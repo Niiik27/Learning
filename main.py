@@ -1,19 +1,53 @@
-print("")
-print("Заполните информацию...")
-print("")
-name = input("Имя: ")
-surname = input("Фамилия: ")
-age = int(input("Возраст: "))
-hobby = input("Хобби: ")
-weight = int(input("Вес: "))
-height = int(input("Рост: "))
-print("")
-print("Имя: " + name)
-print("Фамилия: " + surname)
-print("Возраст: " + str(age))
-print("Хобби: " + hobby)
-print("Вес: " + str(weight))
-print("Рост: " + str(height))
-print("Ваша толстота: " + str(weight/height))
+start_number = int(input("Введите двузначное число: "))
 
-print("Вам: " + str(age//10) + " десятков лет")
+
+a=start_number//100
+print(a)
+b=start_number//10%10
+print(b)
+c=start_number%10%10%10
+print(c)
+
+print("Итого: "+str(a+b+c))
+
+
+
+
+
+
+
+
+start_number = int(input("Введите двузначное число: "))
+next_number=start_number
+sum=0
+k=100
+x=next_number//k
+next_number=start_number%k
+sum=sum+x
+print(x)
+
+k=int(k/10)
+x=next_number//k
+next_number=start_number%k
+sum=sum+x
+print(x)
+
+k=int(k/10)
+x=next_number//k
+next_number=start_number%k
+sum=sum+x
+print(x)
+print("Итого: "+str(sum))
+
+
+
+first_number = input("Введите первое число: ")
+second_number = input("Введите второе число: ")
+num=int(first_number+second_number)
+print(num)
+
+
+
+celsi = float(input("Введите температуру: "))
+farengeit = celsi*9/5+32
+print(farengeit)
