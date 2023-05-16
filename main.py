@@ -1,7 +1,19 @@
-type_int = 1
-type_float = 1.23
-type_str = "Строки пишутся в кавычках"
-type_bool_true = True
-type_boll_false = False
-type_none = None
+print("")
+print("Заполните информацию...")
+print("")
+name = input("Имя: ")
+surname = input("Фамилия: ")
+age = int(input("Возраст: "))
+hobby = input("Хобби: ")
+weight = int(input("Вес: "))
+height = int(input("Рост: "))
+print("")
+print("Имя: " + name)
+print("Фамилия: " + surname)
+print("Возраст: " + str(age))
+print("Хобби: " + hobby)
+print("Вес: " + str(weight))
+print("Рост: " + str(height))
+print("Ваша толстота: " + str(weight/height))
 
+print("Вам: " + str(age//10) + " десятков лет")
