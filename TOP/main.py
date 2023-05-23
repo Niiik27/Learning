@@ -124,24 +124,118 @@
 
 
 
-first = float(input("Первое число\n"))
-action = input("Действие\n")
-second = float(input("Второе число\n"))
+# first = float(input("Первое число\n"))
+# action = input("Действие\n")
+# second = float(input("Второе число\n"))
 
 
-if action == "+":
-    result = first + second
-elif action == "-":
-    result = first - second
-elif action == "*":
-    result = first * second
-elif action == "/": 
-    result = first / second
-elif action == "aver": 
-    result = (first + second)/2
-elif action == "^": 
-    result = first ** second
-else:
-    print("Еще не умею")
-if int(result)-result == 0: result = int(result)
-print(f"Результат {result}")
+# if action == "+":
+#     result = first + second
+# elif action == "-":
+#     result = first - second
+# elif action == "*":
+#     result = first * second
+# elif action == "/": 
+#     result = first / second
+# elif action == "aver": 
+#     result = (first + second)/2
+# elif action == "^": 
+#     result = first ** second
+# else:
+#     print("Еще не умею")
+# if int(result)-result == 0: result = int(result)
+# print(f"Результат {result}")
+
+print(f"{bool(100%6)}")
+print(f"{bool(100%4)}")
+# year=int(input("Введите год "))
+
+
+
+# if year%4:
+#     print("Обычный")
+# elif year%100:
+#     print("Високосный")
+# elif year%400:
+#     print("Обычный")
+# else:
+#     print("Високосный")
+
+
+# if year%400==0:
+#     print("Високосный")
+# elif year%100==0:
+#     print("Обычный")
+# elif year%4==0:
+#     print("Високосный")
+# else:
+#     print("Обычный")
+
+# side_a=int(input("Введите сторону А "))
+# side_b=int(input("Введите сторону B "))
+# side_c=int(input("Введите сторону C "))
+
+# if side_a + side_b > side_c and side_a + side_c > side_b and side_c + side_b > side_a:
+#     if side_a != side_b != side_c:
+#         print("Это разносторонний треугольник")
+#     elif side_a == side_b == side_c:  
+#         print("Это равносторонний треугольник")
+#     else:
+#         print("Это равнобедренный треугольник")
+# else:
+#     print("Это не треугольник!")
+
+nameGame = "Подземелья"
+print("Добро пожаловать \n 'Подземелья'")
+
+
+print("Выберите пол персонажа:\n", "ж-женский\n", "м-Мужской")
+gender = str(input("Введите ж или м :\n"))
+if gender == "М" or gender == "м":
+  gender = "Мужской"
+elif gender == "Ж" or gender == "ж":
+  gender = "Женский"
+print(f"Вы выбрали {gender} пол")
+
+print("Выберете расу персонажа ч-человек,\n э-эльф")
+race = str(input("Введите ч или э:\n"))
+if race == "ч" or race == "Ч":
+  race = "Человек"
+elif race == "э" or race == "Э":
+  race = "Эльф"
+  
+  print(f"Вы выбрали рассу {race}")
+
+if race == "Человек":
+  scoreRole = 0  # галочка для выбора класса
+  print("Выберете класс:\n", "1-Воин", "2-Лучник", "3-Жрец", "4-Маг")
+  role = input("введите 1,2,3 или 4 для выбора класса:")
+  if role == "1":
+    role = "Воин\n"
+  elif role == "2":
+    role = "Лучник\n"
+  elif role == "3":
+    role = "Жрец\n"
+  elif role == "4":
+    role = "Маг\n"
+
+elif race == "Эльф":
+    print("Выберете класс:\n", "1-Воин\n", "2-Лучник\n", "3-Темный Колдун\n",
+          "4-Паладин\n")
+    role = input("введите 1,2,3 или 4 для выбора класса")
+    if role == "1":
+      role = "Воин"
+    elif role == "2":
+      role = "Лучник"
+    elif role == "3":
+      role = "Темный Колдун"
+    elif role == "4":
+      role = "Паладин"
+print(f"Вы выбрали класс:{role}")
+
+name = str(input("Введите имя вашего персонажа"))
+print("\nИнформация о персонаже:\n"
+        f"пол персонажа {gender}\n"
+        f"Раса персонажа {race}\n"
+        f"Класс:{role}\n"
+        f"Имя:{name}\n")
