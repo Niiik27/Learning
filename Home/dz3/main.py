@@ -1,5 +1,12 @@
 
 
+
+
+
+
+
+# exit(0)
+
 """
 В задании было разрешено использовать разные виды условных операторов. Те что не проходили - погуглил и применил.
 Оператор match/case появился в 3.10 версии - значит можно пользоваться
@@ -26,6 +33,42 @@ else:
     print("Вас нет")
 print("")
 
+
+
+"""
+Варианте elif
+"""
+
+print("Упражнение №2 - вывести символ shif+цифра - подходит match/case")
+pressed_key = input("Нажмити цифру на клавиатуре ")
+if pressed_key == "1":
+    print("!")
+elif pressed_key == "2":
+    print("@")
+elif pressed_key == "3":
+    print("#")
+elif pressed_key == "4":
+    print("$")
+elif pressed_key == "5":
+    print("%")
+elif pressed_key == "6":
+    print("^")
+elif pressed_key == "7":
+    print("&")
+elif pressed_key == "8":
+    print("*")
+elif pressed_key == "9":
+    print("(")
+elif pressed_key == "0":
+    print("0")
+else:
+    print("Не та кнопка")
+
+
+
+"""
+Варианте match-case
+"""
 
 print("Упражнение №2 - вывести символ shif+цифра - подходит match/case")
 pressed_key = input("Нажмити цифру на клавиатуре ")
@@ -134,10 +177,37 @@ else:
 print("")
 print(result)
 print("")
+
+
+
     
+"""Тут врове все просто - коментировать особо нечего
+Вариант elif
+"""    
+print("Упражнение №6 - Сконвертировать доллар в другую валюту")
+usd = float(input("Введите сумму в долларах "))
+money = input("Во что конвертировать - EUR, UAN, AZN, RU(По умолчанию)? ")
+result =  0.0
+if money == "":
+    money = "RU"
+    result =  usd*80.17
+elif money == "EUR":
+    result =  usd*0.92764
+elif money == "UAN":
+    result =  usd*7.06
+elif money == "AZN":
+    result =  usd*1.7
+elif money == "RU":
+        result =  usd*80.17
+else:
+    print(f"В {money} не конвертирую")
+    result =  usd
+    money = "USD"
+print(f"{usd} USD = {result} {money}")    
     
-    
-"""Тут врове все просто - коментировать особо нечего"""    
+"""
+Вариант match-case
+"""    
 print("Упражнение №6 - Сконвертировать доллар в другую валюту")
 usd = float(input("Введите сумму в долларах "))
 money = input("Во что конвертировать - EUR, UAN, AZN, RU(По умолчанию)? ")
@@ -235,9 +305,113 @@ else:
 print(f"Вы набрали {score} очк.")
 
 
+#Вариант if-else
+print("Упражнение №10 - Показать следующий день ")
+current_day = int(input("Введите день "))
+current_month = input("Введите месяц ")
+
+if current_month == "январь":
+    current_month = 1
+elif current_month == "февраль":
+    current_month = 2    
+elif current_month == "март":
+    current_month = 3
+elif current_month == "апрель":
+    current_month = 4
+elif current_month == "май":
+    current_month = 5
+elif current_month == "июнь":
+    current_month = 6    
+elif current_month == "июль":
+    current_month = 7
+elif current_month == "август":
+    current_month = 8 
+elif current_month == "сентябрь":
+    current_month = 9
+elif current_month == "октябрь":
+    current_month = 10    
+elif current_month == "ноябрь":
+    current_month = 11
+elif current_month == "декабрь":
+    current_month = 12   
+else:
+    current_month = int(current_month)
+    if current_month > 12:
+        current_month=12    
+    
+        
+current_yaer = int(input("Введите год "))
+
+month_31 = (bool(current_month%2) and current_month < 8) or (bool(current_month%2==0) and current_month > 7)
 
 
+if month_31:
+    if current_month == 12:
+        if current_day>30:#Если кто то введет дату больше 31 то она будет расценена как 31
+            current_yaer+=1
+            current_month=1
+            current_day=1
+        else:
+            current_day+=1
+    elif current_day>30:#Если кто то введет дату больше 31 то она будет расценена как 31
+        current_month+=1
+        current_day=1
+    else:
+        current_day+=1
+else:
+    if current_month==2:
 
+        if current_yaer %400==0:
+            leap=1
+        elif current_yaer %100==0:
+            leap=0
+        elif current_yaer %4==0:
+            leap=1
+        else:
+            leap=0
+
+        if current_day>27+leap:#Если кто то введет дату больше 28/29 то она будет расценена как 28/29 
+            current_month+=1
+            current_day=1
+        else:
+            current_day+=1
+    elif current_day>29:#Если кто то введет дату больше 30 то она будет расценена как 30
+            current_month+=1
+            current_day=1
+    else:
+        current_day+=1
+
+if current_month ==  1:
+    current_month = "Январь"
+elif current_month ==  2:
+    current_month = "Февраль"    
+elif current_month ==  3:
+    current_month = "Март"
+elif current_month ==  4:
+    current_month = "Апрель"
+elif current_month ==  5:
+    current_month = "Май"
+elif current_month ==  6:
+    current_month = "Июнь"  
+elif current_month ==  7:
+    current_month = "Июль"
+elif current_month ==  8:
+    current_month = "Август" 
+elif current_month ==  9:
+    current_month = "Сентябрь"
+elif current_month ==  10:
+    current_month = "Октябрь"   
+elif current_month ==  11:
+    current_month = "Ноябрь"
+elif current_month ==  12:
+    current_month = "Декабрь"   
+else:
+    pass
+
+print(f"Следующий день будет: {current_day}, {current_month}, {current_yaer} г.")
+
+
+#Вариант match-case
 print("Упражнение №10 - Показать следующий день ")
 current_day = int(input("Введите день "))
 current_month = input("Введите месяц ")
