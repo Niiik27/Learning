@@ -1,3 +1,107 @@
+ 
+# start = 2
+# end = 6
+# # end+=1   
+# x = 3
+# y = 6
+# x += 1
+# y += 1
+# sum=0
+
+num = int(input("Факториал "))
+if num == 0: num=1
+n=num
+while num>1:
+    num-=1
+    n=n*num
+
+
+for i in range(1,num):
+    n=n*i
+   
+print(n)   
+    
+    
+
+
+
+
+
+
+
+
+exit(0)
+
+
+for i in range(0,10+1):
+  sum=sum+i
+print(f"Сумма всех чисел в диапазоне от {start} до {i} = {sum}")     
+
+
+
+x = 3
+y = 6
+x += 1
+y += 1
+print("Таблица умножения")
+for i in range(2,x):
+  print("")
+  for n in range(2,y):
+    print(f" {i} x {n} = {i*n}")     
+
+
+
+x = 12
+y = 12
+
+start = -100
+end = 400
+
+for i in range(start,end):
+      print(f" {x} x {i} = {x*i}")     
+
+
+
+start = 100
+end = 400
+for i in range(start,end):
+    if i%2 == 0 and i%6 ==0:
+            print(i)
+
+myName = "Niiik"
+
+
+
+
+x = 456
+for i in range(2,x+1):
+    if x%i == 0 and x!=i:
+        print("Is hard num")
+        break
+    elif x == i:
+        print("simple")
+
+a=5
+b=4
+c=0
+d=0
+
+
+# print(int((a!=0) + (b!=0) + (c!=0) + (d!=0)))
+for i in range((a!=0) + (b!=0) + (c!=0) + (d!=0)):
+    print(i)
+
+
+
+start = int(input("Enter start number"))
+end = int(input("Enter end number"))
+for i in range(start,end,1):
+    print(myName, i)
+    i+=1#Бесполезно
+
+
+
+
 # start_number = int(input("Введите двузначное число: "))
 
 
@@ -184,7 +288,7 @@ print(f"{bool(100%4)}")
 #         print("Это равнобедренный треугольник")
 # else:
 #     print("Это не треугольник!")
-
+"""
 nameGame = "Подземелья"
 print("Добро пожаловать \n 'Подземелья'")
 
@@ -239,3 +343,5 @@ print("\nИнформация о персонаже:\n"
         f"Раса персонажа {race}\n"
         f"Класс:{role}\n"
         f"Имя:{name}\n")
+"""
+
