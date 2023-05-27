@@ -134,7 +134,7 @@ for i in range(start,end):
     res=""
 print("")
 print("Фибоначи")
-input_num = int(input("Введите предел для поиска чисел Фибоначи "))
+input_num = int(input("Введите предел для поиска чисел Фибоначи "))+1
 num_before=1
 next_num=2
 print("Для числа 0 пропорция золотого сечения: 0")
