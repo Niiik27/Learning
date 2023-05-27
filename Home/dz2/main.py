@@ -249,7 +249,6 @@ third = int(input("Третье число "))
 operation = input("max or min or average ")
 if operation == "average":
     result = (first+second+third)/3
-    aver
     print(f"Среднее арефметическое равно {result}")
 elif operation == "max":
     maximum = max(first,second,third)
