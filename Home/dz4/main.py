@@ -132,3 +132,27 @@ for i in range(start,end):
          res = str(i)
     print(res)
     res=""
+print("")
+print("Фибоначи")
+input_num = int(input("Введите предел для поиска чисел Фибоначи "))
+num_before=1
+next_num=2
+print("Для числа 0 пропорция золотого сечения: 0")
+print("Для числа 1 пропорция золотого сечения: 1")
+
+while next_num<input_num:
+     print(f"Для числа {next_num} пропорция золотого сечения: {next_num/num_before}")
+     old_next_num = next_num
+     next_num+=num_before
+     num_before=old_next_num
+  
+# for i in range(3,input_num):
+#      old_next_num = next_num
+#      next_num=num_before+next_num
+#      if next_num>input_num: break
+#      num_before=old_next_num
+#      print(f"Для числа {next_num} пропорция золотого сечения: {next_num/num_before}")
+
+
+print("В указанном пределе больше нет чисел Фибоначи")    
+
