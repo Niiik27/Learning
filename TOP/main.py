@@ -1,347 +1,102 @@
- 
-# start = 2
-# end = 6
-# # end+=1   
-# x = 3
-# y = 6
-# x += 1
-# y += 1
-# sum=0
-
-num = int(input("Факториал "))
-if num == 0: num=1
-n=num
-while num>1:
-    num-=1
-    n=n*num
-
-
-for i in range(1,num):
-    n=n*i
-   
-print(n)   
-    
-    
-
-
-
-
-
-
-
-
-exit(0)
-
-
-for i in range(0,10+1):
-  sum=sum+i
-print(f"Сумма всех чисел в диапазоне от {start} до {i} = {sum}")     
-
-
-
-x = 3
-y = 6
-x += 1
-y += 1
-print("Таблица умножения")
-for i in range(2,x):
-  print("")
-  for n in range(2,y):
-    print(f" {i} x {n} = {i*n}")     
-
-
-
-x = 12
-y = 12
-
-start = -100
-end = 400
-
-for i in range(start,end):
-      print(f" {x} x {i} = {x*i}")     
-
-
-
-start = 100
-end = 400
-for i in range(start,end):
-    if i%2 == 0 and i%6 ==0:
-            print(i)
-
-myName = "Niiik"
-
-
-
-
-x = 456
-for i in range(2,x+1):
-    if x%i == 0 and x!=i:
-        print("Is hard num")
-        break
-    elif x == i:
-        print("simple")
-
-a=5
-b=4
-c=0
-d=0
-
-
-# print(int((a!=0) + (b!=0) + (c!=0) + (d!=0)))
-for i in range((a!=0) + (b!=0) + (c!=0) + (d!=0)):
-    print(i)
-
-
-
-start = int(input("Enter start number"))
-end = int(input("Enter end number"))
-for i in range(start,end,1):
-    print(myName, i)
-    i+=1#Бесполезно
-
-
-
-
-# start_number = int(input("Введите двузначное число: "))
-
-
-# a=start_number//100
-# print(a)
-# b=start_number//10%10
-# print(b)
-# c=start_number%10%10%10
-# print(c)
-
-# print("Итого: "+str(a+b+c))
-
-
-
-# start_number = int(input("Введите двузначное число: "))
-# next_number=start_number
-# sum=0
-# k=100
-# x=next_number//k
-# next_number=start_number%k
-# sum=sum+x
-# print(x)
-
-# k=int(k/10)
-# x=next_number//k
-# next_number=start_number%k
-# sum=sum+x
-# print(x)
-
-# k=int(k/10)
-# x=next_number//k
-# next_number=start_number%k
-# sum=sum+x
-# print(x)
-# print("Итого: "+str(sum))
-
-
-
-# first_number = input("Введите первое число: ")
-# second_number = input("Введите второе число: ")
-# num=int(first_number+second_number)
-# print(num)
-
-
-
-# celsi = float(input("Введите температуру: "))
-# farengeit = celsi*9/5+32
-# print(farengeit)
-
-
-
-
-
-# score=0
-# test_answer = "q"
-# print("Вопрос 1")
-# q1 = input("Зимой и летом одним цветом?\n")
-# breakpoint = input(f"Проверяемое значение = {q1}\nвведите необходимое, или пропстите - клавиша S\n")
-# if breakpoint !="s":
-#     q1=breakpoint
-# else:
-#     pass
-
-
-
-
-# if q1 == "елка" or q1 == "ёлка" or q1 == "Елка" or q1 == "Ёлка" or q1 == test_answer:
-#     print("Овет верный!\n")
-#     score = score + 1
-# else:
-#     print("Подумай еще!\n")
-#     score = score - 1
-# print("Ваши очки: "+str(score)+"\n")
-# print("Вопрос 2")
-# q2 = input("Два кольца два конца, а по середине гвоздик?\n")
-# if q2 == "ножницы" or q2 == "Ножницы" or q2 == test_answer:
-#     print("Овет верный!\n")
-#     score = score + 1
-# else:
-#     print("Подумай еще!\n")
-#     score = score - 1
-# print("Ваши очки: " + str(score) + "\n")
-# print("Вопрос 3")
-# q3 = input("Чем больше из нее берешь тем болше она становится?\n")
-# if q3 == "яма" or q3 == test_answer:
-#     print("Овет верный!\n")
-#     score = score + 1
-# else:
-#     print("Подумай еще!\n")
-#     score = score - 1
-# print("Ваши очки: "+str(score)+"\n")
-# print("Вопрос 4")
-# q4 = input("Шел охотник по городу, увидел часы, выстрелил. Куда попал?\n")
-# if q4 == "в тюрьму" or q4 == test_answer:
-#     print("Овет верный!\n")
-#     score = score + 1
-# else:
-#     print("Подумай еще!\n")
-#     score = score - 1
-# print("Ваши очки: " + str(score) + "\n")
-# print("Вопрос 5")
-# q5 = input("Какую ленту нельзя вплести в голову?\n")
-# if q5 == "пулеметную" or q5 == test_answer:
-#     print("Овет верный!\n")
-#     score = score + 1
-# else:
-#     print("Подумай еще!\n")
-#     score = score - 1
-# print("Ваши очки: " + str(score) + "\n")
-
-# if score >= 3:
-#     q6 = input("Хотите сыграть в суперигру?\n")
-#     if q6 == "нет" or q6 == "n":
-#         print(f"Вы набрали {score} очка(ов)")
-#     elif q6 == "да" or q6 == "y" or q6 == test_answer:
-#         q7 = input("Летели два крокодила, один зеленый, другой направо. Сколько лап у ежа?\n")
-#         if q7 == "4" or q7 == test_answer:
-#             print("Вы выиграли!!!\n")
-#             score = score ** score
-#         else:
-#             print("Вы все проиграли!\n")
-#             score = 0
-# print("Ваши очки: " + str(score) + "\n")
-
-
-
-# first = float(input("Первое число\n"))
-# action = input("Действие\n")
-# second = float(input("Второе число\n"))
-
-
-# if action == "+":
-#     result = first + second
-# elif action == "-":
-#     result = first - second
-# elif action == "*":
-#     result = first * second
-# elif action == "/": 
-#     result = first / second
-# elif action == "aver": 
-#     result = (first + second)/2
-# elif action == "^": 
-#     result = first ** second
-# else:
-#     print("Еще не умею")
-# if int(result)-result == 0: result = int(result)
-# print(f"Результат {result}")
-
-print(f"{bool(100%6)}")
-print(f"{bool(100%4)}")
-# year=int(input("Введите год "))
-
-
-
-# if year%4:
-#     print("Обычный")
-# elif year%100:
-#     print("Високосный")
-# elif year%400:
-#     print("Обычный")
-# else:
-#     print("Високосный")
-
-
-# if year%400==0:
-#     print("Високосный")
-# elif year%100==0:
-#     print("Обычный")
-# elif year%4==0:
-#     print("Високосный")
-# else:
-#     print("Обычный")
-
-# side_a=int(input("Введите сторону А "))
-# side_b=int(input("Введите сторону B "))
-# side_c=int(input("Введите сторону C "))
-
-# if side_a + side_b > side_c and side_a + side_c > side_b and side_c + side_b > side_a:
-#     if side_a != side_b != side_c:
-#         print("Это разносторонний треугольник")
-#     elif side_a == side_b == side_c:  
-#         print("Это равносторонний треугольник")
-#     else:
-#         print("Это равнобедренный треугольник")
-# else:
-#     print("Это не треугольник!")
-"""
-nameGame = "Подземелья"
-print("Добро пожаловать \n 'Подземелья'")
-
-
-print("Выберите пол персонажа:\n", "ж-женский\n", "м-Мужской")
-gender = str(input("Введите ж или м :\n"))
-if gender == "М" or gender == "м":
-  gender = "Мужской"
-elif gender == "Ж" or gender == "ж":
-  gender = "Женский"
-print(f"Вы выбрали {gender} пол")
-
-print("Выберете расу персонажа ч-человек,\n э-эльф")
-race = str(input("Введите ч или э:\n"))
-if race == "ч" or race == "Ч":
-  race = "Человек"
-elif race == "э" or race == "Э":
-  race = "Эльф"
-  
-  print(f"Вы выбрали рассу {race}")
-
-if race == "Человек":
-  scoreRole = 0  # галочка для выбора класса
-  print("Выберете класс:\n", "1-Воин", "2-Лучник", "3-Жрец", "4-Маг")
-  role = input("введите 1,2,3 или 4 для выбора класса:")
-  if role == "1":
-    role = "Воин\n"
-  elif role == "2":
-    role = "Лучник\n"
-  elif role == "3":
-    role = "Жрец\n"
-  elif role == "4":
-    role = "Маг\n"
-
-elif race == "Эльф":
-    print("Выберете класс:\n", "1-Воин\n", "2-Лучник\n", "3-Темный Колдун\n",
-          "4-Паладин\n")
-    role = input("введите 1,2,3 или 4 для выбора класса")
-    if role == "1":
-      role = "Воин"
-    elif role == "2":
-      role = "Лучник"
-    elif role == "3":
-      role = "Темный Колдун"
-    elif role == "4":
-      role = "Паладин"
-print(f"Вы выбрали класс:{role}")
-
-name = str(input("Введите имя вашего персонажа"))
-print("\nИнформация о персонаже:\n"
-        f"пол персонажа {gender}\n"
-        f"Раса персонажа {race}\n"
-        f"Класс:{role}\n"
-        f"Имя:{name}\n")
-"""
-
+# -----------------------------------------------------------------------------------------------------#
+# --------------Использование циклов внутри циклов, возврат значений,  условия-------------------------#
+# -----------------------------------------------------------------------------------------------------#
+print("Регистрация персонажа")
+gender = ""
+race = ""
+role = ""
+name = ""
+
+reg = 0
+while reg < 1:
+    reg_gender = 0
+    while reg_gender < 1:
+        gender = input("Выберете пол персонажа\n1-муж\n2-жен\n: ")
+        if gender == "1":
+            gender = "Мужской"
+            reg_gender += 1
+            print(f"Выбран {gender} пол")
+        elif gender == "2":
+            gender = "Женский"
+            reg_gender += 1
+            print(f"Выбран {gender} пол")
+        else:
+            print("Выберете пол из перечисленного!")
+        if reg_gender == 1:
+            reg_race = 0
+            while reg_race < 1:
+                race = input("Выберете рассу персонажа\n1-Человек\n2-Эльф\n0-вернуться\n: ")
+                if race == "1":
+                    race = "Человек"
+                    reg_race += 1
+                    print(f"Выбран {race}")
+                elif race == "2":
+                    race = "Эльф"
+                    reg_race += 1
+                    print(f"Выбран {race}")
+                elif race == "0":
+                    reg_gender = 0
+                    break
+                else:
+                    print("Выберете рассу из перечисленного!")
+
+                if reg_race == 1:
+                    reg_role = 0
+                    if race == "Человек":
+                        print("Выберете класс:\n", "1-Воин", "2-Лучник", "3-Жрец", "4-Маг")
+                        while reg_role < 1:
+                            role = input("введите 1,2,3 или 4 для выбора класса, 0-вернуться\n: ")
+                            reg_role += 1
+                            if role == "1":
+                                role = "Воин"
+                            elif role == "2":
+                                role = "Лучник"
+                            elif role == "3":
+                                role = "Жрец"
+                            elif role == "4":
+                                role = "Маг"
+                            elif role == "0":
+                                reg_race = 0
+                                reg_role = 0
+                                break
+                            else:
+                                print("Выберете класс человека из перечисленного!")
+                                reg_role = 0
+
+                    elif race == "Эльф":
+                        print("Выберете класс:\n", "1-Воин\n", "2-Лучник\n", "3-Темный Колдун\n",
+                              "4-Паладин\n")
+                        while reg_role < 1:
+                            role = input("введите 1,2,3 или 4 для выбора класса, 0-вернуться\n: ")
+                            reg_role += 1
+                            if role == "1":
+                                role = "Воин"
+                            elif role == "2":
+                                role = "Лучник"
+                            elif role == "3":
+                                role = "Темный Колдун"
+                            elif role == "4":
+                                role = "Паладин"
+                            elif role == "0":
+                                reg_race = 0
+                                reg_role = 0
+                                break
+                            else:
+                                print("Выберете класс эльфа из перечисленного!")
+                                reg_role = 0
+
+    name = str(input("Введите имя вашего персонажа "))
+
+    # переменные типа reg_x... говорят о совершенном выборе, и значит надо было бы использовать их
+    # для определения заполненности полей, но данный цикл не позволяет оставлять пустые поля, и является лишь одним
+    # из путей их заполнения. по этому для проверки будут использоваться сами поля
+    # * Для имитации пустого поля все же можно использовать name
+    if len(gender) != 0 and len(race) != 0 and len(role) != 0 and len(name) != 0:
+        print("\nИнформация о персонаже:\n"
+              f"пол персонажа {gender}\n"
+              f"Раса персонажа {race}\n"
+              f"Класс: {role}\n"
+              f"Имя: {name}\n")
+        reg += 1
+    else:
+        reg = 0
