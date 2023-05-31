@@ -35,6 +35,9 @@ def compare_with_ints():
             c*=c
 
 print(compare_with_strings(1,2))
+a="hellow word"
+b="hellow"+" word"
+print(a is b)
 # print(compare_with_ints())
 # print("")
 
