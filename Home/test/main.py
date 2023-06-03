@@ -1,4 +1,27 @@
 
+
+
+numberList = [2,3,1,3,6,7,9,5,4,2,8,6]
+print(numberList)
+
+while True:
+    del_odd = False
+    start = 0
+    for i in range(start,len(numberList)):
+        # numberList[i]=numberList[i]**2
+        # print(numberList[i])
+        if numberList[i]==2:
+            numberList.pop(i)
+            del_odd = True
+            start=i
+            break
+    if del_odd == False: break
+
+    
+print(numberList)
+numberList.sort()
+
+exit(0)
 import time
 # print(time.time())
 # print(time.perf_counter_ns())

@@ -18,7 +18,7 @@ while reg == False:
     # reg_gender = False
     while reg_gender == False:
         if len(gender) == 0:
-            gender = input("Выберете пол персонажа\n1-муж\n2-жен\nEnter - пропустить\n: ")
+            gender = input("Выберете пол персонажа\n1-муж\n2-жен\nEnter - пропустить\n> ")
 
             if gender == "1":
                 gender = "Мужской"
@@ -41,7 +41,7 @@ while reg == False:
             # reg_race = False
             while reg_race == False:
                 if len(race) == 0:
-                    race = input("Выберете рассу персонажа\n1-Человек\n2-Эльф\n0-вернуться\nEnter - пропустить\n: ")
+                    race = input("Выберете рассу персонажа\n1-Человек\n2-Эльф\n0-вернуться\nEnter - пропустить\n> ")
 
                     if race == "1":
                         race = "Человек"
@@ -70,7 +70,7 @@ while reg == False:
                         print("Выберете класс:\n", "1-Воин", "2-Лучник", "3-Жрец", "4-Маг")
                         while reg_role == False:
                             if len(role) == 0:
-                                role = input("введите 1,2,3 или 4 для выбора класса, 0-вернуться\n: ")
+                                role = input("введите 1,2,3 или 4 для выбора класса, 0-вернуться\n> ")
 
                                 reg_role = True
                                 if role == "1":
@@ -88,7 +88,9 @@ while reg == False:
                                     race = ""
                                     break
                                 elif role == "":
-                                    pass
+                                    print("Поле не должно быть пусто!")
+                                    reg_role = False#Можно без этого, но если случайно нажал Enter без выбора, то можно 
+                                    #принудить сделать выбор не считая ошибкой
                                 else:
                                     print("Ошибка! - Выберете класс человека из перечисленного!")
                                     reg_role = False
@@ -100,7 +102,7 @@ while reg == False:
                               "4-Паладин\n")
                         while reg_role == False:
                             if len(role) == 0:
-                                role = input("введите 1,2,3 или 4 для выбора класса, 0-вернуться\n: ")
+                                role = input("введите 1,2,3 или 4 для выбора класса, 0-вернуться\n> ")
 
                                 reg_role = True
                                 if role == "1":
@@ -118,7 +120,9 @@ while reg == False:
                                     race = ""
                                     break
                                 elif role == "":
-                                    pass
+                                    print("Поле не должно быть пусто!")
+                                    reg_role = False#Можно без этого, но если случайно нажал Enter без выбора, то можно 
+                                    #принудить сделать выбор не считая ошибкой
                                 else:
                                     print("Ошибка! - Выберете класс эльфа из перечисленного!")
                                     role = ""
@@ -134,7 +138,7 @@ while reg == False:
                         # например у эльфов по 10 пальцев на руке, и нужно выбрать перчатку
                         # для человека этот выбор в любом случае не подойдет
     if len(name) == 0:
-        name = input("Введите имя вашего персонажа ")
+        name = input("Введите имя вашего персонажа> ")
     else:
         rename = input("Хотите изменить имя вашего персонажа? \nEnter-нет\n1-да\n:")
         if rename == "1":
