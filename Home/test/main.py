@@ -1,4 +1,23 @@
 
+list_1 = [3,3,1,3,7,9,5,4,2,8,6]
+list_2 = [12,3,4,7,13,6,2,1,0,4]
+
+collection =set(list_1)
+collection.update(list_2)
+print(f"Элементы обоих списков в одном массиве без повторений: {list(collection)}")
+
+collection =set(list_1)
+collection.intersection_update(list_2)
+print(f"Общие элементы в обоих списках: {list(collection)}")
+
+collection = set(list_1)
+collection.symmetric_difference_update(list_2)
+print(f"Уникальные элементы в обоих списках: {list(collection)}")
+
+
+
+
+
 
 
 numberList = [2,3,1,3,6,7,9,5,4,2,8,6]

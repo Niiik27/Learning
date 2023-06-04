@@ -30,7 +30,7 @@
 reg = False
 while reg ==False:
 
-    genderList = ["Мужской","Женский","Назад"]
+    genderList = ["Мужской", "Женский", "Назад"]
     textGender = ""
     for i in range(0, len(genderList)):
         textGender += f"{i} - {genderList[i]}\n"
@@ -48,7 +48,7 @@ while reg ==False:
                     break
 
 
-    raceList = ["Человек", "Эльф", "Гном", "Орк","Троль"]
+    raceList = ["Человек", "Эльф", "Гном", "Орк", "Троль"]
     textRace = ""
     for i in range(0, len(raceList)):
         textRace += f"{i} - {raceList[i]}\n"
@@ -76,4 +76,4 @@ while reg ==False:
                 # print(f"я выбрал {raceList[myRace]} пк сравнивает с {raceList[i]}")
 
 
-    roleList = ["Воин","Лучник","Маг"]
+    roleList = ["Воин", "Лучник", "Маг"]
