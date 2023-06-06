@@ -1,79 +1,38 @@
-# genderList = ["Мужской","Женский"]
-# raceList = ["Человек", "Эльф"]
-# print(raceList,"Создали список")
-# raceList.append("Гном")
-# print(raceList,"Добавили гнома в список")
-# raceList.pop(1)
-# print(raceList,"Удалили эльфа из списка")
-# raceList.clear()
-# print(raceList,"Удалили всех")
+blackList = ["я","коля","денис"]
+guestList = []
+menu_items = ["Добавить гостя", "Удалить гостя","Просмотр гостей","Закончить"]
+offset_menu = 1
+finish_range = [1,10]
 
-# numberList = [3,1,3,7,9,5,4,2,8,6]
-# print(numberList)
-# for i in range(0,len(numberList)):
-#     numberList[i]=numberList[i]**2
-#     # print(numberList[i])
-# print(numberList)
-# numberList.sort()
-
-# listN = [[1,2,3,4,5],
-#          [6,7,8,9,10],
-#          [11,12,13,14,15],
-#          [16,17,18,19,20],
-#          [21,22,23,24,25]]
-# print(listN[1][4])
-
-# for i in range(0,len(listN)):
-#     for j in range(0,len(listN[i])):
-#         print(listN[i][j])
-#     print("----------------------------------------------")
-reg = False
-while reg ==False:
-
-    genderList = ["Мужской", "Женский", "Назад"]
-    textGender = ""
-    for i in range(0, len(genderList)):
-        textGender += f"{i} - {genderList[i]}\n"
-    reg_gender = False
-    while reg_gender == False:
-        myGender = int(input(f"Выберете пол:\n{textGender}>"))
-        if myGender >= len(genderList) or myGender < 0:
-            print("Ошибка: выбери пол из перечисленного! ")
+while True:
+    strItems = ""
+    for i in range(0, len(menu_items)-1+int(finish_range[0]<len(guestList)<finish_range[1])):
+        strItems += f"{i+offset_menu} - {menu_items[i]}\n"
+    print("Регистрация гостей: ")
+    guest_action = int(input(f"Выберите действие:\n{strItems}> "))
+    if guest_action == 0+offset_menu:
+        guest_name = input(f"Введите имя нового гостя:> ")
+        if guest_name not in blackList:
+            guestList.append(guest_name)
         else:
-            for i in range(0, len(genderList)):
-                if myGender == i:
-                    gender = genderList[i]
-                    reg_gender = True
-                    print(f"Выбран {gender} пол")
-                    break
-
-
-    raceList = ["Человек", "Эльф", "Гном", "Орк", "Троль"]
-    textRace = ""
-    for i in range(0, len(raceList)):
-        textRace += f"{i} - {raceList[i]}\n"
-    textRace += f"{len(raceList)} - назад\n"   
-    reg_race = False
-    while reg_race == False:
-        myRace = int(input(f"Выберете рассу:\n{textRace}>"))
-        if myRace > len(raceList) or myRace < 0:
-            print("Ошибка: выбери рассу из перечисленного! ")
-        elif myRace == len(raceList):
-            reg_race = False
+            print("Этого человека нельзя приглашать! ")
+    elif guest_action == 1+offset_menu:
+        print(f"Список гостей: {guestList}\n")
+        del_guest = input("Введите имя удаляемого гостя:> ")
+        guestList.remove(del_guest)
+        print(f"Список гостей: {guestList}\n")
+    elif guest_action == 2+offset_menu:
+        print(f"Список гостей: {guestList}\n")
+    # elif guest_action == 3+offset_menu:
+    #     if finish_range[0]<len(guestList)<finish_range[1]:
+    #         offer = input("Прекратить регистрацию?> ")
+    #         if offer == "y": break
+    
+    #Мне кажется правильнее было бы объеденить условия выхода из цикла в свою группу
+    if finish_range[0]<len(guestList)<finish_range[1]:
+        if guest_action == 3+offset_menu:
             break
-        else:
-            for i in range(0, len(raceList)):
-                if myRace == i:
-                    race = raceList[i]
-                    reg_race = True
-                    print(f"Выбран {race}")
-                    break
-        if reg_race != False:
-            reg = True
-            break
-                    
-
-                # print(f"я выбрал {raceList[myRace]} пк сравнивает с {raceList[i]}")
-
-
-    roleList = ["Воин", "Лучник", "Маг"]
+    elif len(guestList)>=finish_range[1]:
+        print(f"Список гостей: {guestList}\n")
+        break
+    # guest_action=-1
