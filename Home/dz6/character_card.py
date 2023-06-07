@@ -48,25 +48,21 @@ while reg == False:
             reg_gender = True
         else:
             myGender = int(myGender_str)
-            if myGender >= len(genderList) or myGender < 0:
+            for i in range(0, len(genderList)):
+                if myGender == i:
+                    gender = genderList[i]
+                    print(f"Выбран {gender} пол")
+                    reg_gender = True
+                    break
+            if reg_gender == False:# В этом упражнении таким образом буду проводить проверку ввода
                 print("Ошибка: выбери пол из перечисленного! ")
-            else:
-                for i in range(0, len(genderList)):
-                    if myGender == i:
-                        gender = genderList[i]
-                        print(f"Выбран {gender} пол")
-                        reg_gender = True
-                        break
-
     while reg_race == False:
         myRace_str = input(f"Выберете рассу:\n{textRace}> ")
         if len(myRace_str) == 0:
             reg_race = True
         else:
             myRace = int(myRace_str)
-            if myRace > len(raceList) or myRace < 0:
-                print("Ошибка: выбери рассу из перечисленного! ")
-            elif myRace == len(raceList):
+            if myRace == len(raceList):
                 reg_race = False
                 reg_gender = False
                 break
@@ -74,8 +70,8 @@ while reg == False:
                 for i in range(0, len(raceList)):
                     if myRace == i:
                         reg_race = True
-                        print(f"Выбран {race}")
                         race = raceList[i]
+                        print(f"Выбран {race}")
                         if myRace>=len(role_lists):
                             roleList = default_role
                         else:
@@ -85,6 +81,7 @@ while reg == False:
                             textRole += f"{i} - {roleList[i]}\n"
                         textRole += f"{len(roleList)} - Назад\n"
                         textRole += f"{len(roleList)+1} - Сброс\n"
+                if reg_race == False: print("Ошибка: выбери рассу из перечисленного! ")
 
 
     while reg_role == False:
@@ -93,12 +90,10 @@ while reg == False:
             reg_role = True
         else:
             myRole = int(myRole_str)
-            if myRole > len(roleList)+1 or myRole < 0:
-                print("Ошибка: выбери роль из перечисленного! ")
-            elif myRole == len(roleList):
+            if myRole == len(roleList):
                 reg_race = False
                 break
-            elif myRole > len(roleList):
+            elif myRole == len(roleList)+1:
                 reg_race = False
                 reg_gender = False
                 break
@@ -109,7 +104,7 @@ while reg == False:
                         reg_role = True
                         print(f"Выбран {role}")
                         break
-
+                if reg_role == False: print("Ошибка: выбери роль из перечисленного! ")
 
     if len(name) == 0:
         name = input("Введите имя вашего персонажа или 0 чтобы вернуться> ")
