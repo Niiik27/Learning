@@ -25,7 +25,7 @@ submitList = ["Да", "Нет"]
 
 """
 Для оптимизации эти переменные создал вне цикла.
-Код немного упростил - теперь нельзя пропускать выбор
+
 """
 
 textGender = ""
@@ -118,7 +118,6 @@ while reg == False:
         rename = input("Хотите изменить имя вашего персонажа? \nEnter-нет\n1-да\n> ")
         if rename == "1":
             name = input("Введите имя вашего персонажа ")
-git
 
     if len(gender) != 0 and len(race) != 0 and len(role) != 0 and len(name) != 0 and name != "0":
         while reg_submit == False:
