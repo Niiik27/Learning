@@ -1,38 +1,79 @@
-blackList = ["я","коля","денис"]
+# infoProduct = {
+#     "nameProduct":"Каша",
+#     "price":120,
+#     "sale":0.2
+# }
+# print(infoProduct["nameProduct"],infoProduct["price"],infoProduct["sale"],sep="\n")
+
+# print(f"{infoProduct['nameProduct']}\n{infoProduct['price']}\n{infoProduct['sale']}")
+
+# myName = input("Введите свое имя ")
+# myAge = int(input("Сколько вам лет "))
+# infoPerson = {
+#     "namePerson":myName,
+#     "agePerson": myAge,
+#     "hobbyPerson":["Sport", "Programming"]
+# }
+
+# print(infoPerson["hobbyPerson"][0])
+
+# for key in infoPerson:
+#     print(key)
+
+# for key in infoPerson:
+#     print(f"{key} - {infoPerson[key]}")
+
+# productList = [
+#     {
+#         "nameProduct": "Хлеб",
+#         "price": 55,
+#         "count": 37,
+#         "category":"Выпечка",
+#     },
+
+#     {
+#         "nameProduct":"Молоко",
+#         "price": 101,
+#         "count": 3,
+#         "category":"Молочная",
+#     },
+#     {
+#         "nameProduct":"Кефир",
+#         "price": 99,
+#         "count": 20,
+#         "category":"Молочная",
+#     },
+#     {
+#         "nameProduct":"Ряженка",
+#         "price": 60,
+#         "count": 10,
+#         "category":"Молочная",
+#     },
+# ]
+
+# for i in range(0,len(productList)):
+#     print ("Инфо о товаре:")
+#     # if productList[i]["price"]<80:
+#     if productList[i]["category"]=="Молочная":
+#         productList[i]['price'] *= 2
+#         print(f"Категория - {productList[i]['category']}")
+#         print(f"Название товара - {productList[i]['nameProduct']}")
+#         print(f"Цена - {productList[i]['price']}")
+#         print(f"Кол-во - {productList[i]['count']}")
+#         print("--------------------------------------")
 guestList = []
-menu_items = ["Добавить гостя", "Удалить гостя","Просмотр гостей","Закончить"]
-offset_menu = 1
-finish_range = [1,10]
 
 while True:
-    strItems = ""
-    for i in range(0, len(menu_items)-1+int(finish_range[0]<len(guestList)<finish_range[1])):
-        strItems += f"{i+offset_menu} - {menu_items[i]}\n"
-    print("Регистрация гостей: ")
-    guest_action = int(input(f"Выберите действие:\n{strItems}> "))
-    if guest_action == 0+offset_menu:
-        guest_name = input(f"Введите имя нового гостя:> ")
-        if guest_name not in blackList:
-            guestList.append(guest_name)
-        else:
-            print("Этого человека нельзя приглашать! ")
-    elif guest_action == 1+offset_menu:
-        print(f"Список гостей: {guestList}\n")
-        del_guest = input("Введите имя удаляемого гостя:> ")
-        guestList.remove(del_guest)
-        print(f"Список гостей: {guestList}\n")
-    elif guest_action == 2+offset_menu:
-        print(f"Список гостей: {guestList}\n")
-    # elif guest_action == 3+offset_menu:
-    #     if finish_range[0]<len(guestList)<finish_range[1]:
-    #         offer = input("Прекратить регистрацию?> ")
-    #         if offer == "y": break
-    
-    #Мне кажется правильнее было бы объеденить условия выхода из цикла в свою группу
-    if finish_range[0]<len(guestList)<finish_range[1]:
-        if guest_action == 3+offset_menu:
-            break
-    elif len(guestList)>=finish_range[1]:
-        print(f"Список гостей: {guestList}\n")
-        break
-    # guest_action=-1
+    nameGuest = input("Введите имя гостя:> ")
+    ageGuest = int(input("Введите возраст гостя:> "))
+    infoGuest = {
+        "nameGuest": nameGuest,
+        "ageGuest": ageGuest,
+    }
+    guestList.append(infoGuest)
+    if len(guestList)>3:break
+for guest in guestList:
+    print("--------------------------------------")
+    print(f"Имя гостя - {guest['nameGuest']}")
+    print(f"Возраст гостя - {guest['ageGuest']}")
+
