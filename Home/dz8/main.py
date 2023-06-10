@@ -2,6 +2,7 @@ import random
 
 blackList = ["я", "коля", "денис"]
 # Задолбался вводить гостей. на тестовый период будет тестовый массив
+# Можно пользоваться этим, можно добавлять еще, можно отключить
 test_guestList = [
     {
         "nameGuest": "Николай",
@@ -83,15 +84,16 @@ test_guestList = [
 
 ]
 guestList = []
+# просто переопределил, чтоб изменение кода можно было решить только за счет коментария
 guestList = test_guestList
 
 menu_items = ["Добавить гостей", "Удалить гостя по имени", "Удалить гостя по номеру", "Удалить гостя по id",
               "Удалить гостя по индексу", "Удалить всех взрослых", "Удалить всех детей", "Удалить всех мужчин",
               "Удалить всех женщин", "Просмотр гостей", "Закончить"]
 offset_menu = 1
-max_limit = 11
+max_limit = 20
 finish_range = [6, max_limit]
-# Возникла крутая идея по формированию id
+# Возникла идея по формированию id
 idSymbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
 idLen = 8
 n = 0
@@ -227,16 +229,20 @@ while len(guestList) <= finish_range[1]:
             if len(guestList) == 0:
                 print("Вы не можете удалить гостя из пустого списка")
             else:
-                guestNames = "Список гостей до удаления: "
-                for guest in guestList: guestNames += f"{guest['nameGuest']}, "
+                guestNames = "Список гостей до удаления:\n"
+                for i in range(len(guestList)):
+                    guest = guestList[i]
+                    guestNames += f"{i} - {guest['nameGuest']},\n"
                 print(guestNames)
                 del_guest = int(input("Введите индекс удаляемого гостя:> "))
                 if 0 <= del_guest < len(guestList):
                     guestList.pop(del_guest)
                 else:
                     print("Нет гостей с таким индексом!")
-                guestNames = "Список гостей после удаления: "
-                for guest in guestList: guestNames += f"{guest['nameGuest']}, "
+                guestNames = "Список гостей после удаления:\n"
+                for i in range(len(guestList)):
+                    guest = guestList[i]
+                    guestNames += f"{i} - {guest['nameGuest']},\n"
                 print(guestNames)
                 nextGuest = False
                 while nextGuest == False:
