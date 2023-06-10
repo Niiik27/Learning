@@ -125,6 +125,7 @@ while len(guestList) <= finish_range[1]:
                     continue
                 genderGuest = input("Введите пол гостя:> ")
                 # if not (genderGuest == "м" or genderGuest == "ж" or genderGuest == "m" or genderGuest == "w"):
+                # храниться должно в едином формате. далее сохраненные данные будут прроверяться только в кириллице
                 if genderGuest == "m":
                     genderGuest = "м"
                 elif genderGuest == "w":
@@ -170,8 +171,11 @@ while len(guestList) <= finish_range[1]:
         case "Удалить гостя по имени":
 
             if len(guestList) == 0:
-                print("Вы не можете удалить гостя из пустого списка")
+                nextGuest = False
+                while nextGuest == False:
+                    nextGuest = (len(input("Нелзя удалить гостя из пустого списка! Нажмите Enter что бы продолжить> ")) == 0)
             else:
+                # при удалении показывается до и после. в сокращенном виде, что бы было легче понять как все прошло
                 guestNames = "Список гостей до удаления: "
                 for guest in guestList: guestNames += f"{guest['nameGuest']}, "
                 print(guestNames)
@@ -189,7 +193,9 @@ while len(guestList) <= finish_range[1]:
 
         case "Удалить гостя по номеру":
             if len(guestList) == 0:
-                print("Вы не можете удалить гостя из пустого списка")
+                nextGuest = False
+                while nextGuest == False:
+                    nextGuest = (len(input("Нелзя удалить гостя из пустого списка! Нажмите Enter что бы продолжить> ")) == 0)
             else:
                 guestNumbers = "Список гостей до удаления:\n"
                 for guest in guestList: guestNumbers += f"{guest['numberGuest']} - {guest['nameGuest']}\n"
@@ -208,7 +214,9 @@ while len(guestList) <= finish_range[1]:
 
         case "Удалить гостя по id":
             if len(guestList) == 0:
-                print("Вы не можете удалить гостя из пустого списка")
+                nextGuest = False
+                while nextGuest == False:
+                    nextGuest = (len(input("Нелзя удалить гостя из пустого списка! Нажмите Enter что бы продолжить> ")) == 0)
             else:
                 guestNumbers = "Список гостей до удаления:\n"
                 for guest in guestList: guestNumbers += f"{guest['nameGuest']} - {guest['id']}\n"
@@ -227,7 +235,9 @@ while len(guestList) <= finish_range[1]:
 
         case "Удалить гостя по индексу":
             if len(guestList) == 0:
-                print("Вы не можете удалить гостя из пустого списка")
+                nextGuest = False
+                while nextGuest == False:
+                    nextGuest = (len(input("Нелзя удалить гостя из пустого списка! Нажмите Enter что бы продолжить> ")) == 0)
             else:
                 guestNames = "Список гостей до удаления:\n"
                 for i in range(len(guestList)):
