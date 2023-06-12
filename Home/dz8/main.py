@@ -89,11 +89,11 @@ guestList = []
 guestList = test_guestList
 
 menu_items = ["Добавить гостей", "Удалить гостя по имени", "Удалить гостя по номеру", "Удалить гостя по id",
-              "Удалить гостя по индексу", "Удалить всех взрослых", "Удалить всех детей", "Удалить всех мужчин",
+              "Удалить гостя по индексу", "Удалить гостя по возрасту", "Удалить всех взрослых", "Удалить всех детей", "Удалить всех мужчин",
               "Удалить всех женщин", "Просмотр гостей", "Закончить"]
 offset_menu = 1
-max_limit = 20
-finish_range = [6, max_limit]
+max_limit = 10
+finish_range = [5, max_limit]
 # Возникла идея по формированию id
 idSymbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
 idLen = 8
@@ -191,6 +191,31 @@ while len(guestList) <= finish_range[1]:
             del_guest = input("Введите имя удаляемого гостя:> ")
             for guest in guestList:
                 if guest["nameGuest"] == del_guest:
+                    guestList.remove(guest)# использовал for без i по этому удаляю по объекту, но может и с i удалял бы так же - все равно
+                    break
+            guestNames = "Список гостей после удаления : "
+            for guest in guestList: guestNames += f"{guest['nameGuest']}, "
+            print(guestNames)
+            nextGuest = False
+            while nextGuest == False:
+                nextGuest = (len(input("Нажмите Enter что бы продолжить> ")) == 0)
+
+    elif guest_action - offset_menu == menu_items.index("Удалить гостя по возрасту"):
+
+        if len(guestList) == 0:
+            nextGuest = False
+            # print заменил на input что бы можно было прочитать надпись, откликнуться, и дать коду работать дальше
+            # Этот прием использовал дальше довольно часто, он узнаваем, по этому далее не буду его комментировать
+            while nextGuest == False:
+                nextGuest = (len(input("Нелзя удалить гостя из пустого списка! Нажмите Enter что бы продолжить> ")) == 0)
+        else:
+            # при удалении показывается до и после. в сокращенном виде, что бы было легче понять как все прошло
+            guestNames = "Список гостей до удаления: "
+            for guest in guestList: guestNames += f"{guest['nameGuest']}, "#Удобнее видеть строку
+            print(guestNames)
+            del_guest = int(input("Введите возраст удаляемого гостя:> "))
+            for guest in guestList:
+                if guest["ageGuest"] == del_guest:
                     guestList.remove(guest)# использовал for без i по этому удаляю по объекту, но может и с i удалял бы так же - все равно
                     break
             guestNames = "Список гостей после удаления : "
@@ -364,13 +389,50 @@ while len(guestList) <= finish_range[1]:
             nextGuest = (len(input("Нажмите Enter что бы продолжить> ")) == 0)
 
     elif guest_action - offset_menu == menu_items.index("Просмотр гостей"):
-        for guest in guestList:
+
+        # Можно отсортировать массив по возрасту в обратном порядке. Тогда само-собой взрослые будут в начале
+        # Покопавшись - нашел такое решение:
+        # guestList.sort(key = lambda x:x['ageGuest'], reverse=True)
+        # но оно вне рамок урока.  По этому просто сздам новый отсортированный массив
+
+        sortedList = []
+        for i in range(len(guestList)):
+            sortedList.append(guestList[i]['ageGuest'])
+        sortedList.sort(reverse=True)
+        for i in range(len(sortedList)):
+            for j in range(len(guestList)):
+                if sortedList[i] == guestList[j]['ageGuest']:
+                    sortedList[i] = guestList[j]
+                    break
+
+
+        # print(sortedList)
+        children_idx = 0
+        print("--------------------------------------")
+        print("Взрослые:")
+        for i in range(len(sortedList)):
+            guest = sortedList[i]
+            if guest['ageGuest'] < 18:
+                children_idx = i
+                break
             print("--------------------------------------")
             print(f"Имя гостя - {guest['nameGuest']}")
             print(f"Возраст гостя - {guest['ageGuest']}")
             print(f"Пол гостя - {guest['genderGuest']}")
             print(f"Номер гостя - {guest['numberGuest']}")
             print(f"id - {guest['id']}")
+        print("--------------------------------------")
+        print("Дети:")
+        for i in range(children_idx,len(sortedList)):
+            guest = sortedList[i]
+            # if guest['ageGuest'] < 18: break
+            print("--------------------------------------")
+            print(f"Имя гостя - {guest['nameGuest']}")
+            print(f"Возраст гостя - {guest['ageGuest']}")
+            print(f"Пол гостя - {guest['genderGuest']}")
+            print(f"Номер гостя - {guest['numberGuest']}")
+            print(f"id - {guest['id']}")
+
         nextGuest = False
         while nextGuest == False:
             nextGuest = (len(input("Посмотрели? Нажмите Enter> ")) == 0)
