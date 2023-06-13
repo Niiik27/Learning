@@ -1,9 +1,27 @@
+registeredUsers = []
+fields = {
+            "myName":"Имя",
+            "mySurName":"Фамилия",
+            "myLogin":"Логин",
+            "myPass": "Пароль",  
+            }
+
 
 while True:
-    registeredUsers = []
+    
     myName = input("Введите Имя ")
     mySurName = input("Введите Фамилию ")
     myLogin = input("Введите Логин ")
+    
+    while True:
+        validLogin = True
+        for user in registeredUsers:
+            if myLogin == user["myLogin"]:
+                myLogin = input("Такой логин уже занят. Введите другой логин ")
+                validLogin = False
+                break
+        if validLogin == True: break
+
     myPass = input("Введите пароль ")
 
     userCard = {
@@ -12,21 +30,98 @@ while True:
                 "myLogin":myLogin,
                 "myPass": myPass,         
                 }
-    # validLogin = False
-    while True:
-        validLogin = True
+    print("")
+    userCard_str = ""
+    for key in userCard:
+        userCard_str+=f"{fields[key]}: {userCard[key]}\n"
+    print(f"Данные пользователя:\n{userCard_str}")
+    submit = input("Enter - Подтвердить ")
+    print("")
+    if len(submit) == 0: 
+        registeredUsers.append(userCard)
+        print("Пользователь добавлен")
+    else:
+        print("Пользователь не добавлен")
+    if len(registeredUsers)>0:
+        print("")
+        stopAddUsers = input("Прекратить добавление пользователей? Enter - ДА, Любой символ - НЕТ ")
+        if len(stopAddUsers) == 0:
+            break
+print("")   
+print("Теперь вы должны войти")
+print("")
+
+    
+while True:
+    myLogin = input("Введите Логин ")
+    myPass = input("Введите пароль ")
+    #Здесь видимо не стоит облегчать задачу по подбору пароля, а значит не нужно  сообщать что именно не правильно - логин или пароль
+    # Но начать нужно с логина, потому что без логина пароля не существует
+    validLogin = False
+    for user in registeredUsers:
+        if myLogin == user["myLogin"]:
+            validLogin = True
+            break
+    if validLogin == False:
+        print("Ошибка! - Неверный логин или пароль")
+    else:
+        validPass = False
         for user in registeredUsers:
-            if userCard["myLogin"] == user["myLogin"]:
-                print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-                userCard["myLogin"] = input("Такой логин уже занят. Введите другой логин ")
-                validLogin = False
+            if myPass == user["myPass"]:
+                validPass = True
                 break
+        if validPass == False:
+            print("Ошибка! - Неверный логин или пароль")
+        else:
+            #Тут бы сразу после входа видеть инфо, что бы принять решение - выйти, или редактировать
+            print("")
         
-        if validLogin == True: break
+            userCard_str = ""
+            for key in user:
+                userCard_str+=f"{fields[key]}: {user[key]}\n"
+            print(f"Ваши данные:\n{userCard_str}")
+            menuList = ["Редактировать", "Выход"] 
+            menu_txt = ""
+            for i in range(len(menuList)):
+                menu_txt+=f"{i+1} - {menuList[i]}\n"
+            choice = input(f"Выберите действие:\n{menu_txt}")
+            if choice == "2":
+                break
+            elif choice == "1":
+                print("")
+                menuList = ["Изменить имя", "Изменить фамилию","Изменить логин", "Изменить пароль"]
+                menu_txt = ""
+                for i in range(len(menuList)):
+                    menu_txt+=f"{i+1} - {menuList[i]}\n"
+                choice = input(f"Выберите действие:\n{menu_txt}")
+                if choice == "1":
+                    user["myName"] = input("Введите новое имя ")
+                elif choice == "2":
+                    user["mySurName"] = input("Введите новую фамилию ")
+                elif choice == "3":
+                    myLogin = input("Введите новый логин ")
+                    while True:
+                        validLogin = True
+                        for user in registeredUsers:
+                            if myLogin == user["myLogin"]:
+                                myLogin = input("Такой логин уже занят. Введите другой логин ")
+                                validLogin = False
+                                break
+                        if validLogin == True:
+                            user["myLogin"] = myLogin
+                            break
+                elif choice == "4":
+                    user["myPass"] = input("Введите новый пароль ")
 
-            
-    registeredUsers.append(userCard)
+                print(registeredUsers)
 
+
+
+
+
+
+
+    
 
 exit(0)
 
