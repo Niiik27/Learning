@@ -5,6 +5,7 @@
 from datetime import date
 current_date = date.today()
 currentDate = str(current_date).split("-")
+
 print(currentDate)
 
 print("Задание №1 - Карточка пользователя:")
