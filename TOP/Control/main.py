@@ -271,6 +271,7 @@ elif currrnt_task == 5:
                         print(f"Новые данные пользователя:\n{userCard_str}")
                         confirm = input("Прекратить?\nEnter - ДА\nЛюбой символ - НЕТ\n> ")
                         if confirm == "":
+                            print (registeredUsers)
                             finish = True
                     break
                 else:
