@@ -1,82 +1,86 @@
-def regName(myName):
-    print(myName)
-    globalReg()
+def sum_or_mull(num_1,num_2,num_3,operation):
+    if operation == "+":
+        return f"Сумма чисел = {num_1+num_2+num_3}"
+    elif operation == "*":
+        return f"Произведение чисел = {num_1*num_2*num_3}"
+    else:
+        return "Не верная команда"
 
-def regGender():
-    listGender = ["Муж","Жен"]
-    textGender = ""
-    for i in range(0,len(listGender)):
-        textGender += f"{i} - {listGender[i]}\n"
-    myGender = int(input(f"Выберите пол:\n{textGender}> "))
-    for i in range(0,len(listGender)):
-        if myGender == i:
-            myGender = listGender[i]
-            break
-    globalReg()
+print ("Задача 1 - найти сумму или произведение трех чисел")
+num_1 = int(input("Введите первое число: "))
+num_2 = int(input("Введите второе число: "))
+num_3 = int(input("Введите третье число: "))
+operation = input("Что бы перемножить введите \"*\", что бы сложить введите \"+\" ")
+print(sum_or_mull(num_1,num_2,num_3,operation))
 
-def regRace():
-    listRace = ["Человек", "Эльф", "Гном", "Орк", "Троль", "Бабайка"]
-    textRace = ""
-    for i in range(0,len(listRace)):
-        textRace += f"{i} - {listRace[i]}\n"
-    myRace = int(input(f"Выберите рассу:\n{textRace}> "))
-    for i in range(0,len(listRace)):
-        if myRace == i:
-            myRace = listRace[i]
-            regRole(i)
-            break
+
+
+def min_max_aver(num_1,num_2,num_3,operation):
+    if operation == "1":
+        return f"Минимальное число = {min(num_1,num_2,num_3)}"
+    elif operation == "2":
+        return f"Максимальное число = {max(num_1,num_2,num_3)}"
+    elif operation == "3":
+        return f"Среднее арифметическое = {round((num_1+num_2+num_3)/3,6)}"
+    else:
+        return "Не верная команда"
     
-    globalReg()
+    
+print ("Задача 2 - найти минимум, максимум или среднее")
+print(min_max_aver(int(input("Введите первое число: ")),
+                   int(input("Введите второе число: ")),
+                   int(input("Введите третье число: ")),
+                   input("Выберите операцию:\n1 - min\n2 - max\n3 - average\n> ")))
 
+def converter(meters,convert):
+    if convert == 'm':
+        result = meters/1609.344
+        convert = "миль"
+    elif convert == 'i':
+        result = meters/2.54*100
+        convert = "дюймов"
+    elif convert == 'y':
+        result = meters/0.9144
+        convert = "ярдов"
+    elif convert == 'f':
+        result = meters/0.3048
+        convert = "футов"
+    else:
+        print(f"Ошибка в выборе единицы измерения")
+    return f"Результат {result} {convert}"
+print("Задача 3 - перевести метры в мили, дюймы, ярды")
+print(converter(float(input("Введите метры ")),
+                input("Введите m - для перевода в мили, i - в дюймы, y - ярды, f - в футы ")
+                ))
 
-def regRole(race_num):
-    listRoles = [
-    ["Воин", "Лучник", "Жрец", "Маг"],
-    ["Воин", "Лучник", "Темный колдун", "Паладин"],
-    ["Лесник", "Болотник", "Волшебник", "Пастух"],
-    ["Воин", "Наездник", "Генерал", "Призрак"],
-    ["Пакосник", "Весельчак", "Злодей", "Принцесса"],
-        ]
-    listRole = listRoles[race_num]
-    textRole = ""
-    for i in range(0,len(listRole)):
-        textRole += f"{i} - {listRole[i]}\n"
-    myRole = int(input(f"Выберите рассу:\n{textRole}> "))
-    for i in range(0,len(listRole)):
-        if myRole == i:
-            myRole = listRole[i]
-            break
-    globalReg()
+exit(0)
 
+myInfo = {
 
+}
 
-def regItem(item, itemList):
-    textItem = ""
-    for i in range(0,len(itemList)):
-        textItem += f"{i} - {itemList[i]}\n"
-    myItem = int(input(f"Выберите {item}:\n{textItem}> "))
-    for i in range(0,len(itemList)):
-        if myItem == i:
-            myItem = itemList[i]
-            break
-    globalReg()
+def regName(arr, newName):
+    arr["myName"] = newName
+    return arr
 
-
-
-
-
-def globalReg():
-    print("Регистрация персонажа ")
-    x = int(input("Выбор действия:\n1 - Ввод имени\n2 - Ввод Гендера\n3 - Ввод Рассы\n4 - Ввод пункта пола\n5 - Ввод пункта рассы\n> "))
+def regGender(arr):
+    x = int(input("1=м\n2-ж\n"))
     if x == 1:
-        regName(input("Имя: "))
+        arr["myGender"] = "М"
     elif x == 2:
-        regGender()
-    elif x == 3:
-        regRace()
-    elif x == 4:
-        regItem("Пол",["Муж","Жен"])
-    elif x == 5:
-        regItem("Рассу",["Человек", "Эльф", "Гном", "Орк", "Троль", "Бабайка"])
+        arr["myGender"] = "Ж"
+    return arr
 
-globalReg()
+
+
+def globalReg(arr):
+    regName(arr, input("Ваше имя: "))
+    regGender(arr)
+    globalReg(arr)
+    return arr
+
+newInfo = globalReg(myInfo)
+print(newInfo)
+
+
+
