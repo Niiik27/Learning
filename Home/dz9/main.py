@@ -63,7 +63,8 @@ print("numberList", numberList)
 Упростил метод для отслеживания рекурсии. видно разное поведение для
 simple_recursion(recurs) и recurs = simple_recursion(recurs)
 """
-
+print()
+print("*********************** Упрощеная рекурсия без писваивания нового значения  ***********************")
 
 def simple_recursion(recurs=5):
     for i in range(recurs + 1):
@@ -85,19 +86,43 @@ def simple_recursion(recurs=5):
             уменьшение recurs и так до тех пор пока не будет достигнут 0. Происходит множественный запуск функции, в
             зависимости от того на сколько далеко он находится от 0. Все решает уменьшение числа в цикле, а рекурсия
             просто идет следом, толком не выполняя полезного действия
-            
-            На много проще, когда recurs переопределяется данным методом.
-            На любом уровне следующая итерация будет соответствовать условию выхода. Все верхние уровни последовательно
-            завершатся возвратом 0
             """
             simple_recursion(recurs)
-            # recurs = simple_recursion(recurs)
+            
 
 
 num_recurs = 5
 # simple_recursion(num_recurs)
 print("simple_recursion", simple_recursion(num_recurs))
 print()
+print("*********************** Упрощеная рекурсия с пирсваиванием нового значения  ***********************")
+
+def simple_recursion(recurs=5):
+    for i in range(recurs + 1):
+        if recurs == 0:
+            print("Точка возврата", recurs)
+            return recurs
+        elif recurs > 0:
+            print("вошел>>", recurs)
+            recurs -= 1
+            """        
+            На много проще, когда recurs переопределяется данным методом.
+            На любом уровне следующая итерация будет соответствовать условию выхода. Все верхние уровни последовательно
+            завершатся возвратом 0
+            """
+            recurs = simple_recursion(recurs)
+
+
+num_recurs = 5
+# simple_recursion(num_recurs)
+print("simple_recursion", simple_recursion(num_recurs))
+print()
+
+
+
+
+
+print("*********************** Задание 2 ***********************")
 print("*********************** Удаление клиентов рекурсией ***********************")
 clientList = {
     "Меньшиков": "оплачено",
@@ -118,9 +143,18 @@ def del_persons_recursively(clientList: dict, del_status="не оплачено"
     for client in clientList:
         if clientList[client] == del_status:
             clientList.pop(client)
+            return del_persons_recursively(clientList)
+    return clientList
+
+def del_persons_recursively11(clientList: dict, del_status="не оплачено"):
+    """
+    так тоже будет работать
+    """
+    for client in clientList:
+        if clientList[client] == del_status:
+            clientList.pop(client)
             del_persons_recursively(clientList)
             break
-    # return clientList
 
 
 clientNames = "Список клиентов до удаления:\n"
@@ -154,6 +188,8 @@ def del_persons(clientList):
     for client in clientList:
         clientNames += f"{client} - {clientList[client]}\n"
     print(clientNames)
+    
+    
     while True:
         del_client = False
         for client in clientList:
@@ -162,6 +198,8 @@ def del_persons(clientList):
                 del_client = True
                 break
         if del_client == False: break
+
+
     clientNames = "Список клиентов после удаления:\n"
     for client in clientList:
         clientNames += f"{client} - {clientList[client]}\n"
@@ -170,7 +208,59 @@ def del_persons(clientList):
 
 del_persons(clientList)
 
+"""
+Была еще мысль - сначала создать новый массив с удаляемыми объектами, на его основе запустить цикл
+и в основном массиве удалять эти самые объекты
+"""
+clientList = {
+    "Меньшиков": "оплачено",
+    "Выборнов": "не оплачено",
+    "Курочкин": "оплачено",
+    "Мухитов": "не оплачено",
+    "Попов": "оплачено",
+    "Чепаксин": "не оплачено",
+    "Карпов": "оплачено",
+    "Соколов": "не оплачено",
+    "Захаров": "оплачено",
+    "Казаков": "не оплачено",
+    "Хисамов": "оплачено",
+}
+print("*********************** Удаление клиентов при помощи массива ***********************")
+def del_with_array():
+    """
+    Сначала не хотел его писать, но потом вспомнил про генератор массива. И еще задумался об общем
+    количестве итераций. В общем код предполагался небольшим но интересным
+    В случае рекурсии мы удаляем элемент, заново входим метод, и заново начинаем поиск очередного элемента
+    Со списком можно было бы передавать индекс с которого начинать поиск, и таким образом уменьшить общее
+    количество итераций.
+    Со словарем по проще, не считая того что скрывается в методе pop. подозреваю поиск занимает время
+    в зависимости от размера словаря. На каждой рекурсии метод получает максимальный размер словаря
+    А когда поиск не дает результатов происходит выход из рекурсии - выход из всех предыдущих вызовов
+    тоже доп нагрузка
+    В случае удаления в цикле - нужно удалять до тех пор пока не произойдет поиска по всему
+    оставшемуся массиву без удаления - получается много лишних итераций
 
+    В случае  создания дополнительного массива - сначала произойдет одна итерация по исходному массиву
+    Затем итерация по меньшему массиву с выбранными элементами. И будет только один return
+    Все выглядит на много быстрее, не считая усилий потраченных на копирование элементов
+    Но в любом случае этот код максимально простой и понятный
+    Так что написал и его
+    """
+    del_keys = [x for x in clientList if clientList[x] == "не оплачено"]
+    for key in del_keys: clientList.pop(key)
+
+
+
+
+clientNames = "Список клиентов до удаления:\n"
+for client in clientList:
+    clientNames += f"{client} - {clientList[client]}\n"
+print(clientNames)
+del_with_array()
+clientNames = "Список клиентов после удаления:\n"
+for client in clientList:
+    clientNames += f"{client} - {clientList[client]}\n"
+print(clientNames)
 
 
 
