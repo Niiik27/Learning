@@ -1,10 +1,14 @@
 
 menuList = ["Изменить имя", "Изменить фамилию","Изменить логин", "Изменить пароль"]
-def show_menu(menu_list:list):
+menuList = ["Редактировать", "Выход"]
+menuList = ["Да", "Нет"]
+registeredUsers = []
+
+def show_menu(menu_list,msg=""):
     menu_txt = ""
     for i in range(len(menu_list)):
         menu_txt+=f"{i+1} - {menu_list[i]}\n"
-    choice = input(f"Выберите действие:\n{menu_txt}> ")
+    choice = input(f"{msg}\nВыберите действие:\n{menu_txt}> ")
     while True:
         if not choice.isdigit():
             print(f"Допустим тольлько числовой ввод!")
@@ -15,10 +19,101 @@ def show_menu(menu_list:list):
             print(f"Число должно быть в диапазоне от 1 до {len(menu_list)}!")
             choice = input(f"Выберите действие:\n{menu_txt}> ")
 
-print(show_menu(menuList))
+# print(show_menu(menuList,"Что вы хотите изменить?"))
 
 
 
+def add_user(name, surname, login, password):
+    user = {
+            "myName":name,
+            "mySurName":surname,
+            "myLogin":login,
+            "myPass": password,         
+            }
+    show_user(user)
+    submit = input("Enter - Подтвердить ")
+    print("")
+    if len(submit) == 0: 
+        registeredUsers.append(user)
+        print("Пользователь добавлен")
+
+        if len(registeredUsers)>1: 
+            print("")
+            return show_menu(["Да","Нет"],"Прекратить добавление пользователей?") == 2
+
+        return True
+    else:
+        print("Пользователь не добавлен")
+        print("")
+        return show_menu(["Да","Нет"],"Прекратить добавление пользователей?") == 2
+
+
+def input_name():
+    name = input("Введите Имя ")
+    while len(name)==0: 
+        print("Поле не может быть пусто!")
+        name = input("Введите Имя ")
+    return name
+
+def input_surname():
+    surname = input("Введите Фамилию ")
+    while len(surname)==0: 
+        print("Поле не может быть пусто!")
+        surname = input("Введите Фамилию ")
+    return surname
+
+
+def input_login():
+    while True:
+            myLogin = input("Введите Логин ")
+            if len(myLogin)==0: 
+                print("Поле не может быть пусто!")
+                continue
+            # сразу же проверяем логин на уникальность
+            # Если логин не уникален то придется вводит его заного
+            validLogin = True
+            for user in registeredUsers:
+                if myLogin == user["myLogin"]:
+                    # myLogin = input("Такой логин уже занят. Введите другой логин> ")
+                    print("Такой логин уже занят!")
+                    validLogin = False
+                    break
+            if validLogin == True: return myLogin
+
+def input_pass():
+    password = input("Введите пароль ")
+    while len(password)==0: 
+        print("Поле не может быть пусто!")
+        password = input("Введите пароль ")
+    return password
+
+def show_user(user, num=-1):
+    fields = {
+            "myName":"Имя",
+            "mySurName":"Фамилия",
+            "myLogin":"Логин",
+            "myPass": "Пароль",  
+            }
+    
+    print("")
+    user_str = ""
+    num_str = f" {str(num)}" if num!=-1 else ""
+    for key in user:
+        user_str+=f"{fields[key]}: {user[key]}\n"
+    print(f"Данные пользователя{num_str}:\n{user_str}")
+
+def show_users():
+    for i in range(len(registeredUsers)):
+        user = registeredUsers[i]
+        show_user(user,i+1)
+
+
+
+while add_user(input_name(),input_surname(),input_login(),input_pass()):
+    print()
+show_users()
+
+exit(0)
 
 
 def menu(massiv):
