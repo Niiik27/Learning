@@ -1,9 +1,13 @@
-menuList = ["Изменить имя", "Изменить фамилию", "Изменить логин", "Изменить пароль"]
-menuList = ["Редактировать", "Выход"]
-menuList = ["Да", "Нет"]
+from typing import Any
+
+menu_edit_user = ["Изменить имя", "Изменить фамилию", "Изменить логин", "Изменить пароль"]
+menu_actions = ["Редактировать", "Удалить", "Выход"]
+menu_confirm = ["Да", "Нет"]
+
 registeredUsers = []
 
-def show_menu(menu_list, msg=""):
+
+def show_menu(menu_list, msg="") -> int: # Пока не понял зачем такие подсказки, но попробую ее использовать, так как это немного напоминает типизацию в java
     menu_txt = ""
     for i in range(len(menu_list)):
         menu_txt += f"{i + 1} - {menu_list[i]}\n"
@@ -22,7 +26,7 @@ def show_menu(menu_list, msg=""):
 # print(show_menu(menuList,"Что вы хотите изменить?"))
 
 
-def add_user(name, surname, login, password):
+def add_user(name, surname, login, password) -> int:
     user = {
         "myName": name,
         "mySurName": surname,
@@ -38,16 +42,16 @@ def add_user(name, surname, login, password):
 
         if len(registeredUsers) > 1:
             print("")
-            return show_menu(["Да", "Нет"], "Прекратить добавление пользователей?") == 2
+            return show_menu(menu_confirm, "Прекратить добавление пользователей?") == 2
 
         return True
     else:
         # print("Пользователь не добавлен")
         print("")
-        return show_menu(["Да", "Нет"], "Прекратить добавление пользователей?") == 2
+        return show_menu(menu_confirm, "Прекратить добавление пользователей?") == 2
 
 
-def input_name():
+def input_name()-> str:
     name = input("Введите Имя ")
     while len(name) == 0:
         print("Поле не может быть пусто!")
@@ -63,7 +67,7 @@ def input_surname():
     return surname
 
 
-def input_login() -> str:# Пока не понял зачем такие подсказки, но попробую ее использовать
+def input_login11() -> str:
     while True:
         myLogin = input("Введите Логин ")
         if len(myLogin) == 0:
@@ -81,30 +85,38 @@ def input_login() -> str:# Пока не понял зачем такие под
         if validLogin == True: return myLogin
 
 
-def valid_login() -> bool:# Пока не понял зачем такие подсказки, но попробую ее использовать
+def input_login() -> str:
+    while True:
+        my_login = input("Введите Логин ")
+        if not check_login(my_login):
+            return my_login
+        print("Такой логин уже занят!")
 
-    my_login = input("Введите Логин ")
+
+def check_login(my_login) -> bool:
     while len(my_login) == 0:
         print("Поле не может быть пусто!")
         my_login = input("Введите Логин ")
-
     for user in registeredUsers:
-        if my_login == user["my_login"]:
+        if my_login == user["myLogin"]:
             return True
     return False
 
-def valid_pass() -> bool:# Пока не понял зачем такие подсказки, но попробую ее использовать
-    if valid_login():
+
+def check_pass(my_login) -> dict | None:
+    if check_login(my_login):
         my_pass = input("Введите Пароль ")
         while len(my_pass) == 0:
             print("Поле не может быть пусто!")
             my_pass = input("Введите Пароль")
 
-        for user in registeredUsers:
-            if my_pass == user["my_Pass"]:
-                return True
-        return False
-
+        for usr in registeredUsers:
+            if usr["myLogin"] == my_login:
+                if my_pass == usr["myPass"]:
+                    return usr
+                else:
+                    return None
+        return None
 
 
 def input_pass():
@@ -115,34 +127,68 @@ def input_pass():
     return password
 
 
-def show_user(user, num=-1):
-    fields = {
-        "myName": "Имя",
-        "mySurName": "Фамилия",
-        "myLogin": "Логин",
-        "myPass": "Пароль",
-    }
+def show_user(usr, num=-1):
+    if usr:
+        fields = {
+            "myName": "Имя",
+            "mySurName": "Фамилия",
+            "myLogin": "Логин",
+            "myPass": "Пароль",
+        }
 
-    print("")
-    user_str = ""
-    num_str = f" {str(num)}" if num != -1 else ""
-    for key in user:
-        user_str += f"{fields[key]}: {user[key]}\n"
-    print(f"Данные пользователя{num_str}:\n{user_str}")
-
+        print("")
+        user_str = ""
+        num_str = f" {str(num)}" if num != -1 else ""
+        for key in usr:
+            user_str += f"{fields[key]}: {usr[key]}\n"
+        print(f"Данные пользователя{num_str}:\n{user_str}")
+    else:
+        print("Ошибка - Нет такого пользователя!")
 
 def show_users():
     for i in range(len(registeredUsers)):
         user = registeredUsers[i]
         show_user(user, i + 1)
 
+def edit_user(user,choice):
+    if choice == 1:
+        user["myName"] = input("Введите новое имя")
+    elif choice == 2:
+        user["myName"] = input("Введите новую фамилию")
+    elif choice == 3:
+        user["myLogin"] = input("Введите новый логин")
+    elif choice == 4:
+        user["myPass"] = input("Введите новый пароль")
 
 while add_user(input_name(), input_surname(), input_login(), input_pass()):
     print("Пользователь добавлен")
 show_users()
 print("Теперь вы должны войти")
-input_login()
-show_menu([])
+
+
+user = check_pass(input("Введите логин:> "))
+
+while not user:
+    print("Ошибка! - Неверный логин или пароль")
+    user = check_pass(input("Введите логин:> "))
+
+show_user(user)
+
+choice = show_menu(menu_actions)
+if choice == 1:
+    edit_user(user,show_menu(menu_edit_user, "Редактирование"))
+elif choice == 2:
+    registeredUsers.remove(user)
+    print("Пользователь удален")
+    show_users()
+elif choice == 3:
+    exit(0)
+
+
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
 exit(0)
 
 
