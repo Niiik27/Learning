@@ -54,8 +54,13 @@ registered_users = [
 ]
 
 class User:
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password) -> None:
-        self.user_id = user_id
+    def __init__(self, firstname, lastname, birthday, gender, login, password) -> None:
+        """
+        Если невозможно создать пользователя без id то тогда не обязательно делать для этого параметр в конструкторе.
+        Такая мысль появилась после создания метода create_id
+        """
+        # self.user_id = user_id
+        self.user_id = self.create_id(8)
         self.firstname = firstname
         self.lastname = lastname
         self.birthday = birthday
@@ -99,28 +104,30 @@ class User:
 
         return current_year - birth_year - ((current_month, current_day) < (birth_month, birth_day))
 
-    def create_id(self, user_id_len, user_list):
+
+    def create_id(self, user_id_len):
         """
         В каких то старых домашках делал создатель ид. Теперь решил записатьего ввиде метода,
         но пока не решил - использовать или нет. Так что пусть будет. Дальше будет видно
-        :param user_id_len:
-        :param user_list:
+        :param user_list:list
         :return:
         """
         new_id_user = ""
-        id_symbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
+        # id_symbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
+        id_symbols = "1234567890" # упростил до цифр
         while True:
             for _ in range(user_id_len):
                 symbol_index = random.randint(0, len(id_symbols) - 1)
                 new_id_user += id_symbols[symbol_index]
 
-            for user in user_list:
+            for user in registered_users:
                 if user.user_id == new_id_user:
                     new_id_user = ""
                     break
             if len(new_id_user) != 0:
                 break
-        self.user_id = new_id_user
+
+        return int(new_id_user)
 
 
     def to_table(self):
@@ -137,8 +144,8 @@ class User:
 
 
 class Moderator(User):
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password) -> None:
-        super().__init__(user_id, firstname, lastname, birthday, gender, login, password)
+    def __init__(self, firstname, lastname, birthday, gender, login, password) -> None:
+        super().__init__(firstname, lastname, birthday, gender, login, password)
         self.status = "moderator"
 
     def blocking_users(self, user_list):
@@ -155,7 +162,7 @@ class Moderator(User):
         input_user_id = int(input("Введите id пользователя для блокировки "))
         for i in range(len(user_list)):
             if self.status == "moderator":
-                if input_user_id == i and user_list[i].status != "moderator" and user_list[i].status != "admin":
+                if input_user_id == user_list[i].user_id and user_list[i].status != "moderator" and user_list[i].status != "admin":
                     if user_list[i].blocked == True:
                         print("Пользователь уже заблокирован")
                         break
@@ -164,7 +171,7 @@ class Moderator(User):
                         print("Пользователь упешно заблокирован")
                         break
             elif self.status == "admin":
-                if input_user_id == i:
+                if input_user_id == user_list[i].user_id:
                     if user_list[i].blocked == True:
                         print("Пользователь уже заблокирован")
                         break
@@ -179,8 +186,8 @@ class Moderator(User):
         rm.print_tab(table_head, blocked_user_list, "Таблица заблокированных пользователей")
 
 class Admin(Moderator):
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password) -> None:
-        super().__init__(user_id, firstname, lastname, birthday, gender, login, password)
+    def __init__(self, firstname, lastname, birthday, gender, login, password) -> None:
+        super().__init__(firstname, lastname, birthday, gender, login, password)
         self.status = "admin"
     
     def delete_user_list(self, user_list):
@@ -189,7 +196,8 @@ class Admin(Moderator):
 
     def create_user_list(self, array, user_list):
         for i in range(len(array)):
-            user_list.append( User(user_id = i,
+            user_list.append( User(
+                # user_id = self.create_id(8,user_list),
                                 firstname = array[i]["firstname"],
                                 lastname = array[i]["lastname"],
                                 birthday = array[i]["birthday"],
@@ -197,7 +205,7 @@ class Admin(Moderator):
                                 login = array[i]["login"],
                                 password = array[i]["password"]))
             
-myAdmin = Admin(10, "admin", "admin", "01.01.1970", "Мужской", "admin", "admin")
+myAdmin = Admin("admin", "admin", "01.01.1970", "Мужской", "admin", "admin")
     
 myAdmin.create_user_list(base_list,registered_users)          
 print(myAdmin.blocking_users(registered_users))
