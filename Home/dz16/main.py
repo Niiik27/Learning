@@ -1,5 +1,5 @@
 """
-Если навиести мышь на метод, то вылазит подсказка с описанием. Очень удобно.
+Если навести мышь на метод, то вылазит подсказка с описанием. Очень удобно.
 Увлекся созданием описаний и подсказок. Подсказки по типам упращают кодинг - после точки появляются нормальные подсказки
 по функциям объекта
 так что постараюсь их напихать везде где нужно, За одно посмотрю сколько требуется времени на такое оформление
@@ -7,6 +7,9 @@
 
 
 class RegistrationMenu:
+    def __init__(self):
+        self.registered_users = []
+        self.table_head = ["id", "Имя", "Логин", "День рождения", "Возраст", "Статус", "Состояние", "Пароль"]
     def show_menu(self, menu_list: list, msg: str = "") -> int:
         """
         Метод принимает список пунктов меню, и строку для названия или сообщения меню
@@ -32,10 +35,17 @@ class RegistrationMenu:
                 print(f"Число должно быть в диапазоне от 1 до {len(menu_list)}!")
                 choice = input(f"Выберите действие:\n{menu_txt}> ")
 
+    def show_users(self):
+        blocked_user_list = []
+        for i in range(len(self.registered_users)):
+            user:User = self.registered_users[i]
+            blocked_user_list.append(user.to_table())
+        self.print_tab(self.table_head,blocked_user_list,"Таблица заблокированных пользователей")
+
 
     def make_cell(self, my_string: str, cell_len: int, symbol: str = " "):
         """
-        Это аналог str.center по этому нет смысла подробно описывать. Лучше использовать встроенную функцию
+        Метод созает строку нужной длины, и вписывает в середину другую строку
         :param my_string:
         :param cell_len:
         :param symbol:
