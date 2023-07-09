@@ -697,7 +697,7 @@ class TableView:
 
 regMenu = RegistrationMenu()
 regMenu.create_user_list()
-print(regMenu.table_view.make_cell(" Тестовый вывод таблицы ", len(regMenu.table_view.line), "|"))
+print(regMenu.table_view.make_cell(" Тестовая строка из-за которой пришлось перелопатить и резделить таблицу на измерение и отрисовку", len(regMenu.table_view.line), "|"))
 regMenu.show_users()  # Придется сначала увидеть список пользователей что бы решить под кем входить
 # if regMenu.check_in() == "admin":
 regMenu.show_menu(["Добавить пользователя", "Удалить пользователя", "Заблокировать", "Разблокировать"],
