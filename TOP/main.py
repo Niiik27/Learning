@@ -1,5 +1,21 @@
 """
-Сделать разблокировку пользователя
+Случилась глобальная переделка - Сделалкласс RegistrationMenu.
+На данный момент он позволяет не просто вывести меню, но и является менеджером для работы с классами Users & Children
+По этому список зарегестрированных пользователей переехал в него.
+Основной список шаблона оставил на месте так как он имитирует внешние данные
+
+Кроме того решил сделать табличный вывод списка пользователей - показалось не сложно. Основное решение придумалось в
+классе - сделать метод дополняющий строку пробелами до необходимой длины - это позволит выводить строки в столбики.
+Но по пути столкнулся с множественными непредвиденными проблемками, вариантами их решений и новыми идеями.
+В итоге пришлось разработатьотдельный класс для вывода таблиц. Так как функционал меню и таблицы стали сильно
+переплетаться, а мне бы хотелось иметь универсальный инструмент на будущее. По этому пришлось разделить на два класса.
+Теперь таблицей можно пользоваться как принтом, и можно ралзвивать ее функционал по мере необходимости
+Для теста таблицы понадобились дополнительные поля, по этому пришлоь немного поменять User
+метод create_user_list пока что является тестовым по тому не очень красив, и видимо таковым еще на долго останется.
+
+Код менялся непрерывно, что то я комментировал, нв какой то момент бросил, так что в коде могут встретиться дубликаты
+коментариев, или коментарии от перемещенного кода. По этому решил здесь описать суть проделанной работы.
+Метод меню разрабатывал ранее. Здесь его только применил
 """
 import random
 from datetime import date
@@ -96,7 +112,7 @@ class User:
         birth_month = int(birth_date[1])
         birth_day = int(birth_date[0])
 
-        return current_year - birth_year - ((current_month, current_day) < (birth_month, birth_day))
+        return int(current_year - birth_year - ((current_month, current_day) < (birth_month, birth_day)))
 
     def to_table(self):
         return [
@@ -177,9 +193,17 @@ class RegistrationMenu:
         self.registered_users = []
         self.line: str = "|"
         self.width_columns = None
-        self.table_view = TableView(["№","id", "Имя", "Логин", "День рождения", "Возраст", "Статус", "Состояние", "Пароль", "Рейтинг"], "Таблица зарегистрированных пользователей")
+        # self.table_view = TableView(
+        #     {"№": "center", "id": "left", "Имя": "left", "Логин": "left", "День рождения": "center",
+        #      "Возраст": "center", "Статус": "center", "Состояние": "center", "Пароль": "right",
+        #      "Рейтинг": "rating"}, "Таблица зарегистрированных пользователей")
+        self.table_view = TableView(
+            {"№": "center", "id": "left", "Имя": "left", "Логин": "left", "День рождения": "center",
+             "Возраст": "rating.15.*", "Статус": "center", "Состояние": "center", "Пароль": "right",
+             "Рейтинг": "rating.50.|"}, "Таблица зарегистрированных пользователей")
 
         self.user_list_fields = []
+
     def create_user_list(self):
         """
         Здесь заполняем список пользователей что бы было хоть что то, и не приходилось каждый раз создавать список
@@ -203,7 +227,7 @@ class RegistrationMenu:
         for i in range(len(self.registered_users)):
             user: User = self.registered_users[i]
             line = user.to_table()
-            line.insert(0,i+1)
+            line.insert(0, i + 1)
             self.user_list_fields.append(line)
 
         self.table_view.build_tab(self.user_list_fields)
@@ -438,11 +462,30 @@ class RegistrationMenu:
 
 
 class TableView:
-    def __init__(self, table_head: list, tab_name: str = None,padding:int = 1):
+    def __init__(self, table_head: dict, tab_name: str = None, padding: int = 1):
+        """
+        Табличный вывод данных - таблица рисуется на основе шапки, и затем в нее передается тело.
+        Так сделано, что бы можно было узнать ширину таблицы до ее отображения, что бы можно было вывести дополнительное
+        инфо о таблице или ее заголовок.
+        Шапка принимается ввиде словаря - ключи - имена полей, значения - то, по какому краю выравнивать содержимое полей
+        Значения могут быть left, center, right и rating/rating.x/rating.x.y
+        Если у поля значение rating, то поле должно быть цифровым x - ширина ячейки для рейтинго, y - символ, которым
+        показывать рейтинг.
+        Таблица вертикальная - горизонтальные линии содержат символы вертикальных линий - так легче васпринимается, но
+        это усложнило код, и вообще привело к созданию таблицы с данным функционалом.
+        А так же - значение padding регулирует отступы только справа и слева
 
-        self.table_head = table_head
-        self.tab_name = tab_name
-        self.padding = padding
+        :param table_head:dict - словарь полей таблицы
+        :param tab_name: str - название таблицы
+        :param padding:int - отступы от краев таблицы
+        """
+
+        self.table_head: dict = table_head
+        self.headers: list = list(table_head.keys())
+        self.tab_name: str = tab_name
+        self.padding: int = padding
+        self.rating_symbol: str = "|"
+        self.rating_len: int = 50
         """
         Идея создания таблицы потребовала сначала измерения ее параметров, использования результатов измерения,
         а раз мы сначала измеряем, то было бы неплохо сохранить ширину таблицы. Но более эффективно будет сохранить
@@ -466,7 +509,7 @@ class TableView:
         
         """
         self.line: str = "|"
-        self.width_columns:list = None
+        self.width_columns: list = None
 
     # def show_menu(self, menu_list: list, msg: str = "") -> int:
     #     """
@@ -499,7 +542,7 @@ class TableView:
     #             print(f"Число должно быть в диапазоне от 1 до {len(menu_list)}!")
     #             choice = input(f"Выберите действие:\n{menu_txt}> ")
 
-    def make_cell(self, my_string: str, cell_len: int, symbol: str = " ", position=2, offset=0):
+    def make_cell(self, my_string: str, cell_len: int, symbol: str = " ", position="center", offset=0):
         """
         Метод созает из пробелов строку нужной длины, и вписывает в середину нужную строку.
         Получается, что все строки  будут не меньше заданной длины, что позволит красиво их разместить в столбик
@@ -510,15 +553,18 @@ class TableView:
         :position:int 1-left, 2-center, 3-right
         :return:
         """
-        start_offset = ((cell_len - len(str(my_string))) // (2 - (position == 3))) * (position != 1) + offset * (
-                position == 1) - offset * (position == 3)
+        if position == "rating":
+            position="left"
+        start_offset = ((cell_len - len(str(my_string))) // (2 - (position == "right"))) * (position != "left") + \
+                       offset * (position == "left") - offset * (position == "right")
         end_offset = cell_len - len(str(my_string)) - start_offset
         return f"{symbol * start_offset}{my_string}{symbol * end_offset}"
 
-    def raiting_view(self,cell_width:int, fill_percent:int, simbol:str = "|"):
-        symbols_num = int(cell_width/100*fill_percent)-4
-        raiting_line = f"{self.make_cell(str(fill_percent),2,' ',1)} {simbol*symbols_num}"
-        return self.make_cell(raiting_line,cell_width," ",1,1)
+    def raiting_view(self, cell_width: int, fill_percent: int, simbol: str = "|"):
+        symbols_num = int((cell_width-2-1) / 100 * int(fill_percent))#2 символа займет цифровое обозначение, 1 - отступ
+        raiting_line = f"{self.make_cell(str(fill_percent), 2, ' ', 'left')} {simbol * symbols_num}"
+        return self.make_cell(raiting_line, cell_width, " ", 'left', 1)
+
     def build_tab(self, content: list):
         """
         Метов выводит таблицу данных.
@@ -564,21 +610,28 @@ class TableView:
         list_of_width_cells.append(width_cells)
         for user_line in content:
             """
-            На всякий случай увеличим количество ячеек в строке.
+            На всякий случай увеличим количество ячеек в строке, если их меньше полей таблицы.
             Это защитит от ошибки индекса. Но такая ситуация не предполагается        
             """
             while len(user_line) < len(self.table_head):
                 user_line.append("")
             width_cells = []
-            for i in range(len(user_line)-1):
-                field: str = user_line[i]
+            for i in range(len(user_line)):
                 """ширина ячейки равна ширине записи плюс отступы по бокам"""
-                width_cells.append(self.padding + len(str(field)) + self.padding)
+                if "rating" in self.table_head[self.headers[i]]:
+                    cell_info = self.table_head[self.headers[i]].split(".")
+                    rating_len = self.rating_len
+                    rating_symbol = self.rating_symbol
+                    if len(cell_info)>1:
+                        rating_len = int(cell_info[1])
+                    if len(cell_info)>2:
+                        rating_symbol = cell_info[2]
+
+                    user_line[i] = self.raiting_view(rating_len, user_line[i], rating_symbol)
+                width_cells.append(self.padding + len(str(user_line[i])) + self.padding)
 
             """Для рейтинга нужно преобразовать число в количество символов в процентном соотношении"""
-            user_line[-1] = self.raiting_view(50, user_line[-1],"*")
 
-            width_cells.append(len(user_line[-1]))
             list_of_width_cells.append(width_cells)
         """Здесь я хотел использовать функцию map, но что то не заладилось. Пришлось использовать генератор массива
             он выбырает из массива массивов массив с наибольшим значением в соответствующем поле, и берет этот максимум
@@ -611,8 +664,9 @@ class TableView:
         """
         field_str = "|"
         # self.width_columns = self.build_tab(tab_head, content, padding)
-        for i in range(len(self.table_head)):
-            field: str = self.table_head[i]
+        """Немного страшноватое решение, но я вычитал, что с версии 3.6 словари хранят порядок добавления в словарь"""
+        for i in range(len(self.headers)):
+            field: str = self.headers[i]
             field_str += f"{self.make_cell(field, self.width_columns[i])}|"
 
         # print()
@@ -627,7 +681,7 @@ class TableView:
         for n in range(len(content)):
             user_line = content[n]
             field_str = "|"
-            for i in range(len(self.table_head)):
+            for i in range(len(self.headers)):
                 field: str = user_line[i]
                 """             
                 немного поизвращался с привязками - что бы просмотреть как работает ячейка. Часть ячеек выравнены
@@ -635,7 +689,8 @@ class TableView:
                 за одно повысил читабельность таблицы так как имя фамилия лучше смотрятся выровненными по левому краю
                 """
 
-                field_str += f"{self.make_cell(field, self.width_columns[i], ' ', 3 if i == 8 else 1 if i < 3 else 2, self.padding)}|"
+                # field_str += f"{self.make_cell(field, self.width_columns[i], ' ', 3 if i == 8 else 1 if i < 3 else 2, self.padding)}|"
+                field_str += f"{self.make_cell(field, self.width_columns[i], ' ', self.table_head[self.headers[i]], self.padding)}|"
             print(field_str)
             print(self.line)
 
