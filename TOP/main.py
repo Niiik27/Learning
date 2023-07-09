@@ -20,6 +20,7 @@
 import random
 from datetime import date
 
+
 # from Home.dz16.main import RegistrationMenu
 # rm = RegistrationMenu()
 
@@ -133,12 +134,27 @@ class Moderator(User):
         super().__init__(user_id, firstname, lastname, birthday, gender, login, password)
         self.status = "moderator"
 
-    def blocking_users(self, user_list):
+    def blocking_user(self, user_id , menu):
+        print("isworcking")
+        for i in range(len(menu.registered_users)):
+            user: User = menu.registered_users[i]
+            if user.user_id == user_id:
+                user.blocked = True
+                menu.user_list_fields[i][7] = "Заблокирован"
+                menu.table_view.build_tab(menu.user_list_fields)
+                break
+
+
+
+    def blocking_users(self, user_id , user_list):
+        print("isworcking")
         # txt_user_list = ""
         blocked_user_list = []
         for i in range(len(user_list)):
             user: User = user_list[i]
-            blocked_user_list.append(user.to_table())
+            if user.user_id == user_id:
+                user.blocked = True
+                break
             # txt_user_list += f"id - {user.user_id}: ФИо: {user.firstname} {user.lastname} {'Заблокирован' if user.blocked else ''} {user.status}\n"
 
             # txt_user_list += f"{i} - {user_list[i]['user_id']} {user_list[i]['firstname']} {user_list[i]['lastname']} {user_list[i]['blocked']} {user_list[i]['status']}\n"
@@ -170,8 +186,6 @@ class Moderator(User):
         #     user: User = user_list[i]
         #     blocked_user_list.append(user.to_table())
         # rm.print_tab(table_head, blocked_user_list, "Таблица заблокированных пользователей")
-
-
 class Admin(Moderator):
     def __init__(self, user_id, firstname, lastname, birthday, gender, login, password) -> None:
         super().__init__(user_id, firstname, lastname, birthday, gender, login, password)
@@ -209,7 +223,27 @@ class RegistrationMenu:
         Здесь заполняем список пользователей что бы было хоть что то, и не приходилось каждый раз создавать список
         По этому пришлось вклбчить в код детали таблицы
         """
-        for i in range(len(base_list)):
+
+
+        self.registered_users.append(Admin(
+            user_id=10,
+            firstname=base_list[0]["firstname"],
+            lastname=base_list[0]["lastname"],
+            birthday=base_list[0]["birthday"],
+            gender=base_list[0]["gender"],
+            login="qqq",
+            password="qqq"))
+
+        self.registered_users.append(Moderator(
+            user_id=100500,
+            firstname=base_list[0]["firstname"],
+            lastname=base_list[0]["lastname"],
+            birthday=base_list[0]["birthday"],
+            gender=base_list[0]["gender"],
+            login="www",
+            password="www"))
+
+        for i in range(2,len(base_list)):
             self.registered_users.append(User(
                 user_id=self.create_id(),
                 firstname=base_list[i]["firstname"],
@@ -218,10 +252,8 @@ class RegistrationMenu:
                 gender=base_list[i]["gender"],
                 login=base_list[i]["login"],
                 password=base_list[i]["password"]))
-        self.registered_users[2].status = "admin"
-        self.registered_users[2].user_id = 100500
-        self.registered_users[2].login = "qqq"
-        self.registered_users[2].password = "qqq"
+
+
         """После появления новых пользователей нужно задать параметры таблицы"""
 
         for i in range(len(self.registered_users)):
@@ -262,9 +294,9 @@ class RegistrationMenu:
             my_login = input("Введите Логин ")
             my_pass = input("Введите пароль ")
             for i in range(len(self.registered_users)):
-                user = self.registered_users[i]
-                if my_login == user.login and my_pass == user.password:  # только попав сюда - можно считать что логин существует
-                    return user.status
+                registered_user = self.registered_users[i]
+                if my_login == registered_user.login and my_pass == registered_user.password:  # только попав сюда - можно считать что логин существует
+                    return registered_user
             try_count -= 1
             print(f"Логин или пароль не верный, осталось {try_count} чтобы войти")
         print("Отказано в доступе")
@@ -560,9 +592,10 @@ class TableView:
         end_offset = cell_len - len(str(my_string)) - start_offset
         return f"{symbol * start_offset}{my_string}{symbol * end_offset}"
 
-    def raiting_view(self, cell_width: int, fill_percent: int, simbol: str = "|"):
-        symbols_num = int((cell_width-2-1) / 100 * int(fill_percent))#2 символа займет цифровое обозначение, 1 - отступ
-        raiting_line = f"{self.make_cell(str(fill_percent), 2, ' ', 'left')} {simbol * symbols_num}"
+    def raiting_view(self, cell_width: int, fill_percent: int, symbol: str = "|"):
+        len_digit = 3
+        symbols_num = int((cell_width-len_digit) / 100 * int(fill_percent))
+        raiting_line = f"{self.make_cell(str(fill_percent), len_digit, ' ', 'left')} {symbol * symbols_num}"
         return self.make_cell(raiting_line, cell_width, " ", 'left', 1)
 
     def build_tab(self, content: list):
@@ -616,7 +649,15 @@ class TableView:
             while len(user_line) < len(self.table_head):
                 user_line.append("")
             width_cells = []
+            """
+            Пришлось сделать независимое преобразование в рейтинг на лету
+            ценой двойной работы = преобразовывается для подсчета размера,
+            и преобразовывается при выводе на экран
+            это позволяет обновлять таблицу, иначе не получается рейтинг превратить в int
+            Возможно нужно создать такой метод... но это будет уже в моменте оптимизации
+            """
             for i in range(len(user_line)):
+                cel_str = str(user_line[i])
                 """ширина ячейки равна ширине записи плюс отступы по бокам"""
                 if "rating" in self.table_head[self.headers[i]]:
                     cell_info = self.table_head[self.headers[i]].split(".")
@@ -627,8 +668,9 @@ class TableView:
                     if len(cell_info)>2:
                         rating_symbol = cell_info[2]
 
-                    user_line[i] = self.raiting_view(rating_len, user_line[i], rating_symbol)
-                width_cells.append(self.padding + len(str(user_line[i])) + self.padding)
+                    cel_str = self.raiting_view(rating_len, user_line[i], rating_symbol)
+
+                width_cells.append(self.padding + len(cel_str) + self.padding)
 
             """Для рейтинга нужно преобразовать число в количество символов в процентном соотношении"""
 
@@ -688,6 +730,16 @@ class TableView:
                 по левому краю, часть по середине, и пароль по правому
                 за одно повысил читабельность таблицы так как имя фамилия лучше смотрятся выровненными по левому краю
                 """
+                if "rating" in self.table_head[self.headers[i]]:
+                    cell_info = self.table_head[self.headers[i]].split(".")
+                    rating_len = self.rating_len
+                    rating_symbol = self.rating_symbol
+                    if len(cell_info) > 1:
+                        rating_len = int(cell_info[1])
+                    if len(cell_info) > 2:
+                        rating_symbol = cell_info[2]
+
+                    field = self.raiting_view(rating_len, user_line[i], rating_symbol)
 
                 # field_str += f"{self.make_cell(field, self.width_columns[i], ' ', 3 if i == 8 else 1 if i < 3 else 2, self.padding)}|"
                 field_str += f"{self.make_cell(field, self.width_columns[i], ' ', self.table_head[self.headers[i]], self.padding)}|"
@@ -699,7 +751,15 @@ regMenu = RegistrationMenu()
 regMenu.create_user_list()
 print(regMenu.table_view.make_cell(" Тестовая строка из-за которой пришлось перелопатить и резделить таблицу на измерение и отрисовку", len(regMenu.table_view.line), "|"))
 regMenu.show_users()  # Придется сначала увидеть список пользователей что бы решить под кем входить
-# if regMenu.check_in() == "admin":
-regMenu.show_menu(["Добавить пользователя", "Удалить пользователя", "Заблокировать", "Разблокировать"],
-                  "Меню модератора")
-# print(regMenu.check_in())
+user = regMenu.check_in()
+choice = 0
+if user.status == "admin":
+    choice = regMenu.show_menu(["Заблокировать", "Разблокировать","Добавить пользователя", "Удалить пользователя"],
+                      "Меню админа")
+elif user.status == "moderator":
+    choice = regMenu.show_menu(["Заблокировать", "Разблокировать"],"Меню модератора")
+if choice == 1:
+    regMenu.show_users()
+    blocked_id = input("Введите id пользователя")
+    user.blocking_user(blocked_id,regMenu)
+    regMenu.show_users()
