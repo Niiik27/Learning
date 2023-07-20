@@ -89,6 +89,7 @@ class TableView:
         self.padding: int = padding
         self.rating_symbol: str = "\u2588"
         self.rating_len: int = 40
+        self.tab_str = "|"
         """
         Идея создания таблицы потребовала сначала измерения ее параметров, использования результатов измерения,
         а раз мы сначала измеряем, то было бы неплохо сохранить ширину таблицы. Но более эффективно будет сохранить
@@ -182,10 +183,15 @@ class TableView:
         """
 
         self.line: str = "|"
-        self.width_columns = []
+        # width_columns = []
 
         list_of_width_cells = []
         width_cells = []
+        # rating_max = 0
+        # cel_str = ""
+        # rating_len = 0
+        rating_symbol = 0
+        # rating_percent = 0
         """ Сначала возьмем размеры с головы - заголовков колонок"""
         for col_name in self.table_head:
             width_cells.append(self.padding + len(col_name) + self.padding)
@@ -205,8 +211,6 @@ class TableView:
                 """ширина ячейки равна ширине записи плюс отступы по бокам"""
                 if "rating" in self.table_head[self.headers[i]]:
                     """Ищем максимальное значение в столбце, что бы по нему строить все рейтинги"""
-                    rating_max = int(max(content, key=lambda x: int(x[i]))[i])
-                    rating_percent = int(int(user_line[i]) / rating_max * 100)
                     rating_len = self.rating_len
                     rating_symbol = self.rating_symbol
                     cell_info = self.table_head[self.headers[i]].split(".")
@@ -214,8 +218,8 @@ class TableView:
                         rating_len = int(cell_info[1])
                     if len(cell_info) > 2:
                         rating_symbol = cell_info[2]
+                    cel_str = rating_symbol * rating_len
 
-                    cel_str = self.raiting_view(rating_len, rating_percent, int(user_line[i]), rating_symbol)
 
                 """Сделали для строки тела то же что и для шапки - собрали ширины каждой ячейки в строке"""
                 width_cells.append(self.padding + len(cel_str) + self.padding)
@@ -226,66 +230,49 @@ class TableView:
             он выбырает из массива массивов массив с наибольшим значением в соответствующем поле, и берет этот максимум
             в итоге получается список ширин колонок
         """
-        self.width_columns = [max(list_of_width_cells, key=lambda x: x[z])[z] for z in range(len(self.table_head))]
+        width_columns = [max(list_of_width_cells, key=lambda x: x[z])[z] for z in range(len(self.table_head))]
         """
         Здесь можно построить горизонтальную линию таблицы, потому что она не изменяемая, а при этом она даст
         информацию о ширине таблицы. Это может потребоваться для создания доплонительных записей-заголовков
         """
-
-        for i in self.width_columns:
+        self.line = "|"
+        for i in width_columns:
             self.line += "-" * i + "|"
-        # return self.width_columns
 
-    def print_tab(self, content: list):
-        """
-        Метов выводит таблицу данных.
+        if self.tab_name:
+            self.tab_str = self.make_cell(f" {self.tab_name} ", len(self.line), '*')+"\n"
+        else:
+            self.tab_str = "|"
 
-        :param tab_head: list Массив заголовков столбцов
-        :param content: list Массив массивав данных таблицы
-        :param tab_name: str Название таблицы
-        :param padding: int Размер полей вокруг текста в таблице
-
-        :return: None
-        """
-
-        field_str = "|"
+        self.tab_str+="_" * len(self.line)+"\n"
+        self.tab_str += self.line.replace("-", " ") + "\n"
 
         for i in range(len(self.headers)):
             field: str = self.headers[i]
-            field_str += f"{self.make_cell(field, self.width_columns[i])}|"
+            self.tab_str += f"|{self.make_cell(field, width_columns[i])}"
 
-        # print()
-        if self.tab_name:
-            print(self.make_cell(f" {self.tab_name} ", len(self.line), '*'))
-        print("_" * len(self.line))
-        print(self.line.replace("-", " "))  # Найти и понять суть метода очень просто, по этому использую его
+        self.tab_str += "|\n"
+        self.tab_str += self.line.replace("-", "_") + "\n"
 
-        print(field_str)
-        print(self.line)
-        """Только здесь мы добрались до отображения данных таблицы"""
         for n in range(len(content)):
             user_line = content[n]
-            field_str = "|"
+            self.tab_str += "|"
             for i in range(len(self.headers)):
                 field: str = user_line[i]
 
                 if "rating" in self.table_head[self.headers[i]]:
-                    cell_info = self.table_head[self.headers[i]].split(".")
-                    rating_len = self.rating_len
-                    rating_symbol = self.rating_symbol
-                    if len(cell_info) > 1:
-                        rating_len = int(cell_info[1])
-                    if len(cell_info) > 2:
-                        rating_symbol = cell_info[2]
-
                     rating_max = int(max(content, key=lambda x: int(x[i]))[i])
                     rating_percent = int(int(user_line[i]) / rating_max * 100)
+                    field = self.raiting_view(width_cells[i]-len(str(user_line[i]))-self.padding, rating_percent, int(user_line[i]), rating_symbol)
+                self.tab_str += f"{self.make_cell(field, width_columns[i], ' ', self.table_head[self.headers[i]], self.padding)}|"
+            self.tab_str += f"\n{self.line}\n"
 
-                    field = self.raiting_view(rating_len, rating_percent, int(user_line[i]), rating_symbol)
+        # self.tab_str += "\n"
+        # self.tab_str += self.line+"\n"
+        return self
 
-                field_str += f"{self.make_cell(field, self.width_columns[i], ' ', self.table_head[self.headers[i]], self.padding)}|"
-            print(field_str)
-            print(self.line)
+    def print(self):
+        print(self.tab_str)
 
 
 class FakeDataBase:
@@ -369,8 +356,8 @@ class FakeDataBase:
 
     def fill_id(self):
         for item in self.base_list:
-            if item.get("id") is not None:
-                item['id'] = self.create_id(self.base_list)
+            # if item.get("id") is not None:
+            item['id'] = self.create_id(self.base_list)
 
     def store_user_info(self, info):
         for rec in self.base_list:
@@ -391,149 +378,6 @@ class FakeDataBase:
                 self.base_list.remove(rec)
                 return True
         return False
-
-
-class UsersList:
-    def __init__(self, base_list):
-        """
-        В процессе написания кода возникло предположение, что registered_users Должен стать частью RegistrationMenu
-        Но позже возникло обратное предположение - что он должен быть сам по себе
-        Но мне не нравится что он не в классе. Прямой доступ сбивает с толку.
-        По этому решил его обернуть в собственныц класс.
-        Сюда же перекочевали метод по его заполнению, и проверке логинов и паролей
-        В общем будет все что необходимо для корректного доступа к списку пользователей и получения пользователя с
-        определенным статусом
-        """
-        self.registered_users = []
-        self.create_user_list(base_list)
-        self.table_view = TableView(
-            {"№": "center", "id": "left", "Имя": "left", "Пол": "center", "Логин": "left", "День рождения": "center",
-             "Возраст": "rating.15.*", "Статус": "center", "Состояние": "center", "Пароль": "right",
-             "Рейтинг": "rating"}, "Таблица зарегистрированных пользователей")
-
-    def create_user_list(self, base_list):
-        """
-        Здесь заполняем список пользователей что бы было хоть что то, и не приходилось каждый раз создавать список
-        По этому пришлось вклбчить в код детали таблицы
-        """
-
-        for i in range(len(base_list)):
-            if base_list[i]["status"] == "user":
-                self.registered_users.append(User(
-                    user_id=base_list[i]["id"],
-                    firstname=base_list[i]["firstname"],
-                    lastname=base_list[i]["lastname"],
-                    birthday=base_list[i]["birthday"],
-                    gender=base_list[i]["gender"],
-                    login=base_list[i]["login"],
-                    password=base_list[i]["password"]))
-            elif base_list[i]["status"] == "admin":
-                self.registered_users.append(Admin(
-                    user_id=base_list[i]["id"],
-                    firstname=base_list[i]["firstname"],
-                    lastname=base_list[i]["lastname"],
-                    birthday=base_list[i]["birthday"],
-                    gender=base_list[i]["gender"],
-                    login=base_list[i]["login"],
-                    password=base_list[i]["password"]))
-            elif base_list[i]["status"] == "moderator":
-                self.registered_users.append(Moderator(
-                    user_id=base_list[i]["id"],
-                    firstname=base_list[i]["firstname"],
-                    lastname=base_list[i]["lastname"],
-                    birthday=base_list[i]["birthday"],
-                    gender=base_list[i]["gender"],
-                    login=base_list[i]["login"],
-                    password=base_list[i]["password"]))
-
-
-
-
-
-    def check_in(self):
-        try_count = 5
-        while try_count:
-            my_login = input("Введите Логин ")
-            my_pass = input("Введите пароль ")
-            for i in range(len(self.registered_users)):
-                registered_user = self.registered_users[i]
-                if my_login == registered_user.login and my_pass == registered_user.password:  # только попав сюда - можно считать что логин существует
-                    return registered_user
-            try_count -= 1
-            print(f"Логин или пароль не верный, осталось {try_count} чтобы войти")
-        print("Отказано в доступе")
-        return None
-
-    def check_login(self, my_login) -> bool:
-        while len(my_login) == 0:
-            print("Поле не может быть пусто!")
-            my_login = input("Введите Логин ")
-        for user in self.registered_users:
-            if my_login == user.login:
-                return True
-        return False
-
-    def check_pass(self, my_login) -> dict | None:
-        if self.check_login(my_login):
-            my_pass = input("Введите Пароль ")
-            while len(my_pass) == 0:
-                print("Поле не может быть пусто!")
-                my_pass = input("Введите Пароль")
-
-            for usr in self.registered_users:
-                if usr["myLogin"] == my_login:
-                    if my_pass == usr["myPass"]:
-                        return usr
-                    else:
-                        return None
-            return None
-
-    def create_id(self, user_id_len=8):
-        """
-        В каких то старых домашках делал создатель ид. Теперь решил записатьего ввиде метода,
-        но пока не решил - использовать или нет. Так что пусть будет. Дальше будет видно
-        :param user_list:list
-        :return:
-        """
-        new_id_user = ""
-        id_symbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
-        # id_symbols = "1234567890"  # упростил до цифр
-        while True:
-            for _ in range(user_id_len):
-                symbol_index = random.randint(0, len(id_symbols) - 1)
-                new_id_user += id_symbols[symbol_index]
-
-            for user in self.registered_users:
-                if user.user_id == new_id_user:
-                    new_id_user = ""
-                    break
-            if len(new_id_user) != 0:
-                break
-
-        return new_id_user
-
-    def edit_user(self, menu):
-        ...
-
-    def show(self):
-        self.line: str = "|"
-        self.width_columns = None
-
-        user_table_fields = []
-
-        for i in range(len(self.registered_users)):
-            user: User = self.registered_users[i]
-            line = user.to_table()
-            line.insert(0, i + 1)
-            user_table_fields.append(line)
-
-        self.table_view.build_tab(user_table_fields)
-        self.table_view.print_tab(user_table_fields)
-
-
-db = FakeDataBase()
-uset_list = UsersList(db.base_list)
-
 
 class User:
     def __init__(self, user_id, firstname, lastname, birthday, gender, login, password) -> None:
@@ -748,11 +592,11 @@ class Admin(Moderator):
 
     def del_users(self, ids_str):
         ids = ids_str.split(" ")
-        for id in ids:
-            for base_user in base_list:
-                if base_user["id"] == id:
-                    base_list.remove(base_user)
-                    break
+        # for id in ids:
+        #     for base_user in base_list:
+        #         if base_user["id"] == id:
+        #             base_list.remove(base_user)
+        #             break
 
     def callback_menu(self, choice: int):
         if choice == 5:
@@ -770,6 +614,150 @@ class Admin(Moderator):
             self.unblocking_users(user_id, regMenu)
 
         return True
+
+class UsersList:
+    def __init__(self, base_list):
+        """
+        В процессе написания кода возникло предположение, что registered_users Должен стать частью RegistrationMenu
+        Но позже возникло обратное предположение - что он должен быть сам по себе
+        Но мне не нравится что он не в классе. Прямой доступ сбивает с толку.
+        По этому решил его обернуть в собственныц класс.
+        Сюда же перекочевали метод по его заполнению, и проверке логинов и паролей
+        В общем будет все что необходимо для корректного доступа к списку пользователей и получения пользователя с
+        определенным статусом
+        """
+        self.registered_users = []
+        self.create_user_list(base_list)
+        self.table_view = TableView(
+            {"№": "center", "id": "left", "Имя": "left", "Пол": "center", "Логин": "left", "День рождения": "center",
+             "Возраст": "rating.15.*", "Статус": "center", "Состояние": "center", "Пароль": "right",
+             "Рейтинг": "rating"}, "Таблица зарегистрированных пользователей")
+
+    def create_user_list(self, base_list):
+        """
+        Здесь заполняем список пользователей что бы было хоть что то, и не приходилось каждый раз создавать список
+        По этому пришлось вклбчить в код детали таблицы
+        """
+
+        for i in range(len(base_list)):
+            if base_list[i]["status"] == "user":
+                self.registered_users.append(User(
+                    user_id=base_list[i]["id"],
+                    firstname=base_list[i]["firstname"],
+                    lastname=base_list[i]["lastname"],
+                    birthday=base_list[i]["birthday"],
+                    gender=base_list[i]["gender"],
+                    login=base_list[i]["login"],
+                    password=base_list[i]["password"]))
+            elif base_list[i]["status"] == "admin":
+                self.registered_users.append(Admin(
+                    user_id=base_list[i]["id"],
+                    firstname=base_list[i]["firstname"],
+                    lastname=base_list[i]["lastname"],
+                    birthday=base_list[i]["birthday"],
+                    gender=base_list[i]["gender"],
+                    login=base_list[i]["login"],
+                    password=base_list[i]["password"]))
+            elif base_list[i]["status"] == "moderator":
+                self.registered_users.append(Moderator(
+                    user_id=base_list[i]["id"],
+                    firstname=base_list[i]["firstname"],
+                    lastname=base_list[i]["lastname"],
+                    birthday=base_list[i]["birthday"],
+                    gender=base_list[i]["gender"],
+                    login=base_list[i]["login"],
+                    password=base_list[i]["password"]))
+
+
+
+
+
+    def check_in(self):
+        try_count = 5
+        while try_count:
+            my_login = input("Введите Логин ")
+            my_pass = input("Введите пароль ")
+            for i in range(len(self.registered_users)):
+                registered_user = self.registered_users[i]
+                if my_login == registered_user.login and my_pass == registered_user.password:  # только попав сюда - можно считать что логин существует
+                    return registered_user
+            try_count -= 1
+            print(f"Логин или пароль не верный, осталось {try_count} чтобы войти")
+        print("Отказано в доступе")
+        return None
+
+    def check_login(self, my_login) -> bool:
+        while len(my_login) == 0:
+            print("Поле не может быть пусто!")
+            my_login = input("Введите Логин ")
+        for user in self.registered_users:
+            if my_login == user.login:
+                return True
+        return False
+
+    def check_pass(self, my_login) -> dict | None:
+        if self.check_login(my_login):
+            my_pass = input("Введите Пароль ")
+            while len(my_pass) == 0:
+                print("Поле не может быть пусто!")
+                my_pass = input("Введите Пароль")
+
+            for usr in self.registered_users:
+                if usr["myLogin"] == my_login:
+                    if my_pass == usr["myPass"]:
+                        return usr
+                    else:
+                        return None
+            return None
+
+    def create_id(self, user_id_len=8):
+        """
+        В каких то старых домашках делал создатель ид. Теперь решил записатьего ввиде метода,
+        но пока не решил - использовать или нет. Так что пусть будет. Дальше будет видно
+        :param user_list:list
+        :return:
+        """
+        new_id_user = ""
+        id_symbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
+        # id_symbols = "1234567890"  # упростил до цифр
+        while True:
+            for _ in range(user_id_len):
+                symbol_index = random.randint(0, len(id_symbols) - 1)
+                new_id_user += id_symbols[symbol_index]
+
+            for user in self.registered_users:
+                if user.user_id == new_id_user:
+                    new_id_user = ""
+                    break
+            if len(new_id_user) != 0:
+                break
+
+        return new_id_user
+
+    def edit_user(self, menu):
+        ...
+
+    def show(self):
+        self.line: str = "|"
+        self.width_columns = None
+
+        user_table_fields = []
+
+        for i in range(len(self.registered_users)):
+            user: User = self.registered_users[i]
+            line = user.to_table()
+            line.insert(0, i + 1)
+            user_table_fields.append(line)
+
+        self.table_view.build_tab(user_table_fields).print()
+
+
+
+db = FakeDataBase()
+user_list = UsersList(db.base_list)
+
+user_list.show()
+
 
 
 class RegistrationMenu:
@@ -812,8 +800,7 @@ class RegistrationMenu:
         input_user_id = int(input("Введите id пользователя для блокировки "))
         for i in range(len(user_list)):
             if self.status == "moderator":
-                if input_user_id == user_list[i].user_id and user_list[i].status != "moderator" and user_list[
-                    i].status != "admin":
+                if input_user_id == user_list[i].user_id and user_list[i].status != "moderator" and user_list[i].status != "admin":
                     if user_list[i].blocked == True:
                         print("Пользователь уже заблокирован")
                         break
