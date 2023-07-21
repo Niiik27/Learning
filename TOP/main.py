@@ -144,13 +144,13 @@ class TableView:
                 cel_str = str(user_line[i])
                 if "rating" in self.table_head[self.headers[i]]:
                     rating_len = self.rating_len
-                    rating_symbol = self.rating_symbol
+                    # rating_symbol = self.rating_symbol
                     cell_info = self.table_head[self.headers[i]].split(".")
                     if len(cell_info) > 1:
                         rating_len = int(cell_info[1])
-                    if len(cell_info) > 2:
-                        rating_symbol = cell_info[2]
-                    cel_str = rating_symbol * rating_len
+                    # if len(cell_info) > 2:
+                    # rating_symbol = cell_info[2]
+                    cel_str = self.rating_symbol * rating_len
 
                 width_cells.append(self.padding + len(cel_str) + self.padding)
             list_of_width_cells.append(width_cells)
@@ -182,6 +182,10 @@ class TableView:
                 field: str = user_line[i]
 
                 if "rating" in self.table_head[self.headers[i]]:
+                    rating_symbol = self.rating_symbol
+                    cell_info = self.table_head[self.headers[i]].split(".")
+                    if len(cell_info) > 2:
+                        rating_symbol = cell_info[2]
                     rating_max = int(max(content, key=lambda x: int(x[i]))[i])
                     rating_percent = int(int(user_line[i]) / rating_max * 100)
                     field = self.raiting_view(width_cells[i] - len(str(user_line[i])) - self.padding, rating_percent,
@@ -580,7 +584,19 @@ class UsersList:
         Так же теперь доступ к базе осуществляется через этот класс. На мой взгляд так будет понятней, когда мы
         сохраняем пользователя локально, и когда на сервере.
         При инициализации сразу запрашиваем список пользователей и приводим его к удобному формату
-        По скольку это список, то наделил его способностью отображаться в виде таблицы
+
+        Вообще обращение к базе данных теперь происходит через этот класс, так как требуется синхронизация полученных
+        и хранимых локально данных
+
+        Теперь у меня есть объект таблицы, и для реализации функции вывода данных в табличном формате больше не нужно
+        придумывать метод вывода. Значит я могу создать внутри этого класса таблицу, для просмотра пользователей
+        Возможно в дальнейшем она перекочует в менеджер, что бы класс не зависел от внезапно придуманных рюшечек.
+        Пока не определился в этом вопросе потому что считаю допустимым иметь этому классу метод show()
+        По скольку объем данных большой, то его нужно видеть максимально комфортно, не думая о том как это сделать
+        А вот если потребуются элементы GUI то их уже делать отдельно
+
+        Похоже пока писал комент - определился - таблице здесь быть.
+        Хотелось бы сделать меню, но оно зависит от прав пользователя. Значит меню реализовывать в них
         """
         self.registered_users = []
         self.db = FakeDataBase()
@@ -592,8 +608,8 @@ class UsersList:
 
     def create_user_list(self, base_list):
         """
-        Здесь заполняем список пользователей что бы было хоть что то, и не приходилось каждый раз создавать список
-        По этому пришлось вклбчить в код детали таблицы
+        Раньше это была автоматизация создания тестового списка пользователей, а теперь похоже рабочий метод.
+        Тестовый список - теперь на стороне базы данных
         """
 
         for i in range(len(base_list)):
@@ -632,6 +648,11 @@ class UsersList:
                 ))
 
     def check_in(self):
+        """
+        Есть общее правило как пройти проверку и стать частью списка со своими правами. значит проверку нужно
+        реализовать в этом классе
+        :return:
+        """
         try_count = 5
         while try_count:
             my_login = input("Введите Логин ")
@@ -647,7 +668,9 @@ class UsersList:
 
     def check_login(self, my_login) -> bool:
         """
-        Кто то с другого компа может успеть занять мой логин. По этому доступность логина проверяю по базе данных
+        Кто то с другого компа может успеть занять мой логин. По этому доступность логина проверяю по базе данных.
+        А может быть вообще. Все вопросы нужно решать через базу, а то сейчас получается база делится секретной
+        информацией
         :param my_login:
         :return:
         """
@@ -868,7 +891,7 @@ class Registration:
         return password
 
 
-class Login:
+class LogIn:
     """
     Это класс входа
     """
