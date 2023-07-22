@@ -252,8 +252,8 @@ class FakeDataBase:
             "lastname": "Исаева",
             "birthday": [25, 10, 2000],
             "gender": "Женский",
-            "login": "Ekaterina25",
-            "password": "11111",
+            "login": "eee",
+            "password": "eee",
             "status": "user",
             "rating": 30,
         },
@@ -339,7 +339,7 @@ class FakeDataBase:
 
 
 class User:
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, user_list) -> None:
+    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, manager) -> None:
         self.user_id = user_id
         self.rating = rating
         self.firstname = firstname
@@ -350,9 +350,8 @@ class User:
         self.password = password
         self.blocked = False
         self.status = "user"
-        self.user_list: UsersList = user_list
-        self.menu = Menu(["Редактировать профиль", "Удалиться", "Стать модератором",
-                          "Стать админом", "Выход", "Вызвать ошибку"], "Меню пользователя")
+        self.manager: Manager = manager
+        self.menu = Menu(["Редактировать профиль", "Удалиться", "Выход"], "Меню пользователя")
 
     def get_str_status(self):
         if self.status == "user":
@@ -379,25 +378,26 @@ class User:
         elif self.gender.lower() == "женский":
             return "\u2640"
 
-    def update_firstname(self, new_name):
-        self.firstname = new_name
+    def update_firstname(self):
+        self.firstname = Registration.input_field("имя")
 
-    def update_lastname(self, new_name):
-        self.lastname = new_name
+    def update_lastname(self):
+        self.lastname = Registration.input_field("фамилию")
 
-    def update_birthday(self, new_birth):
-        self.birthday = new_birth
+    def update_birthday(self):
+        self.birthday = Registration.input_birthday()
 
-    def update_gender(self, new_gender):
-        self.gender = new_gender
+    def update_gender(self):
+        self.gender = Registration.input_field("пол")
 
-    def update_login(self, new_login):
-        self.login = new_login
+    def update_login(self):
+        self.login = self.manager.registration.input_login()
 
     def update_password(self):
         new_password = ""
         while new_password != self.password or new_password == "":
-            new_password = input(f"Введите старый пароль> ")
+            if new_password: print("Пароль не верный")
+            new_password = Registration.input_field("старый пароль")
         self.password = new_password
 
     def get_user_age(self):
@@ -436,13 +436,7 @@ class User:
         elif choice == 2:
             self.delete_me()
         elif choice == 3:
-            self.upgrade_to_moderator()
-        elif choice == 4:
-            self.upgrade_to_admin()
-        elif choice == 5:
             self.exit_me()
-        elif choice == 6:
-            self.crash_me()
 
     def show(self):
         print(f"Данные пользователя {self.firstname}: ")
@@ -459,23 +453,13 @@ class User:
         print(f"Состояние {'Заблокирован' if self.blocked else 'OK'}")
 
     @staticmethod
-    def crash_me():
-        return 1 / 0
-
-    @staticmethod
     def exit_me():
         print("Пока")
         exit(0)
 
-    def upgrade_to_admin(self):
-        print("Еще не готово")
-
-    def upgrade_to_moderator(self):
-        print("Еще не готово")
-
     def delete_me(self):
-        self.user_list.delete_user_by_id(self.user_id)
-        self.user_list.table_view.print()
+        self.manager.user_list.delete_user_by_id(self.user_id)
+        self.manager.user_list.table_view.print()
 
     def edit_me(self):
         menu = Menu(["Сменить имя", "Сменить фамилию", "Сменить логин",
@@ -483,22 +467,22 @@ class User:
                     "Меню редактирования данных пользователя")
         choice = menu.show()
         if choice == 1:
-            self.edit_me()
+            self.update_firstname()
         elif choice == 2:
-            self.delete_me()
+            self.update_lastname()
         elif choice == 3:
-            self.upgrade_to_moderator()
+            self.update_login()
         elif choice == 4:
-            self.upgrade_to_admin()
+            self.update_birthday()
         elif choice == 5:
-            self.exit_me()
+            self.update_gender()
         elif choice == 6:
-            self.crash_me()
+            self.update_password()
 
 
 class Moderator(User):
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, user_list) -> None:
-        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating, user_list)
+    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, manager) -> None:
+        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating, manager)
         self.status = "moderator"
         self.menu = Menu(["Заблокировать - укажите id пользователей через пробел",
                           "Разблокировать - укажите id пользователей через пробел", "Выход"], "Меню модератора")
@@ -507,8 +491,8 @@ class Moderator(User):
         user_list = user_ids.split(" ")
         for i in range(len(user_list)):
             blocked_id: str = user_list[i].strip()
-            for j in range(len(self.user_list.registered_users)):
-                registered_user: User = self.user_list.registered_users[j]
+            for j in range(len(self.manager.user_list.registered_users)):
+                registered_user: User = self.manager.user_list.registered_users[j]
                 if blocked_id == registered_user.user_id:
                     if registered_user.status == "admin":
                         print("Вы не можете заблокировать админа")
@@ -517,18 +501,18 @@ class Moderator(User):
                         print("Вы не можете заблокировать другого модератора. Обратитесь к администратору")
                         continue
                     registered_user.blocked = True
-                    self.user_list.table_view.update_field("Состояние", j, "Заблокирован").print()
+                    self.manager.user_list.table_view.update_field("Состояние", j, "Заблокирован").print()
                     break
 
     def unblocking_users(self, user_ids):
         user_list = user_ids.split(" ")
         for i in range(len(user_list)):
             blocked_id: str = user_list[i].strip()
-            for j in range(len(self.user_list.registered_users)):
-                registered_user: User = self.user_list.registered_users[j]
+            for j in range(len(self.manager.user_list.registered_users)):
+                registered_user: User = self.manager.user_list.registered_users[j]
                 if blocked_id == registered_user.user_id:
                     registered_user.blocked = False
-                    self.user_list.table_view.update_field("Состояние", j, "OK").print()
+                    self.manager.user_list.table_view.update_field("Состояние", j, "OK").print()
                     break
 
     def callback_menu(self, choice: int):
@@ -545,11 +529,11 @@ class Moderator(User):
 
 
 class Admin(Moderator):
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, user_list) -> None:
-        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating, user_list)
+    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, manager) -> None:
+        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating, manager)
         self.status = "admin"
-        self.menu = Menu(["Заблокировать", "Разблокировать", "Добавить пользователя",
-                          "Удалить пользователя", "Выход"], "Меню админа")
+        self.menu = Menu(["Заблокировать", "Разблокировать", "Сделать пользователя модератором",
+                          "Сделать модератора простым пользователем", "Удалить пользователей", "Выход"], "Меню админа")
 
     @staticmethod
     def delete_user_list(user_list):
@@ -560,37 +544,60 @@ class Admin(Moderator):
         return self.callback_menu(self.menu.show())
 
     def del_users(self, ids_str):
-        print("Not ready")
         ids = ids_str.split(" ")
-        # for id in ids:
-        #     for base_user in base_list:
-        #         if base_user["id"] == id:
-        #             base_list.remove(base_user)
-        #             break
+        for user_id in ids:
+            self.manager.user_list.delete_user_by_id(user_id)
+            self.manager.user_list.table_view.del_line("id", user_id)
 
-    def add_users(self, user_id):
-        print("Not ready")
+        self.manager.user_list.table_view.print()
+
+    def set_users_to_moderator(self, user_ids):
+        user_list = user_ids.split(" ")
+        for i in range(len(user_list)):
+            blocked_id: str = user_list[i].strip()
+            for j in range(len(self.manager.user_list.registered_users)):
+                registered_user: User = self.manager.user_list.registered_users[j]
+                if blocked_id == registered_user.user_id:
+                    if registered_user.status == "admin":
+                        print("Вы не можете заблокировать админа")
+                        continue
+                    elif registered_user.status == "moderator":
+                        print("Вы не можете заблокировать другого модератора. Обратитесь к администратору")
+                        continue
+                    registered_user.status = "moderator"
+                    self.manager.user_list.table_view.update_field("Статус", j, registered_user.status).print()
+                    break
+
+    def moderators_to_user(self, user_ids):
+        user_list = user_ids.split(" ")
+        for i in range(len(user_list)):
+            blocked_id: str = user_list[i].strip()
+            for j in range(len(self.manager.user_list.registered_users)):
+                registered_user: User = self.manager.user_list.registered_users[j]
+                if blocked_id == registered_user.user_id:
+                    registered_user.status = "user"
+                    self.manager.user_list.table_view.update_field("Статус", j, registered_user.status).print()
+                    break
 
     def callback_menu(self, choice: int):
-        if choice == 5:
-            print("Досвидания")
-            return False
-        self.user_list.show()
-        user_id = input("Введите id пользователя: ")
+        self.manager.user_list.show()
+        user_id = input("Введите id пользователей: ")
         if choice == 1:
             self.blocking_users(user_id)
         elif choice == 2:
             self.unblocking_users(user_id)
         elif choice == 3:
-            self.add_users(user_id)
+            self.set_users_to_moderator(user_id)
         elif choice == 4:
+            self.moderators_to_user(user_id)
+        elif choice == 5:
             self.del_users(user_id)
-
-        return True
+        elif choice == 6:
+            self.exit_me()
 
 
 class UsersList:
-    def __init__(self):
+    def __init__(self, manager):
         """
         В процессе написания кода стало неудобно хранить равнозначные массивы вне классов.
         По этому сделал обертку для registered_users, и добавил сопутствующих методов
@@ -611,6 +618,7 @@ class UsersList:
         Похоже пока писал комент - определился - таблице здесь быть.
         Хотелось бы сделать меню, но оно зависит от прав пользователя. Значит меню реализовывать в них
         """
+        self.manager = manager
         self.registered_users = []
         self.db = FakeDataBase()
         self.create_user_list(self.db.base_list)
@@ -636,7 +644,7 @@ class UsersList:
                     login=base_list[i]["login"],
                     password=base_list[i]["password"],
                     rating=base_list[i]["rating"],
-                    user_list=self,
+                    manager=self.manager,
                 ))
             elif base_list[i]["status"] == "admin":
                 self.registered_users.append(Admin(
@@ -648,7 +656,7 @@ class UsersList:
                     login=base_list[i]["login"],
                     password=base_list[i]["password"],
                     rating=base_list[i]["rating"],
-                    user_list=self,
+                    manager=self.manager,
                 ))
             elif base_list[i]["status"] == "moderator":
                 self.registered_users.append(Moderator(
@@ -660,7 +668,7 @@ class UsersList:
                     login=base_list[i]["login"],
                     password=base_list[i]["password"],
                     rating=base_list[i]["rating"],
-                    user_list=self,
+                    manager=self.manager,
                 ))
 
     def check_in(self):
@@ -779,7 +787,7 @@ class Registration:
                 login=self.input_login(),
                 password=self.input_pass("Придумайте пароль: "),
                 rating=0,
-                user_list=self.manager.user_list,
+                manager=self.manager,
             )
             new_user.show()
 
@@ -898,7 +906,7 @@ class Manager:
         self.registration = Registration(self)
         self.log_in: LogIn = LogIn(self)
         self.user = None
-        self.user_list = UsersList()
+        self.user_list = UsersList(self)
         self.menu = Menu(["Вход", "Регистрация"], "Войдите или зарегистрируйтесь")
 
     def show_start_menu(self):
@@ -908,6 +916,7 @@ class Manager:
             self.user = self.registration.reister_new_user()
         if self.user:
             self.show_users()
+            print(f"Добро пожаловать {self.user.status} {self.user.firstname} {self.user.lastname}!")
             self.user.show_menu()
 
     def show_users(self):
