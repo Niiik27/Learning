@@ -36,12 +36,9 @@ class Menu:
         self.menu_list = menu_list
         self.msg = msg
 
-    def show_menu(self) -> int:
+    def show(self) -> int:
         """
         Метод принимает строит меню, и защищает от неправильного ввода
-        :param self:
-        :param menu_list: list
-        :param msg: str
         :return: int
         """
         print()
@@ -81,22 +78,24 @@ class TableView:
         self.rating_len: int = 40
         self.tab_str: str = ""
         self.line: str = ""
-        self.width_columns: list = None
+        self.width_columns: list = []
+        self.content: list = []
 
-    def make_cell(self, my_string: str, cell_len: int, symbol: str = " ", position="center", offset=0):
+    @staticmethod
+    def make_cell(my_string: str, cell_len: int, symbol: str = " ", position="center", offset=0):
         """
         Метод дополняет строку символами до нужной длины
-
         :param my_string:
         :param cell_len:
         :param symbol:
-        :position:int 1-left, 2-center, 3-right
+        :param position:
+        :param offset:
         :return:
         """
         if position == "rating":
             position = "left"
-        start_offset = ((cell_len - len(str(my_string))) // (2 - (position == "right"))) * (position != "left") + \
-                       offset * (position == "left") - offset * (position == "right")
+        start_offset = ((cell_len - len(str(my_string))) // (2 - (position == "right"))) * (
+                position != "left") + offset * (position == "left") - offset * (position == "right")
         end_offset = cell_len - len(str(my_string)) - start_offset
         return f"{symbol * start_offset}{my_string}{symbol * end_offset}"
 
@@ -114,27 +113,22 @@ class TableView:
         raiting_line = f"{self.make_cell(str(original_value), len_digit, ' ', 'left')} {symbol * symbols_num}"
         return self.make_cell(raiting_line, cell_width, " ", 'left', 0)
 
-    def build_tab(self, content: list):
+    def build_tab(self):
         """
         Метов строит таблицу из шапки и данных для дальнейшего вывода.
         возвращяет свой инстанс. Так удобнее вызывать принт. В целом удалось сделать задуманное, и больше нет
         желания как то менято код, по этому оставлю его без коментариев, хоть он и самый сложный в этом классе
-        :param tab_head: list Массив заголовков столбцов
-        :param content: list Массив массивав данных таблицы
-        :param tab_name: str Название таблицы
-        :param padding: int Размер полей вокруг текста в таблице
+
 
         :return: self
         """
-
         self.line: str = "|"
         list_of_width_cells = []
         width_cells = []
-        rating_symbol = 0
         for col_name in self.table_head:
             width_cells.append(self.padding + len(col_name) + self.padding)
         list_of_width_cells.append(width_cells)
-        for user_line in content:
+        for user_line in self.content:
 
             while len(user_line) < len(self.table_head):
                 user_line.append("")
@@ -144,12 +138,9 @@ class TableView:
                 cel_str = str(user_line[i])
                 if "rating" in self.table_head[self.headers[i]]:
                     rating_len = self.rating_len
-                    # rating_symbol = self.rating_symbol
                     cell_info = self.table_head[self.headers[i]].split(".")
                     if len(cell_info) > 1:
                         rating_len = int(cell_info[1])
-                    # if len(cell_info) > 2:
-                    # rating_symbol = cell_info[2]
                     cel_str = self.rating_symbol * rating_len
 
                 width_cells.append(self.padding + len(cel_str) + self.padding)
@@ -175,8 +166,8 @@ class TableView:
         self.tab_str += "|\n"
         self.tab_str += self.line.replace("-", "_") + "\n"
 
-        for n in range(len(content)):
-            user_line = content[n]
+        for n in range(len(self.content)):
+            user_line = self.content[n]
             self.tab_str += "|"
             for i in range(len(self.headers)):
                 field: str = user_line[i]
@@ -186,7 +177,7 @@ class TableView:
                     cell_info = self.table_head[self.headers[i]].split(".")
                     if len(cell_info) > 2:
                         rating_symbol = cell_info[2]
-                    rating_max = int(max(content, key=lambda x: int(x[i]))[i])
+                    rating_max = int(max(self.content, key=lambda x: int(x[i]))[i])
                     rating_percent = int(int(user_line[i]) / rating_max * 100)
                     field = self.raiting_view(width_cells[i] - len(str(user_line[i])) - self.padding, rating_percent,
                                               int(user_line[i]), rating_symbol)
@@ -202,8 +193,8 @@ class TableView:
     def print_line(self, string, symbol):
         """
         Вывод строки в стиле заголовка
-        :param str:
-        :param symb:
+        :param string:
+        :param symbol:
         :return:
         """
 
@@ -214,6 +205,23 @@ class TableView:
         else:
             print(symbol * len(self.line))
 
+    def update_field(self, col_name, row_num, new_value):
+        self.content[row_num][self.headers.index(col_name)] = new_value
+        self.build_tab()
+        return self
+
+    def set_content(self, content):
+        self.content = content
+        return self
+
+    def del_line(self, col_name, value):
+        for line in self.content:
+            if line[self.headers.index(col_name)] == value:
+                self.content.remove(line)
+                self.build_tab()
+                return True
+        return False
+
 
 class FakeDataBase:
     base_list = [
@@ -221,28 +229,28 @@ class FakeDataBase:
             "id": "10",
             "firstname": "Николай",
             "lastname": "Меньшиков",
-            "birthday": "27.10.1980",
+            "birthday": [27, 10, 1980],
             "gender": "Мужской",
             "login": "Niiik27",
             "password": "12345",
-            "status": "admin",
+            "status": "user",
             "rating": 10,
         },
         {
-            "id": "100500",
+
             "firstname": "Денис",
             "lastname": "Кириллов",
-            "birthday": "01.06.2001",
+            "birthday": [1, 6, 2001],
             "gender": "Мужской",
             "login": "Denis161",
             "password": "54321",
-            "status": "moderator",
+            "status": "user",
             "rating": 20,
         },
         {
             "firstname": "Екатерина",
             "lastname": "Исаева",
-            "birthday": "25.10.2000",
+            "birthday": [25, 10, 2000],
             "gender": "Женский",
             "login": "Ekaterina25",
             "password": "11111",
@@ -252,21 +260,22 @@ class FakeDataBase:
         {
             "firstname": "Ольга",
             "lastname": "Владимирова",
-            "birthday": "22.11.1999",
+            "birthday": [22, 11, 1999],
             "gender": "Женский",
-            "login": "Olya22",
-            "password": "22222",
-            "status": "user",
+            "login": "qqq",
+            "password": "qqq",
+            "status": "admin",
             "rating": 40,
         },
         {
+            "id": "100500",
             "firstname": "Кирилл",
             "lastname": "Кириллов",
-            "birthday": "17.11.2006",
+            "birthday": [17, 11, 2006],
             "gender": "Мужской",
-            "login": "Kirillooo",
-            "password": "55555",
-            "status": "user",
+            "login": "www",
+            "password": "www",
+            "status": "moderator",
             "rating": 50,
         },
     ]
@@ -280,7 +289,7 @@ class FakeDataBase:
         """
         В каких то старых домашках делал создатель ид. Теперь решил записатьего ввиде метода,
         но пока не решил - использовать или нет. Так что пусть будет. Дальше будет видно
-        :param user_list:list
+        :param user_id_len:list
         :return:
         """
         new_id_user = ""
@@ -330,7 +339,7 @@ class FakeDataBase:
 
 
 class User:
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating) -> None:
+    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, user_list) -> None:
         self.user_id = user_id
         self.rating = rating
         self.firstname = firstname
@@ -341,6 +350,9 @@ class User:
         self.password = password
         self.blocked = False
         self.status = "user"
+        self.user_list: UsersList = user_list
+        self.menu = Menu(["Редактировать профиль", "Удалиться", "Стать модератором",
+                          "Стать админом", "Выход", "Вызвать ошибку"], "Меню пользователя")
 
     def get_str_status(self):
         if self.status == "user":
@@ -394,10 +406,10 @@ class User:
         current_month = current_date.tm_mon
         current_day = current_date.tm_mday
 
-        birth_date = self.birthday.split(".")
-        birth_year = int(birth_date[2])
-        birth_month = int(birth_date[1])
-        birth_day = int(birth_date[0])
+        birth_date = self.birthday
+        birth_year = birth_date[2]
+        birth_month = birth_date[1]
+        birth_day = birth_date[0]
 
         return int(current_year - birth_year - ((current_month, current_day) < (birth_month, birth_day)))
 
@@ -416,8 +428,7 @@ class User:
         ]
 
     def show_menu(self):
-        return self.callback_menu(Menu.show_menu(["Редактировать профиль", "Удалиться", "Стать модератором",
-                                                  "Стать админом", "Выход", "Вызвать ошибку"], "Меню пользователя"))
+        return self.callback_menu(self.menu.show())
 
     def callback_menu(self, choice: int):
         if choice == 1:
@@ -434,12 +445,12 @@ class User:
             self.crash_me()
 
     def show(self):
-        print(f"Данные пользователя{self.firstname}:")
+        print(f"Данные пользователя {self.firstname}: ")
         print(f"id: {self.user_id}")
         print(f"Рейтинг:{self.rating}")
         print(f"Имя: {self.firstname}")
         print(f"фамилия: {self.lastname}")
-        print(f"День рождения: {self.birthday}")
+        print(f"День рождения: {self.birthday[0]}.{self.birthday[1]}.{self.birthday[2]}")
         print(f"Возраст: {self.get_user_age()}")
         print(f"Пол: {self.gender}")
         print(f"Логин: {self.login}")
@@ -447,29 +458,30 @@ class User:
         print(f"Статус: {self.status}")
         print(f"Состояние {'Заблокирован' if self.blocked else 'OK'}")
 
-    def crash_me(self):
+    @staticmethod
+    def crash_me():
         return 1 / 0
 
-    def exit_me(self):
+    @staticmethod
+    def exit_me():
         print("Пока")
         exit(0)
 
     def upgrade_to_admin(self):
-        pass
+        print("Еще не готово")
 
     def upgrade_to_moderator(self):
-        pass
+        print("Еще не готово")
 
     def delete_me(self):
-        pass
+        self.user_list.delete_user_by_id(self.user_id)
+        self.user_list.table_view.print()
 
     def edit_me(self):
-        # return self.callback_menu(Utils.show_menu(["Сменить имя", "Сменить фамилию", "Сменить логин",
-        #                           "Сменить дату рождения", "Сменить пол", "Сменить пароль"],
-        #                          "Меню редактирования данных пользователя")+6)
-        choice = self.callback_menu(Menu.show_menu(["Сменить имя", "Сменить фамилию", "Сменить логин",
-                                                    "Сменить дату рождения", "Сменить пол", "Сменить пароль"],
-                                                   "Меню редактирования данных пользователя"))
+        menu = Menu(["Сменить имя", "Сменить фамилию", "Сменить логин",
+                     "Сменить дату рождения", "Сменить пол", "Сменить пароль"],
+                    "Меню редактирования данных пользователя")
+        choice = menu.show()
         if choice == 1:
             self.edit_me()
         elif choice == 2:
@@ -485,16 +497,18 @@ class User:
 
 
 class Moderator(User):
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating) -> None:
-        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating)
+    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, user_list) -> None:
+        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating, user_list)
         self.status = "moderator"
+        self.menu = Menu(["Заблокировать - укажите id пользователей через пробел",
+                          "Разблокировать - укажите id пользователей через пробел", "Выход"], "Меню модератора")
 
-    def blocking_users(self, user_ids, menu):
+    def blocking_users(self, user_ids):
         user_list = user_ids.split(" ")
         for i in range(len(user_list)):
             blocked_id: str = user_list[i].strip()
-            for i in range(len(menu.registered_users)):
-                registered_user: User = menu.registered_users[i]
+            for j in range(len(self.user_list.registered_users)):
+                registered_user: User = self.user_list.registered_users[j]
                 if blocked_id == registered_user.user_id:
                     if registered_user.status == "admin":
                         print("Вы не можете заблокировать админа")
@@ -503,54 +517,50 @@ class Moderator(User):
                         print("Вы не можете заблокировать другого модератора. Обратитесь к администратору")
                         continue
                     registered_user.blocked = True
-                    menu.user_table_fields[i][menu.table_view.headers.index("Состояние")] = "Заблокирован"
+                    self.user_list.table_view.update_field("Состояние", j, "Заблокирован").print()
                     break
-        menu.table_view.build_tab(menu.user_table_fields)
 
-    def unblocking_users(self, user_ids, menu):
+    def unblocking_users(self, user_ids):
         user_list = user_ids.split(" ")
         for i in range(len(user_list)):
             blocked_id: str = user_list[i].strip()
-            for i in range(len(menu.registered_users)):
-                registered_user: User = menu.registered_users[i]
+            for j in range(len(self.user_list.registered_users)):
+                registered_user: User = self.user_list.registered_users[j]
                 if blocked_id == registered_user.user_id:
                     registered_user.blocked = False
-                    menu.user_table_fields[i][menu.table_view.headers.index("Состояние")] = "OK"
+                    self.user_list.table_view.update_field("Состояние", j, "OK").print()
                     break
-        menu.table_view.build_tab(menu.user_table_fields)
-
-    def show_menu(self) -> int:
-        return Menu.show_menu(["Заблокировать - укажите id пользователей через пробел",
-                               "Разблокировать - укажите id пользователей через пробел", "Выход"], "Меню модератора")
 
     def callback_menu(self, choice: int):
         if choice == 3:
             print("Досвидания")
             return False
-        regMenu.show_users()
-        user_id = input("Введите id пользователя: ")
+        user_id = input("Введите id пользователей: ")
         if choice == 1:
-            self.blocking_users(user_id, regMenu)
+            self.blocking_users(user_id)
         elif choice == 2:
-            self.unblocking_users(user_id, regMenu)
+            self.unblocking_users(user_id)
 
         return True
 
 
 class Admin(Moderator):
-    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating) -> None:
-        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating)
+    def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, user_list) -> None:
+        super().__init__(user_id, firstname, lastname, birthday, gender, login, password, rating, user_list)
         self.status = "admin"
+        self.menu = Menu(["Заблокировать", "Разблокировать", "Добавить пользователя",
+                          "Удалить пользователя", "Выход"], "Меню админа")
 
-    def delete_user_list(self, user_list):
+    @staticmethod
+    def delete_user_list(user_list):
         user_list.clear()
         print("База данных пустая")
 
     def show_menu(self) -> int:
-        return self.callback_menu(Menu.show_menu(["Заблокировать", "Разблокировать", "Добавить пользователя",
-                                                  "Удалить пользователя", "Выход"], "Меню админа"))
+        return self.callback_menu(self.menu.show())
 
     def del_users(self, ids_str):
+        print("Not ready")
         ids = ids_str.split(" ")
         # for id in ids:
         #     for base_user in base_list:
@@ -558,20 +568,23 @@ class Admin(Moderator):
         #             base_list.remove(base_user)
         #             break
 
+    def add_users(self, user_id):
+        print("Not ready")
+
     def callback_menu(self, choice: int):
         if choice == 5:
             print("Досвидания")
             return False
-        regMenu.show_users()
+        self.user_list.show()
         user_id = input("Введите id пользователя: ")
         if choice == 1:
-            self.blocking_users(user_id, regMenu)
+            self.blocking_users(user_id)
         elif choice == 2:
-            self.unblocking_users(user_id, regMenu)
+            self.unblocking_users(user_id)
         elif choice == 3:
-            self.blocking_users(user_id, regMenu)
+            self.add_users(user_id)
         elif choice == 4:
-            self.unblocking_users(user_id, regMenu)
+            self.del_users(user_id)
 
         return True
 
@@ -623,6 +636,7 @@ class UsersList:
                     login=base_list[i]["login"],
                     password=base_list[i]["password"],
                     rating=base_list[i]["rating"],
+                    user_list=self,
                 ))
             elif base_list[i]["status"] == "admin":
                 self.registered_users.append(Admin(
@@ -634,6 +648,7 @@ class UsersList:
                     login=base_list[i]["login"],
                     password=base_list[i]["password"],
                     rating=base_list[i]["rating"],
+                    user_list=self,
                 ))
             elif base_list[i]["status"] == "moderator":
                 self.registered_users.append(Moderator(
@@ -645,6 +660,7 @@ class UsersList:
                     login=base_list[i]["login"],
                     password=base_list[i]["password"],
                     rating=base_list[i]["rating"],
+                    user_list=self,
                 ))
 
     def check_in(self):
@@ -659,7 +675,7 @@ class UsersList:
             my_pass = input("Введите пароль ")
             for i in range(len(self.registered_users)):
                 registered_user = self.registered_users[i]
-                if my_login == registered_user.login and my_pass == registered_user.password:  # только попав сюда - можно считать что логин существует
+                if my_login == registered_user.login and my_pass == registered_user.password:
                     return registered_user
             try_count -= 1
             print(f"Логин или пароль не верный, осталось {try_count} чтобы войти")
@@ -701,7 +717,7 @@ class UsersList:
         """
         В каких то старых домашках делал создатель ид. Теперь решил записатьего ввиде метода,
         но пока не решил - использовать или нет. Так что пусть будет. Дальше будет видно
-        :param user_list:list
+        :param user_id_len:list
         :return:
         """
         new_id_user = ""
@@ -725,33 +741,31 @@ class UsersList:
         ...
 
     def show(self):
-        self.line: str = "|"
-        self.width_columns = None
-
         user_table_fields = []
-
         for i in range(len(self.registered_users)):
             user: User = self.registered_users[i]
             line = user.to_table()
             line.insert(0, i + 1)
             user_table_fields.append(line)
 
-        table = self.table_view.build_tab(user_table_fields).print()
-        table.print_line("", "+")
-        table.print_line("Тестовый заголовок", "+")
-        table.print_line("", "+")
+        self.table_view.set_content(user_table_fields).build_tab().print()
 
-
-user_list = UsersList()
-
-user_list.show()
+    def delete_user_by_id(self, user_id):
+        if self.db.delete_user_info_by_id(user_id):
+            for user in self.registered_users:
+                if user.user_id == user_id:
+                    self.registered_users.remove(user)
+                    self.table_view.del_line("id", user_id)
+                    return True
+            return False
 
 
 class Registration:
-    def __init__(self):
+    def __init__(self, manager):
         """
         Это класс регистрации
         """
+        self.manager: Manager = manager
         self.new_user = None
 
     def reister_new_user(self):
@@ -764,64 +778,18 @@ class Registration:
                 gender=self.input_gender(),
                 login=self.input_login(),
                 password=self.input_pass("Придумайте пароль: "),
-                rating=0
+                rating=0,
+                user_list=self.manager.user_list,
             )
             new_user.show()
 
             if not input("Enter - Подтвердить "):
-                new_user.user_id = user_list.db.store_user_info(new_user.get_user_info())
-                user_list.registered_users.append(new_user)
+                new_user.user_id = self.manager.user_list.db.store_user_info(new_user.get_user_info())
+                self.manager.user_list.registered_users.append(new_user)
                 self.new_user = new_user
                 return new_user
             else:
                 print("Начните регистрацию заново ")
-
-    # def show_menu(self):
-    #     return self.callback_menu(Utils.show_menu(["Вход", "Регистрация"], "Войдите или зарегистрируйтесь"))
-
-    # def callback_menu(self, choice):
-    #     if choice == 1:
-    #         return regMenu.check_in()
-    #     else:
-    #         return regMenu.reister_new_user()
-    #
-    # def show_users(self):
-    #     self.table_view.print_tab(self.user_table_fields)
-
-    # def blocking_users(self, user_list):
-    #     """
-    #     Пока не участвующий метод. сохранил его на будущеее
-    #     :param user_list:
-    #     :return:
-    #     """
-    #     # txt_user_list = ""
-    #     blocked_user_list = []
-    #     self.show_users()
-    #     input_user_id = int(input("Введите id пользователя для блокировки "))
-    #     for i in range(len(user_list)):
-    #         if self.status == "moderator":
-    #             if input_user_id == user_list[i].user_id and user_list[i].status != "moderator" and user_list[i].status != "admin":
-    #                 if user_list[i].blocked == True:
-    #                     print("Пользователь уже заблокирован")
-    #                     break
-    #                 else:
-    #                     user_list[i].blocked = True
-    #                     print("Пользователь упешно заблокирован")
-    #                     break
-    #         elif self.status == "admin":
-    #             if input_user_id == user_list[i].user_id:
-    #                 if user_list[i].blocked == True:
-    #                     print("Пользователь уже заблокирован")
-    #                     break
-    #                 else:
-    #                     user_list[i].blocked = True
-    #                     print("Пользователь упешно заблокирован")
-    #                     break
-    #     blocked_user_list = []
-    #     for i in range(len(user_list)):
-    #         user: User = user_list[i]
-    #         blocked_user_list.append(user.to_table())
-    #     self.print_tab(self.table_head, blocked_user_list, "Таблица заблокированных пользователей")
 
     @staticmethod
     def input_field(field_name) -> str:
@@ -843,18 +811,23 @@ class Registration:
 
     @staticmethod
     def input_birthday() -> list:
-        birthday = Registration.input_field("день рождения в формате ДД.ММ.ГГГГ ")
+        birthday = Registration.input_field("день рождения в формате ДД.ММ.ГГГГ")
         if not birthday:
             birthday = "01.01.1970"
             print("Дата рождения не указана. Назначена 01.01.1970")
         birthdate = []
         parse_num = ""
-        control_nums = [31, 12, datetime.date.year]
+
+        current_date = date.today().timetuple()
+        current_year = current_date.tm_year
+        control_nums = [31, 12, current_year]
+
         d = 0
         for char in birthday:
             if char.isdigit():
                 parse_num += char
-            elif parse_num:  # между числами может оказаться больше одного нечисла. на следующей же итерации что то пойдет не так
+
+            elif parse_num:
                 if len(birthdate) == 3:
                     return birthdate
                 num = int(parse_num)
@@ -865,17 +838,20 @@ class Registration:
                     print("Введена некорректная дата")
                     return Registration.input_birthday()
                 parse_num = ""
-        return birthdate
+        if len(birthdate) == 3:
+            return birthdate
+        else:
+            birthdate.append(int(parse_num))
+            return birthdate
 
-    @staticmethod
-    def input_login() -> str:
+    def input_login(self) -> str:
         """
         Проверяем свободен ли логин и если да то возвращаем его. если нет, то принуждаем ввести другой логин
         :return:
         """
         while True:
             my_login = Registration.input_field("логин")
-            if not user_list.check_login(my_login):
+            if not self.manager.user_list.check_login(my_login):
                 return my_login
             print("Такой логин уже занят. Придумайте другой")
 
@@ -896,52 +872,48 @@ class LogIn:
     Это класс входа
     """
 
-    def __init__(self, login, password):
-        self.login = login
-        self.password = password
+    def __init__(self, manager):
+        self.manager: Manager = manager
+        self.login = None
+        self.password = None
 
     def log_in_account(self):
-        user: User = user_list.check_in()
+        user: User = self.manager.user_list.check_in()
         if user is not None:
             self.login = user.login
             self.password = user.password
+        return user
 
 
-class Manager():
+class Manager:
     """
     А нужно ли передавать в менеджер столько объектов?
     Возможно нужно их создавать прям внутри менеджера. Ведь дальнейшее взаимодействие с ними предпологается
     исключительно через менеджер
+
+    Пока что убрал параметрры что бы было несложно поработать через менеджер
     """
 
-    def __init__(self, reg, in_log, user_moder_admin, data_list):
-        self.reg = reg
-        self.in_log = in_log
-        self.user_moder_admin = user_moder_admin
-        self.data_list = data_list
-        self.registered_users = []
+    def __init__(self):
+        self.registration = Registration(self)
+        self.log_in: LogIn = LogIn(self)
+        self.user = None
+        self.user_list = UsersList()
         self.menu = Menu(["Вход", "Регистрация"], "Войдите или зарегистрируйтесь")
 
+    def show_start_menu(self):
+        if self.menu.show() == 1:
+            self.user = self.log_in.log_in_account()
+        else:
+            self.user = self.registration.reister_new_user()
+        if self.user:
+            self.show_users()
+            self.user.show_menu()
+
+    def show_users(self):
+        self.user_list.show()
 
 
-
-
-regMenu = Registration()
-regMenu.reister_new_user()
-
-regMenu.show_users()  # Придется сначала увидеть список пользователей что бы решить под кем входить
-
-entered_user = regMenu.show_menu()
-regMenu.show_users()
-
-print()
-print(f"Добро пожаловать {entered_user.get_str_status()} {entered_user.firstname} {entered_user.lastname}")
-
-while entered_user.show_menu():
-    regMenu.show_users()
-
-# my_reg = Registration()
-# my_inlog = Login()
-# my_person_list = [User(), Moderator(), Admin()]
-# base = []
-# my_manager = Manager(my_reg, my_inlog, my_person_list, base)
+account_manager = Manager()
+# print(account_manager.registration.input_birthday())
+account_manager.show_start_menu()

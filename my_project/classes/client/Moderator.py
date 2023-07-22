@@ -38,7 +38,7 @@ class Moderator(User):
         menu.table_view.build_tab(menu.user_table_fields)
 
     def show_menu(self) -> int:
-        return Utils.show_menu(["Заблокировать - укажите id пользователей через пробел",
+        return Utils.show(["Заблокировать - укажите id пользователей через пробел",
                                 "Разблокировать - укажите id пользователей через пробел", "Выход"], "Меню модератора")
 
     def callback_menu(self, choice: int):

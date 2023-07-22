@@ -11,7 +11,7 @@ class Admin(Moderator):
         print("База данных пустая")
 
     def show_menu(self) -> int:
-        return self.callback_menu(Utils.show_menu(["Заблокировать", "Разблокировать", "Добавить пользователя",
+        return self.callback_menu(Utils.show(["Заблокировать", "Разблокировать", "Добавить пользователя",
                                                    "Удалить пользователя", "Выход"], "Меню админа"))
 
     def del_users(self, ids_str):
