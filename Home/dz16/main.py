@@ -381,6 +381,7 @@ class FakeDataBase:
         self.add_new_info(info)
         self.save_base_list()
         return info['id']
+
     def save_base_list(self):
         file = open(self.base_name, "w", encoding="utf-8")
         new_base_json = json.dumps(self.base_list, ensure_ascii=False)
@@ -400,9 +401,10 @@ class FakeDataBase:
     def reset_db(self):
         if os.path.exists(self.base_name):
             os.remove(self.base_name)
-            self.base_list=FakeDataBase.default_base_list
+            self.base_list = FakeDataBase.default_base_list
             self.fill_id()
             self.save_base_list()
+
 
 class User:
     def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, blocked,
@@ -564,7 +566,7 @@ class Moderator(User):
         self.status = "moderator"
         self.menu = Menu(["Заблокировать - укажите id пользователей через пробел",
                           "Разблокировать - укажите id пользователей через пробел",
-                          "Редактировать", "Удалиться","Сбросить базу данных",
+                          "Редактировать", "Удалиться", "Сбросить базу данных",
                           "Выход"], "Меню модератора")
 
     def blocking_users(self, user_ids):
@@ -610,7 +612,7 @@ class Moderator(User):
         elif choice == self.menu.item("Удалиться"):
             self.delete_me()
         elif choice == self.menu.item("Сбросить базу данных"):
-            #сделал для упрощения восстановления админа
+            # сделал для упрощения восстановления админа
             self.manager.user_list.db.reset_db()
             self.manager.user_list.create_user_list(self.manager.user_list.db.base_list)
             exit(0)
@@ -625,7 +627,7 @@ class Admin(Moderator):
         self.status = "admin"
         self.menu = Menu(["Заблокировать", "Разблокировать", "Сделать пользователя модератором",
                           "Сделать модератора простым пользователем", "Передать права администратора",
-                          "Удалить пользователей", "Редактировать", "Удалиться","Сбросить базу данных",
+                          "Удалить пользователей", "Редактировать", "Удалиться", "Сбросить базу данных",
                           "Выход"], "Меню админа")
 
     @staticmethod
