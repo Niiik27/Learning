@@ -1,14 +1,14 @@
 """
 mongodb
-Случилась глобальная переделка - Сделалкласс RegistrationMenu.
+Случилась глобальная переделка - Сделал класс RegistrationMenu.
 На данный момент он позволяет не просто вывести меню, но и является менеджером для работы с классами Users & Children
-По этому список зарегестрированных пользователей переехал в него.
+По этому список зарегистрированных пользователей переехал в него.
 Основной список шаблона оставил на месте так как он имитирует внешние данные
 
 Кроме того решил сделать табличный вывод списка пользователей - показалось не сложно. Основное решение придумалось в
 классе - сделать метод дополняющий строку пробелами до необходимой длины - это позволит выводить строки в столбики.
 Но по пути столкнулся с множественными непредвиденными проблемками, вариантами их решений и новыми идеями.
-В итоге пришлось разработатьотдельный класс для вывода таблиц. Так как функционал меню и таблицы стали сильно
+В итоге пришлось разработать отдельный класс для вывода таблиц. Так как функционал меню и таблицы стали сильно
 переплетаться, а мне бы хотелось иметь универсальный инструмент на будущее. По этому пришлось разделить на два класса.
 Теперь таблицей можно пользоваться как принтом, и можно ралзвивать ее функционал по мере необходимости
 Для теста таблицы понадобились дополнительные поля, по этому пришлоь немного поменять User
@@ -30,7 +30,9 @@ class Menu:
     """
     Слишком часто требуется меню. С ограничениями на ввод. Для этого нужен отдельный метод.
     Но оно нужно в разных контекстах, и тогда придется дублировать метод в разные классы.
-    По этому создал класс для данного метода. За одно это позволит сразу сохранить поля меню
+    По этому создал класс для данного метода. За одно это позволит сразу сохранить поля меню, а не создавать
+    под них отдельный массив.
+    Для построения меню нужен списк пунктов меню. Так же можно передать заголовок меню
     """
 
     def __init__(self, menu_list: list, msg: str = ""):
@@ -39,7 +41,8 @@ class Menu:
 
     def show(self) -> int:
         """
-        Метод принимает строит меню, и защищает от неправильного ввода
+        Метод строит меню на основе списка пунктов меню, и возвращает номенр выбранного пункта
+        Так же он запрещает вводить не числовые данные, что гарантирует корректную работу меню
         :return: int
         """
         print()
@@ -57,10 +60,17 @@ class Menu:
                 print(f"Число должно быть в диапазоне от 1 до {len(self.menu_list)}!")
                 choice = input(f"Выберите действие:\n{menu_txt}> ")
 
-    def item(self, name_item):
+    def item(self, name_item) -> int:
+        """
+        метод возвращает номер пункта по его названию
+        нужен для того что бы можно было оперативно добавлять новые пункты меню, и при обработке выбора не перестраивать
+        обработчик выбора, и вообще не задумываться о правильном порядке
+        :param name_item:
+        :return:
+        """
         for i in range(len(self.menu_list)):
-            item = self.menu_list[i]
-            if item.lower() == name_item.lower():
+            item = self.menu_list[i].lower()
+            if item == name_item.lower():
                 return i + 1
         return -1
         # return self.menu_list.index(name_item)
@@ -93,7 +103,8 @@ class TableView:
     @staticmethod
     def make_cell(my_string: str, cell_len: int, symbol: str = " ", position="center", offset=0):
         """
-        Метод дополняет строку символами до нужной длины
+        Метод дополняет строку символами до нужной длины, что приводит к распечатке таких строк в столбик
+        Символы добавляются согласно выбранному позиционированию текста
         :param my_string:
         :param cell_len:
         :param symbol:
@@ -110,7 +121,10 @@ class TableView:
 
     def raiting_view(self, cell_width: int, fill_percent: int, original_value: int, symbol: str = "\u2588"):
         """
-        Метод выводит строку из исходного числа в и символов графика в процентном соотношении от общей ширины ячейки
+        Метод превращает число в n-количество указанных символов. На основе данных на сколько процентов должна быть
+        заполнена строка.
+        Возвращает строку вида xx ********** где xx - исходное число, **** - выбранные для отображения символы в
+        рассчитанном количестве
         :param cell_width:
         :param fill_percent:
         :param original_value:
@@ -119,17 +133,20 @@ class TableView:
         """
         len_digit = 3
         symbols_num = int((cell_width - len_digit) / 100 * int(fill_percent))
-        raiting_line = f"{self.make_cell(str(original_value), len_digit, ' ', 'left')} {symbol * symbols_num}"
-        return self.make_cell(raiting_line, cell_width, " ", 'left', 0)
+        rating_line = f"{self.make_cell(str(original_value), len_digit, ' ', 'left')} {symbol * symbols_num}"
+        return self.make_cell(rating_line, cell_width, " ", 'left', 0)
 
     def build_tab(self):
         """
-        Метов строит таблицу из шапки и данных для дальнейшего вывода.
-        возвращяет свой инстанс. Так удобнее вызывать принт. В целом удалось сделать задуманное, и больше нет
-        желания как то менято код, по этому оставлю его без коментариев, хоть он и самый сложный в этом классе
-
-
-        :return: self
+            Метов строит таблицу из шапки и данных для дальнейшего вывода.
+            возвращяет свой инстанс. Так удобнее вызывать принт. В целом удалось сделать задуманное, и больше нет
+            желания как то менять код. Хоть он и самый сложный в этом классе - оставлю его без комментариев, так как он
+            идет в дополнение к заданию, а в дальнейшем может пригодиться как самодостаточный элемент для просмотра
+            данных, и уже не важно будет, что там под капотом. А лишние комментарии только мешали отладить код.
+            Основная идея в том, что при изменении полей таблицы может поменяться ширина колонки, по этому нужно сначала
+            все просчитать,а в нужный момент вызвать принт, а что бы принт можно было вызвать сразу после
+            просчета - через точку - возвращается self
+            :return: self
         """
         self.line: str = "|"
         list_of_width_cells = []
@@ -196,6 +213,10 @@ class TableView:
         return self
 
     def print(self):
+        """
+        Распечатка подготовленой ранее таблицы
+        :return:
+        """
         print(self.tab_str)
         return self
 
@@ -215,15 +236,34 @@ class TableView:
             print(symbol * len(self.line))
 
     def update_field(self, col_name, row_num, new_value):
+        """
+        Обновление поля в заданной колонке в указанной строке новым значением
+        :param col_name:
+        :param row_num:
+        :param new_value:
+        :return:
+        """
         self.content[row_num][self.headers.index(col_name)] = new_value
         self.build_tab()
         return self
 
     def set_content(self, content):
+        """
+        Установка тела таблицы
+        :param content:
+        :return:
+        """
         self.content = content
         return self
 
     def del_line(self, col_name, value):
+        """
+        Удаляет строку из таблицы по значению поля в заданном столбце. Типа удаление записи по id.
+        Но только по любым параметрам
+        :param col_name:
+        :param value:
+        :return:
+        """
         for line in self.content:
             if line[self.headers.index(col_name)] == value:
                 self.content.remove(line)
@@ -232,6 +272,13 @@ class TableView:
         return False
 
     def update_line(self, col_name, row_item, new_line):
+        """
+        Обновление всей строки по названию колонки и значению поля
+        :param col_name:
+        :param row_item:
+        :param new_line:
+        :return:
+        """
         for i in range(len(self.content)):
             line = self.content[i]
             if line[self.headers.index(col_name)] == row_item:
@@ -241,11 +288,31 @@ class TableView:
                 break
         return self
 
+    def get_num_line(self, col_name, row_item):
+        """
+        Поиск номера строки по названию колонки из начению поля
+        :param col_name:
+        :param row_item:
+        :return:
+        """
+        for i in range(len(self.content)):
+            line = self.content[i]
+            if line[self.headers.index(col_name)] == row_item:
+                return i
+
     def clear(self):
         self.content.clear()
 
 
 class FakeDataBase:
+    """
+    В конечном итоге пришел к выводу, что требуется какой то имитатор базы данных, доступ к которому будет
+    целой историей с правильной последовательностью действий.
+    В ней будут храниться данные пользователей в своем формате
+    Класс имеет заводской массив пользователей, что бы не приходилось с нуля создавать список для тестов
+    Все сохранения производятся в json на диск, а после сохранения информация считывается заново, что бы обновить
+    локольный список пользователей согласно тому что храниться в базе
+    """
     default_base_list = [
         {
             "id": "10",
@@ -308,7 +375,9 @@ class FakeDataBase:
     ]
 
     def __init__(self):
-        # fileR = open('db_users.json', "r", encoding="utf-8")
+        """
+        При инициализации происходит чтение данных либо с диска либо с шаблона
+        """
         self.base_name = "db_users.json"
         if os.path.exists(self.base_name):
             file = open(self.base_name, "r", encoding="utf-8")
@@ -334,8 +403,8 @@ class FakeDataBase:
 
     def create_id(self, user_id_len=8):
         """
-        В каких то старых домашках делал создатель ид. Теперь решил записатьего ввиде метода,
-        но пока не решил - использовать или нет. Так что пусть будет. Дальше будет видно
+        Создает случайный id в строковам виде из буквенных и цифровых символов
+        При создании проверяется уникальность id
         :param user_id_len:list
         :return:
         """
@@ -360,7 +429,12 @@ class FakeDataBase:
             if item.get("id") is None:
                 item['id'] = self.create_id()
 
-    def add_new_info(self, info):
+    def set_new_info(self, info):
+        """
+        Добавляет новую информацию для сохранения
+        :param info:
+        :return: id
+        """
         if info.get('id') is not None:  # id выдает сервер, так что если id нет, то это значит новый пользователь
             for rec in self.base_list:
                 if rec['id'] == info['id']:
@@ -376,25 +450,48 @@ class FakeDataBase:
         else:
             info['id'] = self.create_id()
             self.base_list.append(info)
-
-    def store_user_info(self, info):
-        self.add_new_info(info)
-        self.save_base_list()
+        # Единственное место где можно получить достоверный id нового пользователя находится здесь
+        # Либо придется перезагружать базу. По этому этот метод должен возвращать id.
         return info['id']
 
+    # def store_user_info(self, info):
+    #     """
+    #     Сохраняет информацию на диск
+    #     :param info:
+    #     :return:
+    #     """
+    #     self.add_new_info(info)
+    #
+    #     if self.save_base_list():
+    #         return info['id']
+    #     else:
+    #         return None
+
     def save_base_list(self):
+        """
+        Здесь сам процесс записи.
+        После записи информация считывается заново, что гарантирует соответствие полученной и сохраненной информации
+        :return:
+        """
+        status = False
         file = open(self.base_name, "w", encoding="utf-8")
-        new_base_json = json.dumps(self.base_list, ensure_ascii=False)
-        file.write(new_base_json)
-        file.close()
-        file = open(self.base_name, "r", encoding="utf-8")
-        self.base_list = json.loads(file.read())
-        file.close()
+        if file:
+            new_base_json = json.dumps(self.base_list, ensure_ascii=False)
+            file.write(new_base_json)
+            file.close()
+            status = True
+        if file:
+            file = open(self.base_name, "r", encoding="utf-8")
+            self.base_list = json.loads(file.read())
+            file.close()
+            status = True
+        return status
 
     def delete_user_info_by_id(self, user_id):
         for rec in self.base_list:
             if rec['id'] == user_id:
                 self.base_list.remove(rec)
+                self.save_base_list()
                 return True
         return False
 
@@ -457,22 +554,37 @@ class User:
         self.lastname = input(f"{self.firstname} {self.lastname} введите новую фамилию: ")
 
     def update_birthday(self):
+        print(f"Прежняя дата рождения: {self.birthday[0]}.{self.birthday[1]}.{self.birthday[2]}")
         self.birthday = Registration.input_birthday()
 
     def update_gender(self):
-        self.gender = Registration.input_field("пол")
+        print(f"Прежний пол: {self.gender}")
+        self.gender = Registration.input_gender()
+        print(f"Выбран {self.gender} пол")
 
     def update_login(self):
+        print(f"Прежний логин: {self.login}")
         self.login = self.manager.registration.input_login()
+        print(f"Выбран {self.gender} пол")
 
     def update_password(self):
-        new_password = ""
-        while new_password != self.password or new_password == "":
-            if new_password: print("Пароль не верный")
-            new_password = Registration.input_field("старый пароль")
-        self.password = new_password
+        print(f"Прежний пароль: {self.password}")
+        old_password = ""
+        while True:
+            old_password = Registration.input_field("старый пароль")
+            if old_password != self.password or old_password == "":
+                print("Пароль не верный")
+            else:
+                break
+
+        self.password = Registration.input_field("новый пароль")
 
     def get_user_age(self):
+        """
+        Для подсчета возраста воспользовался какой то библиотекой, которая выдает всякие даты в непонятном виде
+        по этому пришлось их расшифровать
+        :return:
+        """
         current_date = date.today().timetuple()
         current_year = current_date.tm_year
         current_month = current_date.tm_mon
@@ -486,12 +598,16 @@ class User:
         return int(current_year - birth_year - ((current_month, current_day) < (birth_month, birth_day)))
 
     def to_table(self) -> list:
+        """
+        Метод выдает список полей строки таблицы. По этому потребуется его подстройка, если шапка таблицы изменится
+        :return:
+        """
         return [
             str(self.user_id),
             f"{self.firstname} {self.lastname}",
             self.get_str_gender(),
             self.login,
-            f"{str(self.birthday[0]).rjust(2, '0')}.{str(self.birthday[1]).rjust(2, '0')}.{self.birthday[2]}",
+            f"{str(self.birthday[0]).rjust(2, '0')}.{str(self.birthday[1]).rjust(2, '0')}.{str(self.birthday[2]).rjust(4, '0')}",
             str(self.get_user_age()),
             self.status,
             f"{'Заблокирован' if self.blocked else 'ОК'}",
@@ -500,12 +616,22 @@ class User:
         ]
 
     def show_menu(self):
+        """
+        Показывает меню пользователя
+        :return:
+        """
         choice = 0
-        while choice != self.menu.item("выход"):
+        while choice != self.menu.item("Выход") or choice != self.menu.item("Удалиться") or \
+                choice != self.menu.item("Передать права администратора"):
             choice = self.menu.show()
             self.callback_menu(choice)
 
     def callback_menu(self, choice: int):
+        """
+        Обработка выбора меню
+        :param choice:
+        :return:
+        """
         if choice == self.menu.item("Редактировать профиль"):
             self.edit_me()
         elif choice == self.menu.item("Удалиться"):
@@ -514,6 +640,10 @@ class User:
             self.exit_me()
 
     def show(self):
+        """
+        Показывает данные пользователя - для итоговой сверки перед дальнейшими действиями
+        :return:
+        """
         print(f"Данные пользователя {self.firstname}: ")
         print(f"id: {self.user_id}")
         print(f"Рейтинг:{self.rating}")
@@ -528,16 +658,25 @@ class User:
         print(f"Состояние {'Заблокирован' if self.blocked else 'OK'}")
 
     def exit_me(self):
-        base_list = self.manager.user_list.save_session(self)
-        self.manager.user_list.create_user_list(base_list)
+        """
+        Набор действий при выходе из программы
+        :return:
+        """
+        self.manager.user_list.update_user_info(self)
+        self.manager.user_list.create_user_list()
         self.manager.user_list.show()
         print("Пока")
 
     def delete_me(self):
         self.manager.user_list.delete_user_by_id(self.user_id)
-        self.manager.user_list.table_view.print()
+        self.manager.user_list.show()
+        self.manager.show_start_menu()
 
     def edit_me(self):
+        """
+        Локальное меню редактирования параметров пользователя
+        :return:
+        """
         menu = Menu(["Сменить имя", "Сменить фамилию", "Сменить логин",
                      "Сменить дату рождения", "Сменить пол", "Сменить пароль", "Завершить"],
                     "Меню редактирования данных пользователя")
@@ -583,8 +722,11 @@ class Moderator(User):
                         print("Вы не можете заблокировать другого модератора. Обратитесь к администратору")
                         continue
                     registered_user.blocked = True
-                    self.manager.user_list.db.store_user_info(registered_user.get_user_info())
-                    self.manager.user_list.table_view.update_field("Состояние", j, "Заблокирован").print()
+                    # self.manager.user_list.db.store_user_info(registered_user.get_user_info())
+                    field = "Состояние"
+                    self.manager.user_list.update_user_info(registered_user)
+                    self.manager.user_list.show()
+                    # self.manager.user_list.table_view.update_field("Состояние", j, "Заблокирован").print()
                     break
 
     def unblocking_users(self, user_ids):
@@ -595,8 +737,11 @@ class Moderator(User):
                 registered_user: User = self.manager.user_list.registered_users[j]
                 if blocked_id == registered_user.user_id:
                     registered_user.blocked = False
-                    self.manager.user_list.db.store_user_info(registered_user.get_user_info())
-                    self.manager.user_list.table_view.update_field("Состояние", j, "OK").print()
+                    # self.manager.user_list.db.store_user_info(registered_user.get_user_info())
+                    field = "Состояние"
+                    self.manager.user_list.update_user_info(registered_user)
+                    self.manager.user_list.show()
+                    # self.manager.user_list.table_view.update_field("Состояние", j, "OK").print()
                     break
 
     def callback_menu(self, choice: int):
@@ -614,7 +759,7 @@ class Moderator(User):
         elif choice == self.menu.item("Сбросить базу данных"):
             # сделал для упрощения восстановления админа
             self.manager.user_list.db.reset_db()
-            self.manager.user_list.create_user_list(self.manager.user_list.db.base_list)
+            self.manager.user_list.create_user_list()
             exit(0)
         elif choice == self.menu.item("Выход"):
             self.exit_me()
@@ -644,19 +789,33 @@ class Admin(Moderator):
         self.manager.user_list.table_view.print()
 
     def transfer_admin(self, user_id):
+        """
+        Передача админских прав другому пользователю
+        Нельзя просто локально поменять статус, так как при получении данных создаются разные объекты пользователей
+        Для этого придется создать новую запись, сохранить ее на сервере, поучить оттуда новые данные,,
+        и на их основе заново создать пользователей
+        Пока что для этого требуется закончить сеанс. В дальнейшем может сделаю смену прав без завершения работы
+        :param user_id:
+        :return:
+        """
         for i in range(len(self.manager.user_list.registered_users)):
             registered_user: User = self.manager.user_list.registered_users[i]
             if user_id == registered_user.user_id:
-                self.status = "user"
                 new_admin = registered_user.get_user_info()
-                new_admin["status"] = "admin"
-                self.manager.user_list.db.add_new_info(new_admin)
+                new_admin["status"] = self.status
+                self.manager.user_list.update_base(new_admin)
                 ex_admin = self.get_user_info()
                 ex_admin["status"] = "user"
-                self.manager.user_list.db.add_new_info(ex_admin)
-                self.exit_me()
+                self.manager.user_list.update_base(ex_admin)
+                self.manager.show_start_menu()
+                # self.exit_me()
 
     def set_users_to_moderator(self, user_ids):
+        """
+        Тоже что и с админом - нужно сменить запись и получить ее заново
+        :param user_ids:
+        :return:
+        """
         user_list = user_ids.split(" ")
         for i in range(len(user_list)):
             blocked_id: str = user_list[i].strip()
@@ -666,22 +825,33 @@ class Admin(Moderator):
                     if registered_user.status == "admin":
                         print("Админ не может быть изменен")
                         continue
+                    new_moder = registered_user.get_user_info()
+                    new_moder["status"] = "moderator"
+                    self.manager.user_list.update_base(new_moder)
+                    self.manager.user_list.save_base()
+                    self.manager.user_list.create_user_list()
+                    self.manager.user_list.show()
 
-                    registered_user.status = "moderator"
-                    self.manager.user_list.db.store_user_info(registered_user.get_user_info())
-                    self.manager.user_list.table_view.update_field("Статус", j, registered_user.status).print()
                     break
 
     def moderators_to_user(self, user_ids):
+        """
+        Тоже что и с админом - нужно сменить запись и получить ее заново
+        :param user_ids:
+        :return:
+        """
         user_list = user_ids.split(" ")
         for i in range(len(user_list)):
             blocked_id: str = user_list[i].strip()
             for j in range(len(self.manager.user_list.registered_users)):
                 registered_user: User = self.manager.user_list.registered_users[j]
                 if blocked_id == registered_user.user_id:
-                    registered_user.status = "user"
-                    self.manager.user_list.db.store_user_info(registered_user.get_user_info())
-                    self.manager.user_list.table_view.update_field("Статус", j, registered_user.status).print()
+                    new_moder = registered_user.get_user_info()
+                    new_moder["status"] = "user"
+                    self.manager.user_list.update_base(new_moder)
+                    self.manager.user_list.save_base()
+                    self.manager.user_list.create_user_list()
+                    self.manager.user_list.show()
                     break
 
     def callback_menu(self, choice: int):
@@ -712,7 +882,7 @@ class Admin(Moderator):
             self.delete_me()
         elif choice == self.menu.item("Сбросить базу данных"):
             self.manager.user_list.db.reset_db()
-            self.manager.user_list.create_user_list(self.manager.user_list.db.base_list)
+            self.manager.user_list.create_user_list()
         elif choice == self.menu.item("Выход"):
             self.exit_me()
 
@@ -737,61 +907,60 @@ class UsersList:
         А вот если потребуются элементы GUI то их уже делать отдельно
 
         Похоже пока писал комент - определился - таблице здесь быть.
-        Хотелось бы сделать меню, но оно зависит от прав пользователя. Значит меню реализовывать в них
         """
         self.manager = manager
         self.registered_users = []
         self.db = FakeDataBase()
-        self.create_user_list(self.db.base_list)
+        self.create_user_list()
         self.table_view = TableView(
             {"№": "center", "id": "left", "Имя": "left", "Пол": "center", "Логин": "left", "День рождения": "center",
              "Возраст": "rating.15.*", "Статус": "center", "Состояние": "center", "Пароль": "right",
              "Рейтинг": "rating"}, "Таблица зарегистрированных пользователей")
 
-    def create_user_list(self, base_list):
+    def create_user_list(self):
         """
-        Раньше это была автоматизация создания тестового списка пользователей, а теперь похоже рабочий метод.
+        Раньше это была автоматизация создания тестового списка пользователей, а теперь, похоже, рабочий метод.
         Тестовый список - теперь на стороне базы данных
         """
         self.registered_users.clear()
-        for i in range(len(base_list)):
-            if base_list[i]["status"] == "user":
+        for i in range(len(self.db.base_list)):
+            if self.db.base_list[i]["status"] == "user":
                 self.registered_users.append(User(
-                    user_id=base_list[i]["id"],
-                    firstname=base_list[i]["firstname"],
-                    lastname=base_list[i]["lastname"],
-                    birthday=base_list[i]["birthday"],
-                    gender=base_list[i]["gender"],
-                    login=base_list[i]["login"],
-                    password=base_list[i]["password"],
-                    rating=base_list[i]["rating"],
-                    blocked=base_list[i]["blocked"],
+                    user_id=self.db.base_list[i]["id"],
+                    firstname=self.db.base_list[i]["firstname"],
+                    lastname=self.db.base_list[i]["lastname"],
+                    birthday=self.db.base_list[i]["birthday"],
+                    gender=self.db.base_list[i]["gender"],
+                    login=self.db.base_list[i]["login"],
+                    password=self.db.base_list[i]["password"],
+                    rating=self.db.base_list[i]["rating"],
+                    blocked=self.db.base_list[i]["blocked"],
                     manager=self.manager,
                 ))
-            elif base_list[i]["status"] == "admin":
+            elif self.db.base_list[i]["status"] == "admin":
                 self.registered_users.append(Admin(
-                    user_id=base_list[i]["id"],
-                    firstname=base_list[i]["firstname"],
-                    lastname=base_list[i]["lastname"],
-                    birthday=base_list[i]["birthday"],
-                    gender=base_list[i]["gender"],
-                    login=base_list[i]["login"],
-                    password=base_list[i]["password"],
-                    rating=base_list[i]["rating"],
-                    blocked=base_list[i]["blocked"],
+                    user_id=self.db.base_list[i]["id"],
+                    firstname=self.db.base_list[i]["firstname"],
+                    lastname=self.db.base_list[i]["lastname"],
+                    birthday=self.db.base_list[i]["birthday"],
+                    gender=self.db.base_list[i]["gender"],
+                    login=self.db.base_list[i]["login"],
+                    password=self.db.base_list[i]["password"],
+                    rating=self.db.base_list[i]["rating"],
+                    blocked=self.db.base_list[i]["blocked"],
                     manager=self.manager,
                 ))
-            elif base_list[i]["status"] == "moderator":
+            elif self.db.base_list[i]["status"] == "moderator":
                 self.registered_users.append(Moderator(
-                    user_id=base_list[i]["id"],
-                    firstname=base_list[i]["firstname"],
-                    lastname=base_list[i]["lastname"],
-                    birthday=base_list[i]["birthday"],
-                    gender=base_list[i]["gender"],
-                    login=base_list[i]["login"],
-                    password=base_list[i]["password"],
-                    rating=base_list[i]["rating"],
-                    blocked=base_list[i]["blocked"],
+                    user_id=self.db.base_list[i]["id"],
+                    firstname=self.db.base_list[i]["firstname"],
+                    lastname=self.db.base_list[i]["lastname"],
+                    birthday=self.db.base_list[i]["birthday"],
+                    gender=self.db.base_list[i]["gender"],
+                    login=self.db.base_list[i]["login"],
+                    password=self.db.base_list[i]["password"],
+                    rating=self.db.base_list[i]["rating"],
+                    blocked=self.db.base_list[i]["blocked"],
                     manager=self.manager,
                 ))
 
@@ -845,29 +1014,6 @@ class UsersList:
                         return None
             return None
 
-    def create_id(self, user_id_len=8):
-        """
-        В каких то старых домашках делал создатель ид. Теперь решил записатьего ввиде метода,
-        но пока не решил - использовать или нет. Так что пусть будет. Дальше будет видно
-        :param user_id_len:list
-        :return:
-        """
-        new_id_user = ""
-        id_symbols = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"
-        # id_symbols = "1234567890"  # упростил до цифр
-        while True:
-            for _ in range(user_id_len):
-                symbol_index = random.randint(0, len(id_symbols) - 1)
-                new_id_user += id_symbols[symbol_index]
-
-            for user in self.registered_users:
-                if user.user_id == new_id_user:
-                    new_id_user = ""
-                    break
-            if len(new_id_user) != 0:
-                break
-
-        return new_id_user
 
     def show(self):
         user_table_fields = []
@@ -876,7 +1022,6 @@ class UsersList:
             line = user.to_table()
             line.insert(0, i + 1)
             user_table_fields.append(line)
-
         self.table_view.set_content(user_table_fields).build_tab().print()
 
     def delete_user_by_id(self, user_id):
@@ -884,15 +1029,44 @@ class UsersList:
             for user in self.registered_users:
                 if user.user_id == user_id:
                     self.registered_users.remove(user)
-                    self.table_view.del_line("id", user_id)
+                    # self.table_view.del_line("id", user_id)
                     return True
             return False
 
-    def save_session(self, user: User):
-        self.db.store_user_info(user.get_user_info())
-        return self.db.base_list
+    # def save_session(self, user: User):
+    #
+    #     self.db.add_new_info(user.get_user_info())
+    #     self.db.save_base_list()
+    #     return self.db.base_list
 
+    def update_user_info(self, user: User):
+        """
+        метод обновляет локальный массив. и отправляет на сервер
+        :param user:
+        :return:
+        """
 
+        self.db.set_new_info(user.get_user_info())
+        self.db.save_base_list()
+        # self.registered_users.append(user)
+
+    def update_base(self, record):
+        """
+        простое обновление локального массива без отправки на сервер
+        Произойдет либо обновление данных пользователя, либо добавление данных нового пользователя
+        id назначается на стороне базы данных, по этому метод должен возвращать id, так как если пользователь
+        новый, то id появится только после занесения в базу
+        :param record:
+        :return:
+        """
+        return self.db.set_new_info(record)
+
+    def save_base(self):
+        """
+        Сохраняет файл базы данных как есть
+        :return:
+        """
+        self.db.save_base_list()
 class Registration:
     def __init__(self, manager):
         """
@@ -918,7 +1092,8 @@ class Registration:
             new_user.show()
 
             if not input("Enter - Подтвердить "):
-                new_user.user_id = self.manager.user_list.db.store_user_info(new_user.get_user_info())
+                new_user.user_id = self.manager.user_list.update_base(new_user.get_user_info())
+                self.manager.user_list.save_base()
                 self.manager.user_list.registered_users.append(new_user)
                 self.new_user = new_user
                 return new_user
@@ -1034,13 +1209,25 @@ class Manager:
         self.log_in: LogIn = LogIn(self)
         self.user = None
         self.user_list = UsersList(self)
-        self.menu = Menu(["Вход", "Регистрация"], "Войдите или зарегистрируйтесь")
+        self.menu = Menu(["Вход", "Регистрация", "Показать базу данных пользователей", "Сброс базы данных"],
+                         "Войдите или зарегистрируйтесь")
 
     def show_start_menu(self):
-        if self.menu.show() == 1:
+        choice = self.menu.show()
+        if choice == self.menu.item("Вход"):
             self.user = self.log_in.log_in_account()
-        else:
+        elif choice == self.menu.item("Регистрация"):
             self.user = self.registration.register_new_user()
+        elif choice == self.menu.item("Показать базу данных пользователей"):
+            self.user_list.show()
+            self.show_start_menu()
+        elif choice == self.menu.item("Сброс базы данных"):
+            self.user_list.db.reset_db()
+            self.user_list.create_user_list()
+            self.user_list.show()
+            print("База данных сброшена")
+            self.show_start_menu()
+
         if self.user:
             self.show_users()
             print(
