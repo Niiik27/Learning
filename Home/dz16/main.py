@@ -378,14 +378,18 @@ class FakeDataBase:
         """
         При инициализации происходит чтение данных либо с диска либо с шаблона
         """
+        # поигрался с шифрованием пароля
+        self.keyword = "12345"
         self.base_name = "db_users.json"
         if os.path.exists(self.base_name):
             file = open(self.base_name, "r", encoding="utf-8")
             base_list = file.read()
             self.base_list = json.loads(base_list)
+            self.encrypt_passwords()
             file.close()
         else:
             self.base_list = FakeDataBase.default_base_list
+            # self.encrypt_passwords()
 
         # fileR2 = open('base.json', "r", encoding="utf-8")
 
@@ -473,9 +477,11 @@ class FakeDataBase:
         После записи информация считывается заново, что гарантирует соответствие полученной и сохраненной информации
         :return:
         """
+
         status = False
         file = open(self.base_name, "w", encoding="utf-8")
         if file:
+            self.encrypt_passwords()
             new_base_json = json.dumps(self.base_list, ensure_ascii=False)
             file.write(new_base_json)
             file.close()
@@ -483,8 +489,10 @@ class FakeDataBase:
         if file:
             file = open(self.base_name, "r", encoding="utf-8")
             self.base_list = json.loads(file.read())
+            self.encrypt_passwords()
             file.close()
             status = True
+        print("база сохранена")
         return status
 
     def delete_user_info_by_id(self, user_id):
@@ -502,6 +510,31 @@ class FakeDataBase:
             self.fill_id()
             self.save_base_list()
 
+    def encrypt(self, password):
+        """"
+        Тут попытка зашифровать пороль.
+        Примерно такой способ очень давно мне попадался в книжке по ассемблеру.
+        он использует xor и крутит для него ключевое слово.
+        В книжке говорилось что примерно так работала энигма
+        Но что то зашифрованный пароль не хочет смотрется красиво.
+        Может быть потом что нибудь придумаю
+        """
+        crypto_string = ""
+        for i in range(len(password)):
+            symbol = password[i]
+            char = ord(symbol)
+            key_symbol = i % len(self.keyword)
+            key_char = ord(self.keyword[key_symbol])
+            secret_char = char ^ key_char
+            crypto_string += chr(secret_char)
+        return crypto_string
+
+    def encrypt_passwords(self):
+        for rec in self.base_list:
+            rec["password"] = self.encrypt(rec["password"])
+
+    def show_password(self,crypto_pass):
+        return self.encrypt(crypto_pass)
 
 class User:
     def __init__(self, user_id, firstname, lastname, birthday, gender, login, password, rating, blocked,
@@ -1256,30 +1289,11 @@ class Manager:
         Набор действий при выходе из программы
         :return:
         """
-
+        self.user_list.save_base()
         self.user_list.create_user_list()
         self.user_list.show()
         print("Пока")
 
-
-def encript_pass(orig_password):
-    """"
-    Тут попытка зашифровать пороль. только начал, бросил. и пока не знаю когда вернусь
-    """
-    code_word = "anyword"
-    for char in orig_password:
-        c = ord("char")
-
-
-# a = ord("q")
-#
-# b = ord("h")
-# c = a ^ b
-#
-# print(chr(a))
-# print(chr(c))
-# c = c ^ b
-# print(chr(c))
 
 account_manager = Manager()
 # print(account_manager.registration.input_birthday())
