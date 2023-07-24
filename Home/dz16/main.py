@@ -620,11 +620,12 @@ class User:
         Показывает меню пользователя
         :return:
         """
-        choice = 0
-        while choice != self.menu.item("Выход") or choice != self.menu.item("Удалиться") or \
-                choice != self.menu.item("Передать права администратора"):
+        while True:
             choice = self.menu.show()
             self.callback_menu(choice)
+            if choice != self.menu.item("Выход") or choice != self.menu.item("Удалиться") or \
+                    choice != self.menu.item("Передать права администратора"):
+                break
 
     def callback_menu(self, choice: int):
         """
@@ -637,7 +638,10 @@ class User:
         elif choice == self.menu.item("Удалиться"):
             self.delete_me()
         elif choice == self.menu.item("Выход"):
-            self.exit_me()
+            self.manager.user_list.update_user_info(self)
+            self.manager.show_start_menu()
+
+            # self.exit_me()
 
     def show(self):
         """
@@ -656,16 +660,6 @@ class User:
         print(f"Пароль: {self.password}")
         print(f"Статус: {self.status}")
         print(f"Состояние {'Заблокирован' if self.blocked else 'OK'}")
-
-    def exit_me(self):
-        """
-        Набор действий при выходе из программы
-        :return:
-        """
-        self.manager.user_list.update_user_info(self)
-        self.manager.user_list.create_user_list()
-        self.manager.user_list.show()
-        print("Пока")
 
     def delete_me(self):
         self.manager.user_list.delete_user_by_id(self.user_id)
@@ -762,7 +756,10 @@ class Moderator(User):
             self.manager.user_list.create_user_list()
             exit(0)
         elif choice == self.menu.item("Выход"):
-            self.exit_me()
+            self.manager.user_list.update_user_info(self)
+            self.manager.show_start_menu()
+
+            # self.exit_me()
 
 
 class Admin(Moderator):
@@ -807,7 +804,9 @@ class Admin(Moderator):
                 ex_admin = self.get_user_info()
                 ex_admin["status"] = "user"
                 self.manager.user_list.update_base(ex_admin)
+                self.manager.user_list.update_user_info(self)
                 self.manager.show_start_menu()
+
                 # self.exit_me()
 
     def set_users_to_moderator(self, user_ids):
@@ -884,7 +883,9 @@ class Admin(Moderator):
             self.manager.user_list.db.reset_db()
             self.manager.user_list.create_user_list()
         elif choice == self.menu.item("Выход"):
-            self.exit_me()
+            self.manager.user_list.update_user_info(self)
+            self.manager.show_start_menu()
+            # self.exit_me()
 
 
 class UsersList:
@@ -1014,7 +1015,6 @@ class UsersList:
                         return None
             return None
 
-
     def show(self):
         user_table_fields = []
         for i in range(len(self.registered_users)):
@@ -1067,6 +1067,8 @@ class UsersList:
         :return:
         """
         self.db.save_base_list()
+
+
 class Registration:
     def __init__(self, manager):
         """
@@ -1167,18 +1169,20 @@ class Registration:
     @staticmethod
     def input_pass(password_name=''):
         """
-        В учебно- тестовых целях сделал подсказку для пароля. не знаю буду ли ее использовать.
-        может не понадобится, а удалить забуду, и в коде она будет сбивать с толку
-        :param password_name:
+        Тут передается заголовок строки. Для регистрации нужно пароль придумать, а для входа просто ввести
+        получаются разные заголовки
         :return:
         """
-        password = Registration.input_field("пароль" if not password_name else f"пароль {password_name}")
+        if password_name:
+            password = input(f"{password_name} ")
+        else:
+            password = Registration.input_field("пароль")
         return password
 
 
 class LogIn:
     """
-    Это класс входа
+    Это класс входа. Поменял название класса потому что так легче было понимать зачем он нужен
     """
 
     def __init__(self, manager):
@@ -1201,7 +1205,7 @@ class Manager:
     Возможно нужно их создавать прям внутри менеджера. Ведь дальнейшее взаимодействие с ними предпологается
     исключительно через менеджер
 
-    Пока что убрал параметрры что бы было несложно поработать через менеджер
+    Пока что убрал параметры что бы было несложно добавить в проект менеджер, и не сложно было его удалить
     """
 
     def __init__(self):
@@ -1209,7 +1213,7 @@ class Manager:
         self.log_in: LogIn = LogIn(self)
         self.user = None
         self.user_list = UsersList(self)
-        self.menu = Menu(["Вход", "Регистрация", "Показать базу данных пользователей", "Сброс базы данных"],
+        self.menu = Menu(["Вход", "Регистрация", "Показать базу данных пользователей", "Сброс базы данных", "Выход"],
                          "Войдите или зарегистрируйтесь")
 
     def show_start_menu(self):
@@ -1227,6 +1231,8 @@ class Manager:
             self.user_list.show()
             print("База данных сброшена")
             self.show_start_menu()
+        elif choice == self.menu.item("Выход"):
+            self.exit()
 
         if self.user:
             self.show_users()
@@ -1245,6 +1251,35 @@ class Manager:
     def show_users(self):
         self.user_list.show()
 
+    def exit(self):
+        """
+        Набор действий при выходе из программы
+        :return:
+        """
+
+        self.user_list.create_user_list()
+        self.user_list.show()
+        print("Пока")
+
+
+def encript_pass(orig_password):
+    """"
+    Тут попытка зашифровать пороль. только начал, бросил. и пока не знаю когда вернусь
+    """
+    code_word = "anyword"
+    for char in orig_password:
+        c = ord("char")
+
+
+a = ord("q")
+
+b = ord("h")
+c = a ^ b
+
+print(chr(a))
+print(chr(c))
+c = c ^ b
+print(chr(c))
 
 account_manager = Manager()
 # print(account_manager.registration.input_birthday())
