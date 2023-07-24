@@ -1271,15 +1271,15 @@ def encript_pass(orig_password):
         c = ord("char")
 
 
-a = ord("q")
-
-b = ord("h")
-c = a ^ b
-
-print(chr(a))
-print(chr(c))
-c = c ^ b
-print(chr(c))
+# a = ord("q")
+#
+# b = ord("h")
+# c = a ^ b
+#
+# print(chr(a))
+# print(chr(c))
+# c = c ^ b
+# print(chr(c))
 
 account_manager = Manager()
 # print(account_manager.registration.input_birthday())
