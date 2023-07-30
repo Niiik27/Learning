@@ -35,13 +35,18 @@ class MainWindow(Tk):
         self.button.bind("<Button-1>", self.callbak)
         self.button2.bind("<Button-1>", self.callbak)
 
+
+        """
+        Этот способ колбека мне не очень понравился так как требует лямбды
+        хотя можно передавать свои параметы
+        """
         self.button3 = Button(
             text="Кнопка №3 - отобразит в лейбле свой номер при помощи команды",
             width=70,
             height=1,
             bg="gray",
             fg="yellow",
-            command= lambda x=3:self.btn_command(3)
+            command= lambda:self.btn_command(3)
         )
         self.button4 = Button(
             text="Кнопка №4 - тоже отобразит свой номер",
@@ -49,7 +54,7 @@ class MainWindow(Tk):
             height=1,
             bg="gray",
             fg="yellow",
-            command=lambda x=3:self.btn_command(4)
+            command=lambda:self.btn_command(4)
         )
 
         self.entry = Entry(fg="blue", bg="ivory2", width=50)
