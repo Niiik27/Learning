@@ -24,8 +24,8 @@
 
 
 // alert("Задача 3 - найти площадь ромба по диагоналям");
-// d1 = +prompt("Ваша зарплата:");
-// d2 = +prompt("Выплата по кредиту:");
+// d1 = +prompt("Введите длину первой диагонали: ");
+// d2 = +prompt("Введите длину второй диагонали: ");
 // area = d1*d2/2;
 // alert(`Площадь ромба равна " ${area} " м.кв.\n`);
 
@@ -295,134 +295,134 @@
 
 // alert(`Вы набрали ${score} очк.`)
 
-alert("Упражнение №10 - Показать следующий день ")
-let current_day = +prompt("Введите день ")
-let current_month = +prompt("Введите месяц ")
-if (current_month > 12){
-    current_month=12    }
+// alert("Упражнение №10 - Показать следующий день ")
+// let current_day = +prompt("Введите день ")
+// let current_month = +prompt("Введите месяц ")
+// if (current_month > 12){
+//     current_month=12    }
 
-switch (current_month){
-    case "январь":
-        current_month = 1
-        break;
-    case "февраль":
-        current_month = 2 
-        break;   
-    case "март":
-        current_month = 3
-        break;
-    case "апрель":
-        current_month = 4
-        break;
-    case "май":
-        current_month = 5
-        break;
-    case "июнь":
-        current_month = 6  
-        break;  
-    case "июль":
-        current_month = 7
-        break;
-    case "август":
-        current_month = 8 
-        break;
-    case "сентябрь":
-        current_month = 9
-        break;
-    case "октябрь":
-        current_month = 10  
-        break;  
-    case "ноябрь":
-        current_month = 11
-        break;
-    case "декабрь":
-        current_month = 12  
-        break; 
+// switch (current_month){
+//     case "январь":
+//         current_month = 1
+//         break;
+//     case "февраль":
+//         current_month = 2 
+//         break;   
+//     case "март":
+//         current_month = 3
+//         break;
+//     case "апрель":
+//         current_month = 4
+//         break;
+//     case "май":
+//         current_month = 5
+//         break;
+//     case "июнь":
+//         current_month = 6  
+//         break;  
+//     case "июль":
+//         current_month = 7
+//         break;
+//     case "август":
+//         current_month = 8 
+//         break;
+//     case "сентябрь":
+//         current_month = 9
+//         break;
+//     case "октябрь":
+//         current_month = 10  
+//         break;  
+//     case "ноябрь":
+//         current_month = 11
+//         break;
+//     case "декабрь":
+//         current_month = 12  
+//         break; 
 
-      }
+//       }
         
-let current_yaer = +prompt("Введите год ")
+// let current_yaer = +prompt("Введите год ")
 
-let month_31 = ((current_month%2!=0) && current_month < 8) || ((current_month%2==0) && current_month > 7)
-
-
-if (month_31){
-    if (current_month == 12){
-        if (current_day>30){
-            current_yaer+=1
-            current_month=1
-            current_day=1}
-        else{
-            current_day+=1}}
-    else if (current_day>30){
-        current_month+=1
-        current_day=1}
-    else{
-        current_day+=1}}
-else{
-    if (current_month==2){
-
-        if (current_yaer %400==0){
-            leap=1}
-        else if (current_yaer %100==0){
-            leap=0}
-        else if (current_yaer %4==0){
-            leap=1}
-        else{
-            leap=0}
-
-        if (current_day>27+leap){
-            current_month+=1
-            current_day=1}
-        else{
-            current_day++}}
-    else if (current_day>29){
-            current_month+=1
-            current_day=1}
-    else{
-        current_day+=1}}
+// let month_31 = ((current_month%2!=0) && current_month < 8) || ((current_month%2==0) && current_month > 7)
 
 
+// if (month_31){
+//     if (current_month == 12){
+//         if (current_day>30){
+//             current_yaer+=1
+//             current_month=1
+//             current_day=1}
+//         else{
+//             current_day+=1}}
+//     else if (current_day>30){
+//         current_month+=1
+//         current_day=1}
+//     else{
+//         current_day+=1}}
+// else{
+//     if (current_month==2){
+
+//         if (current_yaer %400==0){
+//             leap=1}
+//         else if (current_yaer %100==0){
+//             leap=0}
+//         else if (current_yaer %4==0){
+//             leap=1}
+//         else{
+//             leap=0}
+
+//         if (current_day>27+leap){
+//             current_month+=1
+//             current_day=1}
+//         else{
+//             current_day++}}
+//     else if (current_day>29){
+//             current_month+=1
+//             current_day=1}
+//     else{
+//         current_day+=1}}
 
 
-switch (current_month){
-    case 1:
-        current_month = "Январь"
-        break;  
-    case 2:
-        current_month = "Февраль"   
-        break;   
-    case 3:
-        current_month = "Март"
-        break;  
-    case 4:
-        current_month = "Апрель"
-        break;  
-    case 5:
-        current_month = "Май"
-        break;  
-    case 6:
-        current_month = "Июнь"  
-        break;  
-    case 7:
-        current_month = "Июль"
-        break;  
-    case 8:
-        current_month = "Август" 
-        break;  
-    case 9:
-        current_month = "Сентябрь"
-        break;  
-    case 10:
-        current_month = "Октябрь"  
-        break;   
-    case 11:
-        current_month = "Ноябрь"
-        break;  
-    case 12:
-        current_month = "Декабрь" 
-        break;  
-     } 
 
 
-     alert(`Следующий день будет: ${current_day}, ${current_month}, ${current_yaer} г.`)
+// switch (current_month){
+//     case 1:
+//         current_month = "Январь"
+//         break;  
+//     case 2:
+//         current_month = "Февраль"   
+//         break;   
+//     case 3:
+//         current_month = "Март"
+//         break;  
+//     case 4:
+//         current_month = "Апрель"
+//         break;  
+//     case 5:
+//         current_month = "Май"
+//         break;  
+//     case 6:
+//         current_month = "Июнь"  
+//         break;  
+//     case 7:
+//         current_month = "Июль"
+//         break;  
+//     case 8:
+//         current_month = "Август" 
+//         break;  
+//     case 9:
+//         current_month = "Сентябрь"
+//         break;  
+//     case 10:
+//         current_month = "Октябрь"  
+//         break;   
+//     case 11:
+//         current_month = "Ноябрь"
+//         break;  
+//     case 12:
+//         current_month = "Декабрь" 
+//         break;  
+//      } 
+
+
+//      alert(`Следующий день будет: ${current_day}, ${current_month}, ${current_yaer} г.`)
