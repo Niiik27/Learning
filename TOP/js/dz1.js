@@ -231,24 +231,198 @@
 
 // alert("Упражнение №7 - Сделать скидку")
 // let money = +prompt("Введите сумму покупки ");
-
 // if(money < 0){
 //     alert(`Введите положительное число. Вы ввели ${money}`);
 // }
 // else{
 //     let discount = 0;
-//         if (money >= 200 && money < 300){
+//     switch(true) {
+//         case money >= 200 && money < 300:
 //             discount = 3;
-//         }
-//         else if(money >= 300 && money < 500){
+//             break;
+//         case money >= 300 && money < 500:
 //             discount = 5;
-//         }
-//         else if(money >= 500){
-//         discount = 7;
-//         }
+//             break;
+//         case money >= 500:
+//             discount = 7
+//             break;
+//     }
 //     money = money - (money/100*discount);       
-//     alert(`Цена со скидкой ${discount}% = ${money} рублей`);
-        
+//     alert(`Цена со скидкой ${discount}% = ${money} рублей`);    
 // }
      
+// alert("Упражнение №8 - Узнать впишется ли окружность в квадрат ")
+// let ring_len = +prompt("Введите длину окружности ")
+// let perimeter = +prompt("Введите периметр квадрата ")
+// let d = ring_len/(2*3.141592) 
+// let side = perimeter/4
+// alert(`Окружность ${d<=side?"помещается": "слишком большая!"}`)
 
+
+
+// alert("Упражнение №9 - Спросить пользователя и наградить за верный ответ ")
+// let q_1 = +prompt("Сколько грамм в килограмме - 100, 1000, 900? ")
+
+// let score = 0
+// let nxt=' '
+// if (q_1=="1000"){
+//     score+=2
+//     alert("Молодец! Вам 2 очка")
+//     nxt=' еще '}
+// else{
+//     alert("Ответ неверный!")
+//     alert(`У вас ${score} очк.`)}
+
+
+
+// let q_2 = prompt("Спутник Земли - Луна, Марс, Юпитер? ")
+// if (q_2=="Луна" || q_2=="луна"){
+//     score+=2
+//     alert(`Молодец! Вам${nxt}2 очка`)
+//     nxt=' еще '}
+// else{
+// alert("Ответ неверный!")
+// alert(`У вас ${score} очк.`)}
+
+
+// let q_3 = input("Драгоценный метал - Медь, Аллюминий, Серебро? ")
+// if (q_3=="Серебро" || q_3=="серебро") {
+//     score+=2
+//     alert(`Молодец! Вам${nxt}2 очка`)
+// }
+// else{
+// alert("Ответ неверный!")}
+
+// alert(`Вы набрали ${score} очк.`)
+
+alert("Упражнение №10 - Показать следующий день ")
+let current_day = +prompt("Введите день ")
+let current_month = +prompt("Введите месяц ")
+if (current_month > 12){
+    current_month=12    }
+
+switch (current_month){
+    case "январь":
+        current_month = 1
+        break;
+    case "февраль":
+        current_month = 2 
+        break;   
+    case "март":
+        current_month = 3
+        break;
+    case "апрель":
+        current_month = 4
+        break;
+    case "май":
+        current_month = 5
+        break;
+    case "июнь":
+        current_month = 6  
+        break;  
+    case "июль":
+        current_month = 7
+        break;
+    case "август":
+        current_month = 8 
+        break;
+    case "сентябрь":
+        current_month = 9
+        break;
+    case "октябрь":
+        current_month = 10  
+        break;  
+    case "ноябрь":
+        current_month = 11
+        break;
+    case "декабрь":
+        current_month = 12  
+        break; 
+
+      }
+        
+let current_yaer = +prompt("Введите год ")
+
+let month_31 = ((current_month%2!=0) && current_month < 8) || ((current_month%2==0) && current_month > 7)
+
+
+if (month_31){
+    if (current_month == 12){
+        if (current_day>30){
+            current_yaer+=1
+            current_month=1
+            current_day=1}
+        else{
+            current_day+=1}}
+    else if (current_day>30){
+        current_month+=1
+        current_day=1}
+    else{
+        current_day+=1}}
+else{
+    if (current_month==2){
+
+        if (current_yaer %400==0){
+            leap=1}
+        else if (current_yaer %100==0){
+            leap=0}
+        else if (current_yaer %4==0){
+            leap=1}
+        else{
+            leap=0}
+
+        if (current_day>27+leap){
+            current_month+=1
+            current_day=1}
+        else{
+            current_day++}}
+    else if (current_day>29){
+            current_month+=1
+            current_day=1}
+    else{
+        current_day+=1}}
+
+
+
+
+switch (current_month){
+    case 1:
+        current_month = "Январь"
+        break;  
+    case 2:
+        current_month = "Февраль"   
+        break;   
+    case 3:
+        current_month = "Март"
+        break;  
+    case 4:
+        current_month = "Апрель"
+        break;  
+    case 5:
+        current_month = "Май"
+        break;  
+    case 6:
+        current_month = "Июнь"  
+        break;  
+    case 7:
+        current_month = "Июль"
+        break;  
+    case 8:
+        current_month = "Август" 
+        break;  
+    case 9:
+        current_month = "Сентябрь"
+        break;  
+    case 10:
+        current_month = "Октябрь"  
+        break;   
+    case 11:
+        current_month = "Ноябрь"
+        break;  
+    case 12:
+        current_month = "Декабрь" 
+        break;  
+     } 
+
+
+     alert(`Следующий день будет: ${current_day}, ${current_month}, ${current_yaer} г.`)
