@@ -19,7 +19,7 @@
 // let salary = +prompt("Ваша зарплата:");
 // let credit = +prompt("Выплата по кредиту:");
 // let payment = +prompt("ЖКХ:");
-
+// total = salary-credit-payment
 // alert(`Итого в остатке  ${total} руб.\n`);
 
 

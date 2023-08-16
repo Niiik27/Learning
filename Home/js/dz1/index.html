@@ -6,9 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    <h1 id="h1" class="">ДЗ 1</h1>
-    <h2 id="h2" class="">Из второго задания</h2>
-    <div></div>
+    <h1>ДЗ 1</h1>
+    <h2>Из второго задания</h2>
+
     <div>Из-за спешки сделал какие то еще задачи - не помню из каких заданий, но +- по теме.<br>
         Условные операторы - в приоритете switch/case и тренарные операторы, так как есть желание освежить в памяти JAVA<br>
         Сначала делал при помощи алертов, но из-за большого объема задач не понимал как это можно будет удобно проверять.<br>
@@ -21,101 +21,100 @@
      1-е число <input id="num_1" type="number">
      2-е число <input id="num_2" type="number">
      3-е число <input id="num_3" type="number">
-    <button id="calc1">Решить</button></div>
+    <button id="calc-sum-mul">Решить</button></div>
     <div>Сумма всех чисел: <span id="sum">...</span></div>
     <div>Произведение всех чисел: <span id="mul">...</span></div>
  
     <h3>Задача №2 - сколько осталось денег</h3>
-    <div>Ваша зарплата:</span><input id="salary" type="number">
-    <span>Выплата по кредиту:</span><input id="credit" type="number">
-    <span>ЖКХ:</span><input id="payment" type="number">
-    <button id="calc2">Решить</button></div>
-    <div>Итого в остатке: <span id="sum">...</span> руб.</div>
+    <div>Ваша зарплата: <input id="salary-input" type="number">
+    Выплата по кредиту: <input id="credit-input" type="number">
+    ЖКХ: <input id="payment-input" type="number">
+    <button id="calc-money">Посчитать</button></div>
+    <div>Итого в остатке: <span id="money-out">...</span> руб.</div>
 
     <h3>Задача №3 - найти площадь ромба по диагоналям</h3>
-    <div>Введите длину первой диагонали:<input id="d1" type="number">
-    Введите длину второй диагонали:<input id="d2" type="number">
-    <button id="calc3">Решить</button></div>
-    <div>Площадь ромба равна: <span id="area">...</span> м.кв.</div>
+    <div>Введите длину первой диагонали:<input id="d1-input" type="number">
+    Введите длину второй диагонали:<input id="d2-input" type="number">
+    <button id="calc-area">Решить</button></div>
+    <div>Площадь ромба равна: <span id="area-out">...</span> м<sup>2</sup></div>
 
     <h3>Задача №4 - вывод надписи на разных строках</h3>
-    <div id="diff-strings">To be or not to be</div>
+    <div id="diff-strings-shekspir">To be or not to be</div>
 
     <h3>Задача №5 - вывод надписи на разных строках</h3>
-    <div id="diff-strings">“Life is what happens when you’re busy making other plans” John Lennon.</div>
+    <div id="diff-strings-lennon">“Life is what happens when you’re busy making other plans” John Lennon.</div>
 
     <h3>Задание №6 - перевести метры в мили, дюймы, ярды</h3>
-    <span>Введите метры: </span><input id="meters" type="number">
+    <div>Введите метры: <input id="meters-input" type="number">
 
-    <button id="calc61">Перевести в мили</button>
-    <button id="calc62">Перевести в дюймы</button>
-    <button id="calc63">Перевести в ярды</button>
-    <button id="calc64">Перевести в футы</button>
-    <div>Результат: <span id="res_meters">...</span></div>
+    <button id="calc-miles">Перевести в мили</button>
+    <button id="calc-inches">Перевести в дюймы</button>
+    <button id="calc-yards">Перевести в ярды</button>
+    <button id="calc-feets">Перевести в футы</button></div>
+    <div>Результат: <span id="meters-out">...</span> <span id="unit-out">...</span></div>
 
 
     <h2 id="h2" class="">Из третьего задания</h2>
 
     <h3>Упражнение №1 - определить статус по возрасту</h3>
-    <span>Сколько вам лет?: </span><input id="age" type="number">
-    <button id="calc-age">Определить статус</button>
-    <div>Вы <span id="age-status">...</span></div>
+    <div>Сколько вам лет?: <input id="age-input" type="number">
+    <button id="define-status-btn">Определить статус</button></div>
+    <div>Вы <span id="status-out">...</span></div>
 
     <h3>Упражнение №2 - вывести символ shif+цифра</h3>
-    <div>Нажмити shif+цифру на клавиатуре: <input id="shift-digit" type="text"><button id="btn-shft-digit">Определить цифру</button></div>
+    <div>Нажмити shif+цифру на клавиатуре: <input id="shift-digit-input" type="text"><button id="shft-digit-btn">Определить цифру</button></div>
     <div>Вы нажали заглавную <span id="shift-dig-out">...</span></div>
 
     <h3>Упражнение №3 - проверить - есть ли в трехзначном числе одинаковые цифры</h3>
-    <span>Введите трехзначное число: </span><input id="digit3" type="number">
-    <button id="btn-digit3">Проверить</button>
+    <div>Введите трехзначное число: <input id="digit3-input" type="number">
+    <button id="digit3-btn">Проверить</button></div>
     <div id="dig3-out">...</div>
 
 
     <h3>Упражнение №4 - определить - является ли год високосным</h3>
-    <div>Введите год: <input id="year" type="number"><button id="calc-age">Определить</button></div>
-    <div id="age-status">...</div>
+    <div>Введите год: <input id="year-input" type="number"><button id="year-btn">Определить</button></div>
+    <div id="year-out">...</div>
 
-    <h3>Упражнение №5 - проверить число на палиндром</h3>
-    <div>Введите число: <input id="pal-dig-input" type="number"><button id="pal-dig">Проверить</button></div>
-    <div id="pal-dig-out">...</div>
+    <h3>Упражнение №5 - проверить пятизначное число на палиндром</h3>
+    <div>Введите число: <input id="palindrome-input" type="number"><button id="palindrome-btn">Проверить</button></div>
+    <div id="palindrome-out">...</div>
 
 
 
     <h3>Упражнение №6 - Сконвертировать доллар в другую валюту</h3>
-    <span>Введите сумму в долларах: </span><input id="meters" type="number">
+    <div>Введите сумму в долларах: <input id="usd-input" type="number">
 
-    <button id="convert-money-eur">Евро</button>
-    <button id="convert-money-uan">Юань</button>
-    <button id="convert-money-azn">Азер</button>
-    <button id="convert-money-ru">Рубль</button>
-    <div>Результат: <span id="res_meters">...</span></div>
+    <button id="eur-btn">Евро</button>
+    <button id="uan-btn">Юань</button>
+    <button id="azn-btn">Манат</button>
+    <button id="ru-btn">Рубль</button></div>
+    <div>Результат: <span id="usd-out">...</span> usd = <span id="convert-out">...</span> <span id="ue-name-out">...</span></div>
 
 
     <h3>Упражнение №7 - Сделать скидку</h3>
-    <div>Введите сумму покупки: <input id="pal-dig-input" type="number"><button id="pal-dig">Проверить</button></div>
-    <div>Цена со скидкой <span id="discount-id">...</span> <span id="money-id">...</span> руб.</div>
+    <div>Введите сумму покупки: <input id="acquisition-value-input" type="number"><button id="check-acquisition-value-btn">Узнать цену со скидкой</button></div>
+    <div id="discount-price-out">...</div>
 
     <h3>Упражнение №8 - Узнать впишется ли окружность в квадрат</h3>
     <div>Введите длину окружности:<input id="round-input" type="number">
         Введите периметр квадрата:<input id="rectangle-input" type="number">
-    <button id="check-round">Узнать</button></div>
+    <button id="check-round-btn">Узнать</button></div>
     <div>Окружность <span id="round-out">...</span></div>
 
 
     <h3>Упражнение №9 - Спросить пользователя и наградить за верный ответ</h3>
-    <div><span id="question-id">***Вопрос*** </span>
-
-    <button id="answer-1">Ответ 1</button>
-    <button id="answer-2">Ответ 2</button>
-    <button id="answer-3">Ответ 3</button></div>
-    <div>Вы набрали: <span id="res_meters">...</span></div>
-    <div id="congratulations-id"></div>
+    <div><span id="question-out">***Вопрос*** </span>
+    <button id="answer-1-btn">Ответ 1</button>
+    <button id="answer-2-btn">Ответ 2</button>
+    <button id="answer-3-btn">Ответ 3</button></div>
+    <div>Вы набрали: <span id="score-out">...</span></div>
+    <div id="congratulations-out"></div>
 
 
 
     <h3>Упражнение №10 - Показать следующий день</h3>
-    <div>Введите сумму покупки: <input id="next-day-input" type="date"><button id="next-day-btn"> Показать</button></div>
-    <div>Следующий день <span id="next-day-out">...</span></div>
+    <div>Введите текущий день: <input id="current-day-input" type="date"><button id="next-day-btn"> Показать</button></div>
+    <div id="next-day-out">...</div>
 
 
     <script src="script.js"></script>
