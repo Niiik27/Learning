@@ -75,6 +75,41 @@ function calculate_unit(units){
      
 }
 
+
+let calc_max = document.querySelector("#calc-max");
+let calc_min = document.querySelector("#calc-min");
+let calc_aver = document.querySelector("#calc-aver");
+
+
+calc_max.addEventListener("click",function(){calculate_max_min_aver("max")});
+calc_min.addEventListener("click",function(){calculate_max_min_aver("min")});
+calc_aver.addEventListener("click",function(){calculate_max_min_aver("average")});
+
+
+function calculate_max_min_aver(action){
+    let num_1 = Number(document.querySelector("#num_71").value);
+    let num_2 = Number(document.querySelector("#num_72").value);
+    let num_3 = Number(document.querySelector("#num_73").value);
+    let max_min_aver_out = document.querySelector("#max-min-aver-out");
+
+    switch(action){
+        case "max":
+            max_min_aver_out.innerHTML = `Максимальное число = ${Math.max(num_1,num_2,num_3)}`;
+            break;
+        case "min":
+            max_min_aver_out.innerHTML = `Минимальное число = ${Math.min(num_1,num_2,num_3)}`;
+            break;
+        case "average":
+            max_min_aver_out.innerHTML = `Среднее арифметическое = ${((num_1+num_2+num_3)/3).toFixed(2)}`;
+            break;
+
+    }
+     
+}
+
+
+
+
 let define_status_btn = document.querySelector("#define-status-btn");
 define_status_btn.addEventListener("click",define_status);
 function define_status(){
