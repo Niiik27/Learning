@@ -496,5 +496,110 @@ switch (current_month){
      } 
 
 
-     next_day_out.innerHTML = `Следующий день будет: ${current_day}, ${current_month}, ${current_year} г.`;
+     next_day_out.innerHTML = `Следующий день будет: ${current_day}, ${current_month}, ${current_year} г.`;  
+}
+
+let numerator_btn = document.querySelector("#numerator-btn");
+let back_numerator_btn = document.querySelector("#back-numerator-btn");
+
+numerator_btn.addEventListener("click",function(){find_numerators(false)});
+back_numerator_btn.addEventListener("click",function(){find_numerators(true)});
+
+function find_numerators(back_order){
+    let start= Number(document.querySelector("#start-div-input").value);
+    let end = Number(document.querySelector("#end-div-input").value);
+    let denominator = Number(document.querySelector("#denominator-input").value);
+    let numerator_out = document.querySelector("#numerator-out");
+    let multiple5_out = document.querySelector("#multiple5-out");
+    let count5 = 0;
+    let res="[";
+    if(back_order){
+        for (i=end;i>=start;i--){
+            if (i % denominator == 0){
+                    res+=`${i}, `;
+                }
+            if (i % 5 == 0){
+                count5++;
+                }
+        }
+        let tmp=start;
+        start=end;
+        end=tmp;
+
+    }else{
+        for (i=start;i<=end;i++){
+            if (i % denominator == 0){
+                    res+=`${i}, `;
+                }
+            if (i % 5 == 0){
+                count5++;
+                }
+        }}
+
+        if (res.length>2){
+            res = res.substring(0,res.length-2);
+    }
+    res +="]"   
+    numerator_out.innerHTML =(`Числа кратные ${denominator} в диапазоне от ${start} до ${end}: ${res}`)
+    multiple5_out.innerHTML = count5
+}
+
+
+let fizz_buzz_btn = document.querySelector("#fizz-buzz-btn");
+fizz_buzz_btn.addEventListener("click",fizz_buzz);
+
+
+function fizz_buzz(){
+    let start= Number(document.querySelector("#start-fizz-buzz-input").value);
+    let end = Number(document.querySelector("#end-fizz-buzz-input").value);
+    let fizz_buzz_out = document.querySelector("#fizz-buzz-out");
+    let res="";
+
+    for (i=start;i<=end;i++){
+        if (i % 3 == 0 || i % 5 == 0){
+            if (i % 3 == 0){
+                    res+="Fizz";
+                }
+            else{
+                res+="Buzz";
+                }     
+        }
+        else{
+            res+=i;
+        }
+        res+="\n";
+    }
+
+    fizz_buzz_out.innerHTML = `<pre>${res}</pre>`
+
+}
+
+
+let calc_diff = document.querySelector("#calc-diff");
+calc_diff.addEventListener("click",calculate_diff);
+
+function calculate_diff(){
+    let a = Number(document.querySelector("#A").value);
+    let b = Number(document.querySelector("#B").value);
+    let c = Number(document.querySelector("#C").value);
+    
+    let D = document.querySelector("#D");
+    let X1 = document.querySelector("#X1");
+    let X2 = document.querySelector("#X2");
+
+    let d = b**2-4*a*c
+    D.innerHTML= `D = ${d}`;
+    console.log(D.innerHTML);
+    if (d>0){
+        X1.innerHTML = `X1 = ${(-b+Math.sqrt(d))/(2*a)}`
+        X2.innerHTML = `X2 = ${(-b-Math.sqrt(d))/(2*a)}`
+    }
+    else if (d==0){
+        X1.innerHTML = `X1 = ${-b/(2*a)}`
+        X2.innerHTML = 'Нет корня'
+    }
+    else{
+        X1.innerHTML = 'Нет корня'
+        X2.innerHTML = 'Нет корня'
+    }
 }
