@@ -1,4 +1,6 @@
 
+/*Пример с нахождением суммы и произведения. Встречался в разных заданиях
+с небольшими вариациями. Сделал его только один раз что бы не замусоривать код.*/
 let calc_sum_mul = document.querySelector("#calc-sum-mul");
 calc_sum_mul.addEventListener("click",calculate_sum_mul);
 function calculate_sum_mul(){
@@ -10,7 +12,7 @@ function calculate_sum_mul(){
     sum.innerHTML = num_1+num_2+num_3;
     mul.innerHTML = num_1*num_2*num_3;
 }
-
+/**Пример с подсчетом оставшихся от зарплаты денег */ 
 let calc_money = document.querySelector("#calc-money");
 calc_money.addEventListener("click",calculate_money);
 function calculate_money(){
@@ -20,7 +22,7 @@ function calculate_money(){
     let money_out = document.querySelector("#money-out");
     money_out.innerHTML = salary_input - credit_input - payment_input;
 }
-
+/**Подсчет площади прямоугольника */
 let calc_area = document.querySelector("#calc-area");
 calc_area.addEventListener("click",calculate_area);
 function calculate_area(){
@@ -30,10 +32,15 @@ function calculate_area(){
     let area_out = document.querySelector("#area-out");
     area_out.innerHTML = area;
 }
-
+/**Разбиение строки на несколько строк. Видимо не те задания стал делать
+ * так как не требуется ни какой логики
+ */
 let diff_strings_shekspir = document.querySelector("#diff-strings-shekspir");
 diff_strings_shekspir.innerHTML="To be<br>or not<br>to be"
-
+/** так же разбиение на строки, но с отступами. по скольку думал, что это
+ * больше html задача, то не стал с ней заморачиваться - нашел подходящий тег,
+ * за счет него и решил
+ */
 let diff_strings_lennon = document.querySelector("#diff-strings-lennon");
 diff_strings_lennon.innerHTML=
 '<pre>"Life is what happens\n\
@@ -41,18 +48,38 @@ diff_strings_lennon.innerHTML=
         you’re busy making other plans”\n\
                                     John Lennon.</pre>'
 
-
+/**Конвертер единиц измерения. Здесь хотелось решить задачу за счет
+ * передачи разных параметров,
+ */
 
 let calc_miles = document.querySelector("#calc-miles");
 let calc_inches = document.querySelector("#calc-inches");
 let calc_yards = document.querySelector("#calc-yards");
 let calc_feets = document.querySelector("#calc-feets");
 
-calc_miles.addEventListener("click",function(){calculate_unit("miles")});
-calc_inches.addEventListener("click",function(){calculate_unit("inches")});
-calc_yards.addEventListener("click",function(){calculate_unit("yards")});
-calc_feets.addEventListener("click",function(){calculate_unit("feets")});
+calc_miles.addEventListener("click",function(){calculate_unit("miles",1609.344)});
+calc_inches.addEventListener("click",function(){calculate_unit("inches",2.54/100)});
+calc_yards.addEventListener("click",function(){calculate_unit("yards",0.9144)});
+calc_feets.addEventListener("click",function(){calculate_unit("feets",0.3048)});
+/**на момент написания кода - была лишь одна задача - разобраться как передавать параметры
+ * в метод, что бы его можно было применять с разными кнопками и соответственно разными
+ * исходными данными, на момент комментариев - возникла идея,
+ * что нужно передавать значения едениц, что бы избежать лишних условий в методе.
+ */
+function calculate_unit(unit_name,unit_value){
+    let meters = Number(document.querySelector("#meters-input").value);
+    let result_out = document.querySelector("#meters-out");
+    let unit_out = document.querySelector("#unit-out");
+    unit_out.innerHTML = unit_name;
+    /**
+        * какой то извращенный способ представлять флоаты с заданным количеством цифр после  запятой
+        * врядли его запомню, но благодаря этому комментарию смогу легко его здесь найти и подсмотреть
+        * если понадобится
+        */
+    result_out.innerHTML = (meters/unit_value).toFixed(2);     
+}
 
+/*
 function calculate_unit(units){
     let meters = Number(document.querySelector("#meters-input").value);
     let result_out = document.querySelector("#meters-out");
@@ -74,8 +101,10 @@ function calculate_unit(units){
     }
      
 }
-
-
+*/
+/** Поиск минимума, максимума, и среднего. Наличие интерфейса позволяет избежать ввода действия,
+ * и выбрать действие при помощи соответствующей кнопки.
+ */
 let calc_max = document.querySelector("#calc-max");
 let calc_min = document.querySelector("#calc-min");
 let calc_aver = document.querySelector("#calc-aver");
@@ -100,6 +129,10 @@ function calculate_max_min_aver(action){
             max_min_aver_out.innerHTML = `Минимальное число = ${Math.min(num_1,num_2,num_3)}`;
             break;
         case "average":
+            /**какой то извращенный способ представлять флоаты с заданным количеством цифр после  запятой
+             * врядли его запомню, но благодаря этому комментарию смогу легко его здесь найти и подсмотреть
+             * если понадобится
+             */
             max_min_aver_out.innerHTML = `Среднее арифметическое = ${((num_1+num_2+num_3)/3).toFixed(2)}`;
             break;
 
@@ -108,7 +141,7 @@ function calculate_max_min_aver(action){
 }
 
 
-
+/**Определение статуса человека по возрасту */
 
 let define_status_btn = document.querySelector("#define-status-btn");
 define_status_btn.addEventListener("click",define_status);
@@ -134,6 +167,8 @@ function define_status(){
     }   
 }
 
+
+/**Определение shift+цифры */
 let shft_digit_btn = document.querySelector("#shft-digit-btn");
 shft_digit_btn.addEventListener("click",shft_digit);
 function shft_digit(){
@@ -183,6 +218,7 @@ function shft_digit(){
         
 }
 
+/**Проверка - есть ли в трехзначном числе одинаковые цифры */
 let digit3_btn = document.querySelector("#digit3-btn");
 digit3_btn.addEventListener("click",digit3_define);
 function digit3_define(){
@@ -202,7 +238,7 @@ function digit3_define(){
     num = num%(10**order);
     dig3_out.innerHTML = first == second || second == third || first == third? "Есть повторения":"Нет повторяющихся цифр";
 }
-
+/**Определить - является ли год високосным */
 let year_btn = document.querySelector("#year-btn");
 year_btn.addEventListener("click",leap_year_define);
 function leap_year_define(){
@@ -222,7 +258,7 @@ function leap_year_define(){
             year_out.innerHTML = "Обычный";
     }  
 }
-
+/**Проверка - является ли число палиндромом */
 let palindrome_btn = document.querySelector("#palindrome-btn");
 palindrome_btn.addEventListener("click",palindrome_define);
 function palindrome_define(){
@@ -254,6 +290,15 @@ function palindrome_define(){
     }
     palindrome_out.innerHTML = result
 }
+/**Конвертер валют - то же самое что и конвертер едениц  измерения. Отличие лишь в том что курс
+ * постоянно меняется, и неудобно вводить актуальные значения ни в параметры, ни тем более,
+ * в тело метода. По этому здесь будут именнованные значения валют, что бы не лазить
+ * в глубь кода. Курсы устаревшие, но при таком подходе их легко подправить
+ */
+let eur_value = 0.92764;
+let uan_value = 7.06;
+let azn_value = 1.7;
+let ru_value = 80.17;
 
 let eur_btn = document.querySelector("#eur-btn");
 let uan_btn = document.querySelector("#uan-btn");
@@ -272,23 +317,29 @@ function convert_money(units){
     let unit_out = document.querySelector("#ue-name-out");
     usd_out.innerHTML = usd;
     unit_out.innerHTML = units;
+    /**какой то извращенный способ представлять флоаты с заданным количеством цифр после  запятой
+             * врядли его запомню, но благодаря этому комментарию смогу легко его здесь найти и подсмотреть
+             * если понадобится
+             */
     switch(units){
         case "eur":
-            convert_out.innerHTML = usd*0.92764;
+            convert_out.innerHTML = (usd*eur_value).toFixed(2);
             break;
         case "uan":
-            convert_out.innerHTML = usd*7.06;
+            convert_out.innerHTML = (usd*uan_value).toFixed(2);
             break;
         case "azn":
-            convert_out.innerHTML = usd*1.7;
+            convert_out.innerHTML = (usd*azn_value).toFixed(2);
             break;
         case "ru":
-            convert_out.innerHTML = usd*80.17;
+            convert_out.innerHTML = (usd*ru_value).toFixed(2);
             break;
     }
      
 }
-
+/**
+ * Рассчитать скидку в зависимости от суммы покупки
+ */
 let check_acquisition_value_btn = document.querySelector("#check-acquisition-value-btn");
 check_acquisition_value_btn.addEventListener("click",check_acquisition_value);
 function check_acquisition_value(){
@@ -315,7 +366,7 @@ function check_acquisition_value(){
         discount_out.innerHTML =`Цена со скидкой ${discount}% = ${money} рублей`;    
     }
 }
-
+/**Узнать - впишется ли окружность в квадрат */
 let check_round_btn = document.querySelector("#check-round-btn");
 check_round_btn.addEventListener("click",check_round);
 function check_round(){
@@ -328,7 +379,10 @@ function check_round(){
 
 }
 
-
+/**Задать вопрос, и вознаградить за правильный ответ - Эта задача немного отличается от других
+ * так как потребовала программирования - создания метода с вопросами и вариантами ответов,
+ * и проверочного метода
+ */
 let answer_1_btn = document.querySelector("#answer-1-btn");
 let answer_2_btn = document.querySelector("#answer-2-btn");
 let answer_3_btn = document.querySelector("#answer-3-btn");
@@ -409,7 +463,7 @@ function check_answer(answer){
             break;
     }  
 }
-
+/** Определить следующий день */
 let next_day_btn = document.querySelector("#next-day-btn");
 next_day_btn.addEventListener("click",next_day);
 function next_day(){
@@ -499,6 +553,8 @@ switch (current_month){
      next_day_out.innerHTML = `Следующий день будет: ${current_day}, ${current_month}, ${current_year} г.`;  
 }
 
+/**Определить кратные числа в указанном диапазоне */
+
 let numerator_btn = document.querySelector("#numerator-btn");
 let back_numerator_btn = document.querySelector("#back-numerator-btn");
 
@@ -544,7 +600,7 @@ function find_numerators(back_order){
     multiple5_out.innerHTML = count5
 }
 
-
+/**Задача про Физз Базз - описание не страничке*/
 let fizz_buzz_btn = document.querySelector("#fizz-buzz-btn");
 fizz_buzz_btn.addEventListener("click",fizz_buzz);
 
@@ -569,11 +625,13 @@ function fizz_buzz(){
         }
         res+="\n";
     }
-
+//Тут и пригодилось задание про вывод на разных строках, так как в столбик результат читабильней
     fizz_buzz_out.innerHTML = `<pre>${res}</pre>`
 
 }
 
+
+/**Второе задание по JS. Найти дифференциал уравнения и его корни */
 
 let calc_diff = document.querySelector("#calc-diff");
 calc_diff.addEventListener("click",calculate_diff);

@@ -1,5 +1,5 @@
 """
-URL configuration for gen_password project.
+URL configuration for genpass project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+import index.views
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',index.views.indexView, name="index"),
+    path('password/',index.views.passwordView, name="password"),
 ]
