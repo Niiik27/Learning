@@ -19,9 +19,10 @@ from django.urls import path
 
 import registration.views
 import userprofile.views
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', registration.views.regView, name='registration'),
     path('profile/', userprofile.views.profileView, name='profile'),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
