@@ -1,33 +1,45 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Userprofile</title>
-</head>
-<body>
-<h1>Анкета пользователя</h1>
-<img src="{{ foto_html }}" alt="аватарка" width = 30%>
-<ul>
-    <li>Имя: {{ firstname_html }}</li>
-    <li>Фамилия: {{ lastname_html }}</li>
-    <li>Дата рождения: {{ birth_html }}</li>
-</ul>
-<div>Навыки:</div>
-<ul>
-    <li>{{ skill_1_html }}</li>
-    <li>{{ skill_2_html }}</li>
-    <li>{{ skill_3_html }}</li>
-    <li>{{ skill_4_html }}</li>
-    <li>{{ skill_5_html }}</li>
-</ul>
-<h2>О себе:</h2>
-<div>{{ about_html }}</div>
-<!--
-Без скриптов и ссылок, но работает. И я толком не понимаю почему - registration или register или reg
-тут нужно разобраться
--->
-<form action="{% url 'registration' %}">
-<button>Закрыть</button>
-</form>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Userprofile</title>
+        <link rel="stylesheet" href="{% static 'userprofile/css/style.css' %}">
+    </head>
+    <body>
+        <main class="card">
+            <h1 class="head_1">Анкета пользователя</h1>
+            <div class="user-data">
+                <img class="image" src="{{ foto_html }}" alt="аватарка">
+                <div class="info">
+                    <ul>
+                        <li>Имя: {{ firstname_html }}</li>
+                        <li>Фамилия: {{ lastname_html }}</li>
+                        <li>Дата рождения: {{ birth_html }}</li>
+                    </ul>
+                    <div class="skills">
+                        <div>Навыки:</div>
+                        <ul>
+                            <li>{{ skill_1_html }}</li>
+                            <li>{{ skill_2_html }}</li>
+                            <li>{{ skill_3_html }}</li>
+                            <li>{{ skill_4_html }}</li>
+                            <li>{{ skill_5_html }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        
+            <h2>О себе:</h2>
+            <div class="about">{{ about_html }}</div>
+            <!--
+            Без скриптов и ссылок, но работает. И я толком не понимаю почему - registration или register или reg
+            тут нужно разобраться
+            -->
+            <form action="{% url 'registration' %}">
+            <button class="button">Закрыть</button>
+            </form>
+        </main>
+    </body>
+
 </html>
