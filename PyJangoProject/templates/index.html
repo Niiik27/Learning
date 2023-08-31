@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href={{ static }}"/css/style.css" >
+</head>
+<body>
+    <h1>Добро пожаловать в<br>Генератор паролей</h1>
+    <form action="{% url 'password' %}">
+        <span>Количество символов</span>
+        <select name="length" id="">
+            <option value="1">Один</option>
+            <option value="2">Два</option>
+            <option value="3">Три</option>
+            <option value="4">Четыре</option>
+            <option value="5">Пять</option>
+            <option value="6" selected="selected">Шесть</option>
+            <option value="7">Семь</option>
+            <option value="8">Восемь</option>
+            <option value="9">Девять</option>
+            <option value="10">Десять</option>
+        </select>
+        <br>
+        <label for="">Прописные буквы</label>
+        <input type="checkbox" name="lower">
+        <br>
+        <label for="">Заглавные буквы</label>
+        <input type="checkbox" name="upper">
+        <br>
+        <label for="">Цифры</label>
+        <input type="checkbox" name="digits">
+        <br>
+        <label for="">Всякие символы</label>
+        <input type="checkbox" name="symbols">
+        <br>
+        <button type = "submit">Сгенерировать новый пароль</button>
+    </form>
+</body>
+</html>
