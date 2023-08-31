@@ -106,53 +106,6 @@ li {
 
 
 
-
-
-
-
-
-
-
-.inputs{
-    background-color: cornflowerblue;
-    display: flex;
-    flex-direction: row;
-    width:90%;
-    height: 80%;
-    justify-content: space-between;
-    align-items: center;
-    justify-self: center;
-    align-self: auto;
-}
-
-
-.area-container{
-    background-color: burlywood;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    border-radius: 25px;
-    border-style: none;
-}
-.fields{
-    background-color: #da286c;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: start;
-    height: 100%;
-    
-}
-
-
-
-.txt-input{
-    border-radius: 10px;
-    width:100%;
-    height:27px;
-}
-
 .button{
     border-radius: 20px;
     padding: 10px 30px;
