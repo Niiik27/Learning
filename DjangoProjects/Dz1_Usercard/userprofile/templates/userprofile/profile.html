@@ -6,10 +6,28 @@
 </head>
 <body>
 <h1>Анкета пользователя</h1>
-<img src="" alt="аватарка">
-<div>Анкетные данные</div>
-<h2>О пользователе:</h2>
-<div>Информация из блока о себе</div>
+<img src="{{ foto_html }}" alt="аватарка" width = 30%>
+<ul>
+    <li>Имя: {{ firstname_html }}</li>
+    <li>Фамилия: {{ lastname_html }}</li>
+    <li>Дата рождения: {{ birth_html }}</li>
+</ul>
+<div>Навыки:</div>
+<ul>
+    <li>{{ skill_1_html }}</li>
+    <li>{{ skill_2_html }}</li>
+    <li>{{ skill_3_html }}</li>
+    <li>{{ skill_4_html }}</li>
+    <li>{{ skill_5_html }}</li>
+</ul>
+<h2>О себе:</h2>
+<div>{{ about_html }}</div>
+<!--
+Без скриптов и ссылок, но работает. И я толком не понимаю почему - registration или register или reg
+тут нужно разобраться
+-->
+<form action="{% url 'registration' %}">
 <button>Закрыть</button>
+</form>
 </body>
 </html>
