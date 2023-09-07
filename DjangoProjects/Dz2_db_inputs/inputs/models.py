@@ -7,3 +7,4 @@ class Article(models.Model):
     date = models.DateField()  # Дата
     url = models.URLField()  # Ссылка
     number = models.PositiveSmallIntegerField()
+    f1 = models.JSONField()
