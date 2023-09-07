@@ -1,10 +1,50 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link rel="stylesheet" href="{% static 'home/style/style.css' %}">
 </head>
 <body>
-
-</body>
+    <header class="header">
+        <div class="wrapper header-wrapper">
+            <div class="logo">
+                <img src="" alt="">
+            </div>
+            <nav>
+                <a href="#" class="link">Главная</a>
+                <a href="{% url 'blog_in_urls' %}" class="link">Блог</a>
+                <a href="#" class="link">Портфолио</a>
+            </nav>
+            <div class="header-right">
+        <!--        Добавить код проверки на авторизацию-->
+                <a href="#" class="link">Регистрация</a>
+                <a href="#" class="link link-primary">Вход</a>
+        <!--        Добавить код, если пользователь авторизовался-->
+                <a href="#" class="link link-primary">Выход</a>
+            </div>
+        </div>
+    </header>
+    <main>
+<!--        Добавить код для секции hero, отображать только после авторизации-->
+        <section class="hero">
+            <div class="wrapper hero-wrapper">
+                <img src="" alt="" class="my_image hero__my_image">
+                <span class="first_name">Имя: Текст рыба</span>
+                <span class="last_name">Фамилия: Текст рыба</span>
+                <span class="my_age">Дата рождения 27.10.1980(42)</span>
+                <p class="my_desc">О себе: </p>
+                <p class="my_desc">О себе: </p>
+            </div>
+        </section>
+<!--        Добавить код для отображения регистрации. Только не ля авторизованных пользователей-->
+        <section class="hero">
+            <div class="wrapper hero-wrapper">
+                <h2>Регистрация нового пользователя</h2>
+                <a href="#" class="sign_link">Регистрация</a>
+            </div>
+        </section>
+    </main>
+    </body>
 </html>
