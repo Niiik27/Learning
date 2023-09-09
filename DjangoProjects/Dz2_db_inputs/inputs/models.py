@@ -7,4 +7,22 @@ class Article(models.Model):
     date = models.DateField()  # Дата
     url = models.URLField()  # Ссылка
     number = models.PositiveSmallIntegerField()
-    f1 = models.JSONField()
+    JASONvalue = models.JSONField()
+    booleaValue = models.BooleanField()
+    timeValue = models.TimeField()
+    dateTimeValue = models.DateTimeField()
+    # decimalValue = models.DecimalField()
+    durationValue = models.DurationField()
+    floatValue = models.FloatField()
+    emailValue = models.EmailField()
+    ipValue = models.GenericIPAddressField()
+    # comaValue = models.CommaSeparatedIntegerField()
+    # nullBooleanValue = models.NullBooleanField()
+
+
+    # fileValue = models.FilePathField()
+    uuidValue = models.UUIDField()
+    slugValue = models.SlugField()
+    # # oneTwoOneField = models.OneToOneField()
+    binaryValue = models.BinaryField()
+    bifPosIntField = models.PositiveBigIntegerField()
