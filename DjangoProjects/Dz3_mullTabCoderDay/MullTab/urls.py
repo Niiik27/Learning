@@ -14,10 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+import index.views as views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',index.urls,name='idx')
-]
+    # path('admin/', include('admin.site.urls')),#Админа можно было бы импортировать, так как не главная страница
+    path('',views.indexView,name='idx'),
+    # path('sign/', include('index.urls')),#Если при открытии сайта мы должны куда то попадать, то зачем нам include?
+    # Все равно этот вид будет подгружен сразк.
+
+]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
