@@ -27,5 +27,7 @@ urlpatterns = [
     path('',views.indexView,name='idx'),
     # path('sign/', include('index.urls')),#Если при открытии сайта мы должны куда то попадать, то зачем нам include?
     # Все равно этот вид будет подгружен сразк.
+    path('coderday/', include('coderday.urls')),
+    path('mulltable/', include('mulltable.urls')),
 
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
