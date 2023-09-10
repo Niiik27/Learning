@@ -12,7 +12,7 @@
 <body>
 <h1>{{ now_html_var }}</h1>
 <h2>{{ today_html_var }}</h2>
-<div></div><a href="">Здесь можно узнать когда будет день программиста</a></div>
-<div><a href="">Здесь можно посмотреть таблицу умножения</a></div>
+<div></div><a href="{% url 'action_coderday' %}">Здесь можно узнать когда будет день программиста</a></div>
+<div><a href="{% url 'action_mulltab' %}">Здесь можно посмотреть таблицу умножения</a></div>
 </body>
 </html>

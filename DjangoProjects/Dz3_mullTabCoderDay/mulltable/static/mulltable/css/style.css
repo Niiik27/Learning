@@ -1,0 +1,17 @@
+body{
+background-color:aqua
+}
+.mulltab{
+display: grid;
+grid-template-columns: repeat(4, 100px);
+grid-template-rows: repeat(18, auto);
+/* orientation: portrait; */
+grid-auto-flow: column;
+/* direction: rtl; */
+/* grid-column: auto;
+grid-row: auto; */
+}
+
+.mullrow{
+    display: flex;
+}

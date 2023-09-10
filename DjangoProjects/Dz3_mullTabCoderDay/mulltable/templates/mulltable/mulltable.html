@@ -1,0 +1,23 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Таблица умножения</title>
+    <div>Все таки для таблицы умножения нужна сетка. По этому все оформление свелось к grid. <br>
+        Удалось реализовать основную идею, может быть чуть позже ее доработаю. <br>
+        Хочется избавиться от звездочек. <br>
+    </div>
+    <link rel="stylesheet" href="{% static 'mulltable/css/style.css' %}">
+</head>
+<body>
+    <div class="mulltab">
+        {% for num in mull_tab %}
+            <div class="mullrow">{{ num }}</div>
+        {% endfor %}
+    </div>
+</body>
+</html>

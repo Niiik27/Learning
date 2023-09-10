@@ -24,10 +24,14 @@ import index.views as views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('admin/', include('admin.site.urls')),#Админа можно было бы импортировать, так как не главная страница
-    path('',views.indexView,name='idx'),
+    path('',views.indexView,name='index'),
     # path('sign/', include('index.urls')),#Если при открытии сайта мы должны куда то попадать, то зачем нам include?
     # Все равно этот вид будет подгружен сразк.
-    path('coderday/', include('coderday.urls')),
+    path('', include('coderday.urls')),
     path('mulltable/', include('mulltable.urls')),
+    # При инклуде не нужно прописывать пути. Их нужно прописать в том файле который инклюдим
+    # Или наоборот - тут пишем там не пишем
 
-]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
