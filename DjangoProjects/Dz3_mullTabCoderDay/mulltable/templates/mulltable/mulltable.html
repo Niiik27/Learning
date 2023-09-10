@@ -9,14 +9,19 @@
     <title>Таблица умножения</title>
     <div>Все таки для таблицы умножения нужна сетка. По этому все оформление свелось к grid. <br>
         Удалось реализовать основную идею, может быть чуть позже ее доработаю. <br>
-        Хочется избавиться от звездочек. <br>
+        На денный момент принудительно задан размер сетки 4х16. <br>
     </div>
     <link rel="stylesheet" href="{% static 'mulltable/css/style.css' %}">
 </head>
 <body>
     <div class="mulltab">
-        {% for num in mull_tab %}
-            <div class="mullrow">{{ num }}</div>
+        {% for nums in mull_tab %}
+<!--            <div class="mullcol">-->
+                {% for num in nums %}
+                    <div class="mullrow">{{ num }}</div>
+                {% endfor %}
+<!--            </div>-->
+            <br>
         {% endfor %}
     </div>
 </body>
