@@ -22,7 +22,7 @@ body{
 .base{
     background-color: #213B3BFF;
     display: grid;
-    grid-template-columns: 600px;s
+    grid-template-columns: 600px;
     justify-content: center;
     gap: 20px;
     /*background-color: #c5f613;*/
