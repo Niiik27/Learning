@@ -1,5 +1,7 @@
 
+
 ###### https://django.fun/ru/docs/django/4.1/ref/models/fields/
+# MARCDOWN
 # Для работы джанго требуется установить эти пакеты:	
 1. _pip install Pillow_
 2. _pip install django-admin_

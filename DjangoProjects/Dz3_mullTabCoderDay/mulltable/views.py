@@ -1,5 +1,10 @@
 from django.shortcuts import render
 def mulltabView11(request):
+    """
+    Этот метод был первым. Потом мне захотелось разбить таблицу на блоки
+    :param request:
+    :return:
+    """
     tab_strs = []
     for i in range(2,10):
         for j in range(2, 10):
@@ -10,6 +15,13 @@ def mulltabView11(request):
 
 
 def mulltabView(request):
+    """
+    Теперь итоговый массив рассчитан на обработку внутри двух циклов - внешний меняет основное число
+    внутренния - можетели. Это позволит вставить в html всякие символы разбивки, или организовать вывод
+    по блокам, а для этого сделать нужные классы
+    :param request:
+    :return:
+    """
     tab_strs = []
     for i in range(2,10):
         var_strs=[]

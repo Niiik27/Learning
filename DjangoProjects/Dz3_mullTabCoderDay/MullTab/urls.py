@@ -22,6 +22,7 @@ from django.urls import path, include
 import index.views as views
 
 urlpatterns = [
+    # path(локальный путь в адресной строке, файл с логикой вида, name=имя для использования в ссылках)
     path('admin/', admin.site.urls),
     # path('admin/', include('admin.site.urls')),#Админа можно было бы импортировать, так как не главная страница
     path('',views.indexView,name='index'),

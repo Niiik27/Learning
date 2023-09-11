@@ -7,22 +7,27 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Таблица умножения</title>
-    <div>Все таки для таблицы умножения нужна сетка. По этому все оформление свелось к grid. <br>
-        Удалось реализовать основную идею, может быть чуть позже ее доработаю. <br>
-        На денный момент принудительно задан размер сетки 4х16. <br>
-    </div>
+
     <link rel="stylesheet" href="{% static 'mulltable/css/style.css' %}">
 </head>
 <body>
+    <header class="comment">
+        Для таблицы умножения хотелось использовать сетку. Подозревал, что grid как раз для такой задачи
+        По этому решил в этом упражнении поковыряться в grid-е
+        Хотя и с флексами бы никаких осложнений небыло бы.
+        Хочется разобраться в преимуществах обоих способов, что бы можно было выбирать подходящее решение
+    </header>
+<section class = "base">
     <div class="mulltab">
         {% for nums in mull_tab %}
-<!--            <div class="mullcol">-->
+            <div class="mullcol">
                 {% for num in nums %}
                     <div class="mullrow">{{ num }}</div>
                 {% endfor %}
-<!--            </div>-->
-            <br>
+            </div>
+
         {% endfor %}
     </div>
+    </section>
 </body>
 </html>
