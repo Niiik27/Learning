@@ -23,9 +23,9 @@ def mulltabView(request):
     :return:
     """
     tab_strs = []
-    for i in range(2,10):
+    for i in range(1,11):
         var_strs=[]
-        for j in range(2, 10):
+        for j in range(1, 11):
             a = i*j
             var_strs.append(f'{i} x {j} = {a}')
         tab_strs.append(var_strs)
