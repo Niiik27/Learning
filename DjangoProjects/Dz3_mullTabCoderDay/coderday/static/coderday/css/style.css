@@ -1,0 +1,34 @@
+body{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 750px;
+    justify-content: center;
+    gap:500px;
+    font-family: 'Lucida Grande', Arial, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    background-color: #808080;
+    color: white;
+    height: 20vh;
+}
+
+.base{
+    background-color: #213B3BFF;
+    display: grid;
+    grid-template-columns: 700px;
+
+
+}
+
+.left-string{
+    content:"ffff";
+    animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  100% {
+    opacity: 0;
+  }
+    0%{
+        color:red;
+    }
+}

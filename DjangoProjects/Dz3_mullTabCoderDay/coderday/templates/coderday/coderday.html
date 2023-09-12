@@ -1,14 +1,18 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'coderday/css/style.css' %}">
     <title>День программиста</title>
 </head>
-<body>
-<div>{{ coder_txt }}</div>
-<div>{{ left_txt }}</div>
-</body>
+    <body>
+        <section class = "base">
+            <h1>{{ coder_txt }}</h1>
+            <div class="left-string">{{ left_txt }}</div>
+        </section>
+    </body>
 </html>

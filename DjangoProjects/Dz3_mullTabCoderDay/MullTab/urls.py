@@ -21,6 +21,20 @@ from django.urls import path, include
 
 import index.views as views
 
+urlpatterns1 = [
+    # path(локальный путь в адресной строке, файл с логикой вида, name=имя для использования в ссылках)
+    path('admin/', admin.site.urls),
+    # path('admin/', include('admin.site.urls')),#Админа можно было бы импортировать, так как не главная страница
+    path('',views.indexView,name='index'),
+    # path('sign/', include('index.urls')),#Если при открытии сайта мы должны куда то попадать, то зачем нам include?
+    # Все равно этот вид будет подгружен сразк.
+    path('', include('coderday.urls')),# Этот вариант неправильный, но оставлен в таком виде в научно-исследовательских целях
+    path('mulltable/', include('mulltable.urls')),
+    # При инклуде не нужно прописывать пути. Их нужно прописать в том файле который инклюдим
+    # Или наоборот - тут пишем там не пишем
+
+]
+
 urlpatterns = [
     # path(локальный путь в адресной строке, файл с логикой вида, name=имя для использования в ссылках)
     path('admin/', admin.site.urls),

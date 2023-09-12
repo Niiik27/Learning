@@ -1,3 +1,21 @@
 body{
-background-color:green
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: 750px;
+    justify-content: center;
+    gap:20px;
+    font-family: 'Lucida Grande', Arial, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    background-color: #808080;
+    color: white;
+    /*height: 100vh;*/
+}
+.ref-style{
+    color:white;
+    font-family: 'Lucida Grande', Arial, sans-serif;
+}
+
+.ref-style:hover{
+    color:yellow;
 }

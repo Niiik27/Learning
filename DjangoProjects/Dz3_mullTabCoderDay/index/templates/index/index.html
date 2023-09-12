@@ -1,18 +1,18 @@
 <!doctype html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Дата и время сейчас</title>
-    <link rel="stylesheet" href="{% static 'index/css/style.css' %}">
-</head>
-<body>
-<h1>{{ now_html_var }}</h1>
-<h2>{{ today_html_var }}</h2>
-<div></div><a href="{% url 'action_coderday' %}">Здесь можно узнать когда будет день программиста</a></div>
-<div><a href="{% url 'action_mulltab' %}">Здесь можно посмотреть таблицу умножения</a></div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Дата и время сейчас</title>
+        <link rel="stylesheet" href="{% static 'index/css/style.css' %}">
+    </head>
+    <body>
+        <h1>{{ today_html_var }}</h1>
+        <h2>{{ now_html_var }}</h2>
+        <div><a href="{% url 'action_coderday' %}" class="ref-style">Здесь можно узнать когда будет день программиста</a></div>
+        <div><a href="{% url 'action_mulltab' %}" class="ref-style">Здесь можно посмотреть таблицу умножения</a></div>
+    </body>
 </html>

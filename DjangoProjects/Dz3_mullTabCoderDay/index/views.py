@@ -1,15 +1,17 @@
 import datetime
-import locale
-locale.setlocale(
-    category=locale.LC_ALL,
-    locale="Russian"  # Note: do not use "de_DE" as it doesn't work
-)
-
+from utils import get_num_in_russian, russian_month
 from django.shortcuts import render
 
-# Create your views here.
 def indexView(request):
-    time_now = datetime.datetime.now().time().strftime('Сейчас %H часов %M минут')
-    today_date = datetime.datetime.now().date().strftime('%d %B %Y года')
 
+    hour = get_num_in_russian(datetime.datetime.now().time().hour,["час","часа","часов"])
+    minute = get_num_in_russian(datetime.datetime.now().time().minute,["минута","минуты","минут"])
+    time_now = f'Сейчас {hour}, {minute}'
+
+
+    day = datetime.datetime.now().day
+    month = russian_month[datetime.datetime.now().month]
+    year = datetime.datetime.now().year
+    current_date = f"{day} {month} {year}"
+    today_date = f"Сегодня {current_date} года"
     return render(request, template_name='index/index.html',context={'today_html_var':today_date,'now_html_var':time_now,})
