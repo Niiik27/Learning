@@ -13,7 +13,8 @@ def coderdayView(request):
     first_day_year = datetime.datetime(today.year, 1, 1,0,0,0)
     delta = datetime.timedelta(days=256)
     prog_day = first_day_year + delta
-    # days, hours, minutes, seconds = timedelta_to_dhms(delta)
+    # Тут можно обойтись только датой, но пока не разобрался что делать с часами, минутами секундами
+
     deltaNow = datetime.datetime(prog_day.year, prog_day.month, prog_day.day,prog_day.hour,prog_day.minute,prog_day.second) - datetime.datetime.now()
     total_seconds = deltaNow.total_seconds()
     left_days = int(total_seconds / 86400)
