@@ -1,8 +1,7 @@
 
-
 # Create your tests here.
 russian_month = {
-    1:"января",
+    1 :"января",
     2: "февраля",
     3: "марта",
     4: "апреля",
@@ -20,7 +19,7 @@ russian_month = {
 а то запутался что когда в каком падеже должно быть.
 """
 russian_hours_in_parent_state = {
-    1:"час",
+    1 :"час",
     2: "часа",
     3: "часа",
     4: "часа",
@@ -45,14 +44,24 @@ russian_hours_in_parent_state = {
     23: "часа",
     24: "часа",
 }
-def get_num_in_russian(num:int, string_vars:list):
+def get_num_in_russian(num :int, string_vars :list):
+    """
+    Толком не проверял, вроде работает. Идея понятна
+    :param num:
+    :param string_vars:
+    :return:
+    """
     # string_vars = ["час","часа","часов"]
     # Попытка передать массив падежей - для дальнейшего использования с другими словами
-    fin_num = num # см. закономерности в russian_hours_in_parent_state - видно что нужны числа до 20
-    if fin_num>20:fin_num %=10
+    # Когда будет прошедшее число, то в алгоритме оно появится в отрицательном виде, но на произношении это никак
+    # не должно сказаться, и более того оно будет использоваться как положительное в отрицательной ситуации.
+    fin_num = abs(num) # см. закономерности в russian_hours_in_parent_state - видно что нужны числа до 20
+
+    if fin_num > 20:
+        fin_num %= 10
     if fin_num == 1:
         return f'{num} {string_vars[0]}'
-    elif 1<fin_num<5:
+    elif 1< fin_num < 5:
         return f'{num} {string_vars[1]}'
     else:
         return f'{num} {string_vars[2]}'
