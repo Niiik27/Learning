@@ -11,7 +11,7 @@ def timedelta_to_dhms(duration):
 def coderdayView(request):
     today = datetime.date.today()
     first_day_year = datetime.datetime(today.year, 1, 1,0,0,0)
-    delta = datetime.timedelta(days=256)
+    delta = datetime.timedelta(days=255)
     prog_day = first_day_year + delta
     # Тут можно обойтись только датой, но пока не разобрался что делать с часами, минутами секундами
 

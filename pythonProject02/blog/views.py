@@ -4,7 +4,9 @@ from .models import Article
 
 app_name = 'blog'
 def blogView(request):
+
     articles = Article.objects.all()
+    print(articles)
     return render(request, template_name='./blog/blog.html', context={'articles': articles})
 
 def detailView(request, article_id):
