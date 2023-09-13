@@ -9,3 +9,7 @@ class Article(models.Model):
     url = models.URLField('Доп. источник',blank=False)  # Ссылка
     def __str__(self):
         return f"{self.title} | {self.date}"
+    class Meta:
+        verbose_name = 'readable'
+        verbose_name_plural = 'Статьи'
+
