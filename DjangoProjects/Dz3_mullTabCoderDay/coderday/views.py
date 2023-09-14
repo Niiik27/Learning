@@ -41,7 +41,7 @@ def coderdayView(request):
     if left_days*sign>0:
         left_time = f"До дня программиста {'остался' if left_days%10==1 else 'осталось'}: {left_days_str} {left_hours_str} {left_minutes_str} {left_seconds_str}"
     elif left_days*sign<0:
-        left_time = f"Со дня программиста {'прошел' if (-left_days)%10==1 else 'прошло'}: {left_days_str} {left_hours_str} {left_minutes_str} {left_seconds_str} секунд"
+        left_time = f"Со дня программиста {'прошел' if (-left_days)%10==1 else 'прошло'}: {left_days_str} {left_hours_str} {left_minutes_str} {left_seconds_str}"
     else:
         if total_seconds >= 0:
             left_time = f'До дня программиста осталось совсем немного: {left_hours_str} {left_minutes_str} {left_seconds_str}'
