@@ -6,7 +6,7 @@ class Article(models.Model):
     desc= models.TextField('Описание')  # Ограниченная строка
     image= models.ImageField('Изображение',upload_to='blog/image')  # строка по изображению (отдельный тип данных)
     date = models.DateField('Дата')  # Дата
-    url = models.URLField('Доп. источник',blank=False)  # Ссылка
+    url = models.URLField('Доп. источник',blank=True)  # Ссылка
     def __str__(self):
         return f"{self.title} | {self.date}"
     class Meta:

@@ -1,49 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<section>
+    <div class="wrapper">
+        <form action="{% url 'registration_in_urls' %}" method="POST">
+            {% csrf_token %}
+            {{ formuser }}
+            
+            <button type="submit">Регистрация</button>
+            <p>{{ error }}</p>
+        </form>
+    </div>
+</section>
+{% endblock %}
 
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Registration</title>
-        <link rel="stylesheet" href="{% static 'reguser/css/style.css' %}">
-    </head>
-    <body>
-        <main>
-            <form class="card"  action="{% 1url 'profile' %}">
-                <h1 class="head_1">Регистрация пользователя</h1>
-                <div class="inputs">
-                    <div class="fields">
-                        <label for="">Ссылка на ваше фото (из соцсети)</label>
-                        <input class="txt-input" type="url" name="foto" value="https://abrakadabra.fun/uploads/posts/2022-03/1647178918_11-abrakadabra-fun-p-dzhango-osvobozhdennii-art-25.jpg">
-                        <label for="">Имя</label>
-                        <input class="txt-input" type="text" name="firstname" value="Николай">
-                        <label for="">Фамилия</label>
-                        <input class="txt-input" type="text" name="lastname" value="Меньшиков">
-                        <label for="">Дата рождения</label>
-                        <input class="txt-input" type="date" name="birth" value="1980-10-27">
-                        <label for="">Ваши навыки:</label>
-                        <input class="txt-input" type="text" name="skill_1" value="Python">
-                        <input class="txt-input" type="text" name="skill_2" value="SQL">
-                        <input class="txt-input" type="text" name="skill_3" value="JS">
-                        <input class="txt-input" type="text" name="skill_4" value="CSS">
-                        <input class="txt-input" type="text" name="skill_5" value="Java">
-                    </div>
-                    <div class="about">
-                        <label for="">Расскажите о себе:</label>
-                        <textarea class="area-container" name="about">
-            Действие фильма начинается в 1858 году, за два года до начала Гражданской войны.
-            Двое братьев-работорговцев гонят купленных ими на аукционе в Техасе пятерых чернокожих
-            рабов-мужчин на Дальний Юг. Среди рабов находится Джанго, который в наказание за побег
-            был высечен кнутом и продан предыдущим хозяином на аукционе отдельно от его любимой жены
-            Брумхильды. Ночью в лесу группа встречается с доктором Кингом Шульцем, иммигрантом из
-            Германии и охотником за головами, использующим свою бывшую профессию дантиста[11][12]
-            как прикрытие. Шульц хочет выкупить Джанго и, получив отказ, убивает одного из братьев
-            Спек, а второго со сломанной ногой оставляет на растерзание освобождённым рабам.
-                        </textarea>
-                    </div>
-                </div>
-                <button class="button" type = "submit">Отправить</button>
-            </form>
-        </main>
-    </body>
-</html>
+

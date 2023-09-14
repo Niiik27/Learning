@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'home/style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/style/style.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="wrapper header-wrapper">
+            <div class="logo">
+                <img src="" alt="">
+            </div>
+            <nav>
+                <a href="{% url 'home' %}" class="link">Главная</a>
+                <a href="{% url 'blog_in_urls' %}" class="link">Блог</a>
+                <a href="" class="link">Профиль</a>
+                <a href="{% url 'admin:index' %}" class="link">Админка</a>
+            </nav>
+            <div class="header-right">
+        <!--        Добавить код проверки на авторизацию-->
+                {% if request.user.username %}
+                    <a href="#" class="link link-primary">Выход</a>
+                {% else %}
+                    <a href="{% url 'registration_in_urls' %}" class="link">Регистрация</a>
+                    <a href="{% url 'login_in_urls' %}" class="link link-primary">Вход</a>
+                {% endif %}
+
+        <!--        Добавить код, если пользователь авторизовался-->
+
+            </div>
+        </div>
+    </header>
+{% block content %}
+{% endblock %}
+    </body>
+</html>
