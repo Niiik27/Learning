@@ -3,9 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
-    <link rel="stylesheet" href="{% static 'home/style/style.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/style/style.css' %}">
+    <title>{{ page_name }}</title>
+    <link rel="stylesheet" href="{% static 'base/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '' %}{{ page_style }}/css/style.css">
 </head>
 <body>
     <header class="header">

@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 def homeView(request):
 
-    return render(request, template_name='./home/home.html')
+    return render(request, './home/home.html', {'page_name': 'Домашняя страница','page_style':'home'})
 
 
 
