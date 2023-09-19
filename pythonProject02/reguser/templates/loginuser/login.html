@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-    <section>
-        <form class="card" >
-            <h1 class="head_1">Вход</h1>
-            <div class="inputs">
-                <div class="fields">
-                    <label for="">Логин:</label>
-                    <input class="txt-input" type="text" name="foto" value="Nikolay">
-                    <label for="">Пароль:</label>
-                    <input class="txt-input" type="text" name="firstname" value="Mensh">
-                </div>
-            </div>
-            <button class="button" type = "submit">Войти</button>
+<section>
+    <div class="wrapper">
+        <form action="{% url 'login_in_urls' %}" method="POST">
+            {% csrf_token %}
+            {{ formuser }}
+
+            <button type="submit">Войти</button>
+            <p>{{ error }}</p>
         </form>
-    </section>  `
+    </div>
+</section>
 {% endblock %}
